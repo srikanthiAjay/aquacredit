@@ -10,39 +10,35 @@ $(document).ready(function() {
         var extra_id = (parseInt(bank_cnt) + 1);
         var html = ['<div class="bank_dtl_blk" data-bank-id="bank_acc_' + extra_id + '" data-bid="' + extra_id + '"> <span class="remove" onclick="removeBankAcc(' + extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span> <div class="row">',
             '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">Person Full Name</label>',
-            '<input type="text" class="form-control" id="fname_' + extra_id + '" name="fname[]" placeholder="Person Full Name" />',
+            '<div class="form-group"><span class="border-lable-flt">',            
+            '<input type="text" class="form-control" id="fname_' + extra_id + '" name="fname[]" placeholder=" " />',
+			'<label for="fname_' + extra_id + '">Person Full Name</label>',
             '<label id="fname_' + extra_id + '-error" class="error" for="fname_' + extra_id + '"></label>',
-            '</div>',
-            '</div>',
-            '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">Account Number</label>',
-            '<input type="text" class="form-control allownumericwithoutdecimal" id="ac_number_' + extra_id + '" name="ac_number[]" placeholder="Account Number" />',
-            '<label id="ac_number_' + extra_id + '-error" class="error" for="ac_number_' + extra_id + '"></label>',
-            '</div>',
+            '</span></div>',
             '</div>',
             '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">Bank Name</label>',
-            '<input type="text" class="form-control" id="bc_name_' + extra_id + '" name="bc_name[]" placeholder="Bank Name" />',
-            '<label id="bc_name_' + extra_id + '-error" class="error" for="bc_name_' + extra_id + '"></label>',
-            '</div>',
+            '<div class="form-group"><span class="border-lable-flt">',           
+            '<input type="text" class="form-control allownumericwithoutdecimal" id="ac_number_' + extra_id + '" name="ac_number[]" placeholder=" " />',
+             '<label for="ac_number_' + extra_id + '">Account Number</label>',
+            '</span></div>',
             '</div>',
             '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">IFSC</label>',
-            '<input type="text" class="form-control" id="ifsc_' + extra_id + '" name="ifsc[]" placeholder="IFSC" />',
-            '<label id="ifsc_' + extra_id + '-error" class="error" for="bc_name_' + extra_id + '"></label>',
+            '<div class="form-group"><span class="border-lable-flt">',            
+            '<input type="text" class="form-control" id="bc_name_' + extra_id + '" name="bc_name[]" placeholder=" " />',
+            '<label for="bc_name_' + extra_id + '">Bank Name</label>',
+            '</span></div>',
             '</div>',
-            '</div>',
-
             '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">Branch Name</label>',
-            '<input type="text" class="form-control" id="branch_name" name="branch_name[]" placeholder="Branch Name" />',
+            '<div class="form-group"><span class="border-lable-flt">',            
+            '<input type="text" class="form-control" id="ifsc_' + extra_id + '" name="ifsc[]" placeholder=" " />',
+            '<label for="ifsc_' + extra_id + '">IFSC</label>',
+            '</span></div>',
             '</div>',
+            '<div class="col-md-6">',
+            '<div class="form-group"><span class="border-lable-flt">',            
+            '<input type="text" class="form-control" id="branch_name" name="branch_name[]" placeholder=" " />',
+			'<label for="branch_name">Branch Name</label>',
+            '</span></div>',
             '</div></div> </div>'
         ];
         $(this).parent('.hdg_bk').siblings('.bank_list').children('.bank_list_pos').append(html.join("\n"));
@@ -93,32 +89,28 @@ $(document).ready(function() {
         var crop_extra_id = (parseInt(crop_cnt) + 1);
         var html = ['<div class="crp_dtl_blk" data-crop-id="crop_details_' + crop_extra_id + '" data-cid="' + crop_extra_id + '"> <span class="crp_remove" onclick="removeCrop(' + crop_extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span> <div class="row">',
             '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">Crop Location</label>',
-            '<input type="text" class="form-control" id="crop_loc_' + crop_extra_id + '" name="crop_loc[]" placeholder="Crop Location" />',
-            '<label id="crop_loc_' + crop_extra_id + '-error" class="error" for="crop_loc_' + crop_extra_id + '"></label>',
-            '</div>',
-            '</div>',
-            '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">Crop Type</label>',
-            '<input type="text" class="form-control" id="crop_type_' + crop_extra_id + '" name="crop_type[]" placeholder="Crop Type" />',
-            '<label id="crop_type_' + crop_extra_id + '-error" class="error" for="crop_type_' + crop_extra_id + '"></label>',
-            '</div>',
+            '<div class="form-group"><span class="border-lable-flt">',            
+            '<input type="text" class="form-control" id="crop_loc_' + crop_extra_id + '" name="crop_loc[]" placeholder=" " />',
+            '<label for="crop_loc_' + crop_extra_id + '">Crop Location</label>',
+            '</span></div>',
             '</div>',
             '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">Number of Acres</label>',
-            '<input type="text" class="form-control" id="acres_' + crop_extra_id + '" name="acres[]" placeholder="Number of Acres" onkeypress="return allowNumerORDecimal(event,this)"/>',
-            '<label id="acres_' + crop_extra_id + '-error" class="error" for="acres_' + crop_extra_id + '"></label>',
-            '</div>',
+            '<div class="form-group"><span class="border-lable-flt">',            
+            '<input type="text" class="form-control" id="crop_type_' + crop_extra_id + '" name="crop_type[]" placeholder=" " />',
+            '<label for="crop_type_' + crop_extra_id + '">Crop Type</label>',
+            '</span></div>',
             '</div>',
             '<div class="col-md-6">',
-            '<div class="form-group">',
-            '<label for="name">Open Balance</label>',
-            '<input type="text" class="form-control" id="transaction_balance_' + crop_extra_id + '" name="transaction_balance[]" placeholder="Open Balance" onkeypress="return allowNumerORDecimal(event,this)"/>',
-            '<label id="transaction_balance_' + crop_extra_id + '-error" class="error" for="transaction_balance_' + crop_extra_id + '"></label>',
+            '<div class="form-group"><span class="border-lable-flt">',            
+            '<input type="text" class="form-control" id="acres_' + crop_extra_id + '" name="acres[]" placeholder=" " onkeypress="return allowNumerORDecimal(event,this)"/>',
+            '<label for="acres_' + crop_extra_id + '">Number of Acres</label>',
+            '</span></div>',
             '</div>',
+            '<div class="col-md-6">',
+            '<div class="form-group"><span class="border-lable-flt">',            
+            '<input type="text" class="form-control" id="transaction_balance_' + crop_extra_id + '" name="transaction_balance[]" placeholder=" " onkeypress="return allowNumerORDecimal(event,this)"/>',
+            '<label for="transaction_balance_' + crop_extra_id + '">Open Balance</label>',
+            '</span></div>',
             '</div>',
             '</div>'
         ];
@@ -170,11 +162,12 @@ $(document).ready(function() {
         var med_extra_id = (parseInt(med_cnt) + 1);
         var medicine = ['<div class="col-md-4 med_details" id="mdiv_' + med_extra_id + '" data-med-id="med_details_' + med_extra_id + '" data-mid="' + med_extra_id + '">',
             '<div class="form-group">',
-            '<label for="name">Medicines' + med_extra_id + ' (%)<span class="deflt"> Default </span><a href="javascript:void(0)" title="" class="fr change_med" onclick="nchangemed(' + med_extra_id + ')"> Change </a><span class="med_remove" onclick="removeMed(' + med_extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span></label>',
-            '<input type="text" class="form-control" id="medicines' + med_extra_id + '" name="medicines[]" placeholder="Medicines' + med_extra_id + '" onkeypress="return allowNumerORDecimal(event,this)">',
+            '<span class="deflt">&nbsp;</span><a href="javascript:void(0)" title="" class="fr change_med" onclick="nchangemed(' + med_extra_id + ')"> Change </a><span class="med_remove" onclick="removeMed(' + med_extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span>',
+            '<span class="border-lable-flt"><input type="text" class="form-control" id="medicines' + med_extra_id + '" name="medicines[]" placeholder="Medicines' + med_extra_id + '" onkeypress="return allowNumerORDecimal(event,this)">',
+			'<label for="medicines' + med_extra_id + '">Medicines' + med_extra_id + '</label>',
             '<input type="hidden"  id="hidfm' + med_extra_id + '" name="hidfm' + med_extra_id + '"/>',
             '<input type="hidden" id="hidm' + med_extra_id + '" name="hidm' + med_extra_id + '" value="" />',
-            '</div>',
+            '</span></div>',
             '</div>'
         ];
         $("#med_block .roi:last").before(medicine.join("\n"));
@@ -536,7 +529,8 @@ $(document).ready(function() {
         var email = $(this).parent().parent().parent().find('#email').val();
         var phone = $(this).parent().parent().parent().find('#mobile').val();
 
-        if (email && phone != '') {
+        //if (email && phone != '') {
+        if (email || phone != '') {
 
             $('.dft_mob_blk').empty();
             $('.aler_lnks').removeAttr('style');
@@ -551,13 +545,17 @@ $(document).ready(function() {
 
             if (hidmob.length > 1) {
                 $(this).parent().parent().parent().siblings('.aler_lnks').find('.new_mob_em_blk.new_m li.defa_c').html(new_email.join("\n"));
+				//$(this).parent().parent().parent().siblings('.aler_lnks').find('#mob_numb_new').prop('disabled', false);
             } else {
                 $(this).parent().parent().parent().siblings('.aler_lnks').find('.new_mob_em_blk.new_m').html(new_email.join("\n"));
+				//$(this).parent().parent().parent().siblings('.aler_lnks').find('#mob_numb_new').prop('disabled', true);
             }
             if (hidmail.length > 1) {
                 $(this).parent().parent().parent().siblings('.aler_lnks').find('.new_mob_em_blk.new_p li.defa_c').html(new_phone.join("\n"));
+				//$(this).parent().parent().parent().siblings('.aler_lnks').find('#email_id_new').prop('disabled', false);
             } else {
                 $(this).parent().parent().parent().siblings('.aler_lnks').find('.new_mob_em_blk.new_p').html(new_phone.join("\n"));
+				//$(this).parent().parent().parent().siblings('.aler_lnks').find('#email_id_new').prop('disabled', true);
             }
 
             $(this).parent().parent().parent().siblings('.aler_lnks').find('.form-control').removeAttr('disabled', 'true');
@@ -568,7 +566,7 @@ $(document).ready(function() {
             $('#hid_mail').val(hidmail.join());
 
 
-        } else {
+        }else {
 
             $(this).parent().parent().parent().siblings('.aler_lnks').find('.form-control').prop("disabled", true);
             $('.dft_mob_blk').empty();

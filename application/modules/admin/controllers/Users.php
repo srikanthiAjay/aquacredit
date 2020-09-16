@@ -55,22 +55,6 @@ class Users extends CI_Controller
 		$this->load->view('admin/userdetails',$data);
 	}
 
-	public function details_old($uid = null)
-	{
-		$data["page_title"] = "User Details";				
-		$adminid = $this->session->userdata("adminid");
-		$data['user'] = $this->Users_model->getUser($uid);
-		//total loans
-		$data['totalLoan'] = $this->Loans_model->getTotalLoansOfUser($uid);
-		//total orders
-		$data['totalOrders'] = $this->Sales_model->getTotalSaleByUser($uid);
-		//total harvets
-		$data["totalHarvest"] = $this->Trades_model->getTotalTradeByUser($uid);
-		//total acres
-		$data["totalAcres"] = $this->Users_model->getUserTotalCrop($uid);
-		$this->load->view('admin/userdetails_b',$data);
-	}
-
 	public function getAnalytics()
 	{
 		$data['cropLoan'] = $this->Loans_model->getTotalLoansOfUser($this->input->post("user_id"),$this->input->post("crop_id"));
@@ -204,6 +188,111 @@ class Users extends CI_Controller
 		$data["upload_docs"]=$this->Users_model->getUserUploads($user_id);
 		$this->load->view('admin/edituser',$data);
 	}
+	public function uedit($user_id)
+	{	
+		$data["page_title"] = "Edit User";
+		//Brands
+		$data["brands"]=$this->Users_model->getBrands();
+		//User and Info
+		$data["user"]=$this->Users_model->getUser($user_id);
+
+		//Medicines
+		if($data["user"]["user_type"]=='FARMER' || $data["user"]["user_type"]=='DEALER'){
+			//Default Default Medicines
+			$med_res=$this->getDefaultMedicineBrands();
+			$data["med1"]=$data["user"]["medicines1_brands"];
+			$data["med2"]=$data["user"]["medicines2_brands"];
+			$data["med3"]=$data["user"]["medicines3_brands"];
+			$data["med4"]=$data["user"]["medicines4_brands"];
+			$data["med5"]=$data["user"]["medicines5_brands"];
+			$data["med6"]=$data["user"]["medicines6_brands"];
+
+			$user_medicines="";
+			$med_cnt=0;
+			$med_ids=[];
+			for($i=1;$i<=6;$i++){
+				if(!empty($data["med".$i])){
+					if(in_array($i,[1,2,3])){
+						$user_medicines.=$data["med".$i].",";
+					}
+				}
+
+				if($data["user"]["medicines".$i]>0){
+					$med_cnt++;
+					$med_ids[]=$i;
+				}
+			}
+			$user_med=rtrim($user_medicines,",");
+			$data["allmed"]=$user_med;
+			$data["allmed_arr"]=explode(",",$user_med);
+			$data["med_cnt"]=$med_cnt;
+			$data["med_ids"]=implode(",",$med_ids);
+		}
+		
+		//Bank Acc
+		$bank_acc=$this->Users_model->getUserBankAcc($user_id);
+		$bcnt=(count($bank_acc)>0)?count($bank_acc):0;
+		$bc_ids="";
+		if($bcnt>0){
+			$bc_ids=$this->getIDS($bcnt);
+		}
+
+		$data["bank_acc"]=$bank_acc;
+		$data["bcnt"]=($bcnt>0)?$bcnt:0;
+		$data["bc_ids"]=$bc_ids;
+
+		//Crops
+		if($data["user"]["user_type"]=='FARMER'){
+			$crops=$this->Users_model->getUserCrops($user_id);
+			$ccnt=(count($crops)>0)?count($crops):0;
+			$cc_ids="";
+			if($ccnt>0){
+				$cc_ids=$this->getIDS($ccnt);
+			}
+
+			$data["crops"]=$crops;
+			$data["ccnt"]=($ccnt>0)?$ccnt:0;
+			$data["cc_ids"]=$cc_ids;
+
+			//Partners
+			$partners=$this->Users_model->getUserParteners($user_id);
+			$pcnt=(count($partners)>0)?count($partners):0;
+			$pids="";
+			if($pcnt>0){
+				$pids=$this->getIDS($pcnt);
+			}
+			$data["partners"]=$partners;
+			$data["pcnt"]=($pcnt>0)?$pcnt:0;
+			$data["pids"]=$pids;
+		}
+
+		//Alerts
+		$alerts=$this->Users_model->getUserAlerts($user_id);
+		$alert_m=$alert_e=$alert_mids=$alert_eids=$amobiles=$emails=[];
+		for($a=0;$a<count($alerts);$a++){
+			if($alerts[$a]['contact_type']=='M'){
+				$alert_m[]=$alerts[$a]['contact'];
+				$alert_mids[]=$alerts[$a]['uc_id'];
+				$amobiles[]=['uc_id'=>$alerts[$a]['uc_id'],'contact'=>$alerts[$a]['contact']];
+			}else if($alerts[$a]['contact_type']=='E'){
+				$alert_e[]=$alerts[$a]['contact'];
+				$alert_eids[]=$alerts[$a]['uc_id'];
+				$emobiles[]=['uc_id'=>$alerts[$a]['uc_id'],'contact'=>$alerts[$a]['contact']];
+			}
+		}
+		$data["alerts"]=$alerts;
+		$data["amobiles"]=$amobiles;
+		$data["emobiles"]=$emobiles;
+		$data["alert_m"]=$alert_m;
+		$data["alert_mids"]=$alert_mids;
+		$data["alert_e"]=$alert_e;
+		$data["alert_eids"]=$alert_eids;
+
+
+		//User uploads
+		$data["upload_docs"]=$this->Users_model->getUserUploads($user_id);
+		$this->load->view('admin/edituser1',$data);
+	}
 
 	public function getIDS($cnt){
 		$ids=[];
@@ -260,6 +349,44 @@ class Users extends CI_Controller
 		$res['allmed']=(count($allmed)>0)?implode(",", $allmed):"";
 		$res['allmed_arr']=(count($allmed)>0)?$allmed:[];
 		return $res;
+	}
+	public function ftest()
+	{
+		$data["page_title"] = "Create User";				
+		$adminid = $this->session->userdata("adminid");
+		//Brands
+		$data["brands"]=$this->Users_model->getBrands();
+		//Default Default Medicines
+		$med_res=$this->getDefaultMedicineBrands();
+		$data["med1"]=$med_res["med1"];
+		$data["med2"]=$med_res["med2"];
+		$data["med3"]=$med_res["med3"];
+		$data["allmed"]=$med_res["allmed"];
+		$data["allmed_arr"]=$med_res["allmed_arr"];
+		$this->load->view('admin/user/farmer1',$data);
+	}
+	public function dtest()
+	{
+		$data["page_title"] = "Create User";				
+		$adminid = $this->session->userdata("adminid");
+		//Brands
+		$data["brands"]=$this->Users_model->getBrands();
+		//Default Default Medicines
+		$med_res=$this->getDefaultMedicineBrands();
+		$data["med1"]=$med_res["med1"];
+		$data["med2"]=$med_res["med2"];
+		$data["med3"]=$med_res["med3"];
+		$data["allmed"]=$med_res["allmed"];
+		$data["allmed_arr"]=$med_res["allmed_arr"];
+		$this->load->view('admin/user/dealer1',$data);
+	}
+
+	//Create Non Farmer
+	public function nftest()
+	{
+		$data["page_title"] = "Create User";				
+		$adminid = $this->session->userdata("adminid");
+		$this->load->view('admin/user/non-farmer1',$data);
 	}
 	//Create Farmer
 	public function createfarmer()

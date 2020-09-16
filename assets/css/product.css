@@ -6,3 +6,22 @@ label {font-size: 13px!important;}
 select {outline: none;}
 .multiselect { height: 40px; }
 #prdt_lst_tbl_filter {margin-right: 0px!important;}
+.select2 {left: 0px!important; top: 0px!important;}
+.select2-selection__arrow { background: url(http://3.7.44.132/aquacredit/assets/images/select_arow.png) no-repeat right;
+    position: relative;
+    background-size: auto;     top: 8px!important;
+    right: 15px!important;
+    width: 20px!important;}
+    .select2-selection__arrow b {opacity: 0;}
+    .select2-container--default .select2-selection--single {border: 1px solid #ced4da;}
+.select2-search--dropdown {padding: 15px;}
+.select2-search--dropdown input {border-radius: 4px; height: 35px;}
+.select2-results__option.select2-results__message {text-align: center; margin-bottom: 10px;}
+.border-lable-flt {height: 40px;}
+.res_tbl .col-sm-12 {
+    overflow: auto;
+}
+.select2-container--default.select2-container--disabled .select2-selection--single {background: #fff!important;}
+.res_tbl table {
+    min-width: 1000px;
+}

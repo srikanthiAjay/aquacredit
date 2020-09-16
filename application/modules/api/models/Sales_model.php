@@ -24,6 +24,16 @@ class Sales_model extends CI_Model
 		$data = $this->db->get_where("payment_transactions", ['sale_id' => $lid])->result();
 		return(json_encode(array('status'=>'success','data'=>$data)));
 	}
+	function check_guest_mobile($bname)
+	{
+		$query = $this->db->get_where("users", ['mobile' => urldecode($bname)])->row_array();
+		if($query)
+		{
+			return json_encode(array('status'=>'exists'));
+		}else{
+			return json_encode(array('status'=>'notexists'));
+		}	
+	}
 	function getbanks($seltype)
 	{
 		if($seltype=='bank')
@@ -128,8 +138,8 @@ class Sales_model extends CI_Model
 
 	function getSalesActualDetails($lid)
 	{
-		$this->db->select('sale_details.*,products.pname,products.purchase_amt');
-		$this->db->join('products', 'products.pid = sale_details.product_id','left');
+		$this->db->select('sale_details.*,branch_inventory.product_name as pname,branch_inventory.purchase_amt,branch_inventory.qty as inventoryqty,branch_inventory.bin_id as inventoryid');
+		$this->db->join('branch_inventory', 'branch_inventory.bin_id = sale_details.inventory_id','left');
 		$query = $this->db->get_where("sale_details", ['sale_details.s_id' => $lid])->result();
 		return(json_encode(array('status'=>'success','data'=>$query)));
 	}
@@ -176,12 +186,13 @@ class Sales_model extends CI_Model
 	function getSearchProducts($skey,$branch,$proids)
 	{
 		$pid = implode(',',$proids);
+		
+
 		/*if($pid!='')
 		{
 			 $s = 'and  pid NOT IN ("'.$pid.'")';
 		}*/
-		$qu = $this->db->query("select *from branch_inventory where branch_id='".$branch."' and  pid NOT IN ($pid) ")->result();
-		//echo $this->db->last_query();
+		/*$qu = $this->db->query("select *from branch_inventory where branch_id='".$branch."' and  pid NOT IN ($pid) ")->result();
 		$res = json_decode(json_encode($qu), true);
 		$rw = '';
 		
@@ -189,25 +200,46 @@ class Sales_model extends CI_Model
 		{
 			$rw .= $r['pid'].','; 
 		}
-		$rww = substr($rw,0,-1);
+		$rww = substr($rw,0,-1);*/
 
-
-		$this->db->select('pid,pname,pmrp,brand_id,per_item,weightage,purchase_amt');
-		if($rww!='')
-		{
-			$sub = "and pid IN($rww)";
-		}
-		$this->db->where("pname LIKE '%$skey%' $sub ");
-			$query = $this->db->get('products')->result();
+		//echo $rww;
+			$this->db->select('*');
+			if($pid!='')
+			{
+				//$sub = "and pid IN($rww)";
+				//$this->db->where("pid NOT IN ($pid) ");
+			}
+			$this->db->where("product_name LIKE '%$skey%' $sub ");
+			$this->db->where("branch_id='".$branch."' ");
+			$this->db->where("qty!=0 ");
+			$query = $this->db->get('branch_inventory')->result();
+			//echo $this->db->last_query();
 			$response = json_decode(json_encode($query), true);
 			foreach($response as $row)
 			{
-					$packing = $this->db->get_where("packing_types", ['id' => $row['per_item']])->row_array();
-					$units = $this->db->get_where("units", ['id' => $row['weightage']])->row_array();
+				$tt = $this->db->query("select pid,pname,pmrp,brand_id,per_item,weightage,purchase_amt from products where pid='".$row['pid']."' ")->row_array();
 
-					$img_path = 'http://3.7.44.132/aquacredit/assets/images/f_1.png';
+				$tts = $this->db->query("select bin_id,pid from branch_inventory where branch_id='".$branch."' and pid='".$row['pid']."' order by bin_id desc LIMIT 0,1 ")->row_array();
 
-					$data[] = array("pid"=>$row['pid'],"value"=>$row['pname'],"label"=>$row['pname'],"brand_id"=>$row["brand_id"],"img"=>$img_path,"pmrp"=>$row['pmrp'],"packing"=>$packing['packing_type'],"units"=>$units['unit_name'],'purchase_amt'=>$row['purchase_amt']);
+				$tcount = $this->db->query("select bin_id,pid from branch_inventory where branch_id='".$branch."' and pid='".$row['pid']."' order by bin_id desc LIMIT 0,1 ")->row_array();
+
+				$productcount = $this->db->query("select count(*) as productcount from branch_inventory where branch_id='".$branch."' and pid='".$row['pid']."' ")->row_array();
+
+				if($tts['bin_id']==$row['bin_id'] )
+				{
+					$tag = 'New';
+				}
+				else
+				{
+					$tag = 'Old';
+				}
+
+				$packing = $this->db->get_where("packing_types", ['id' => $tt['per_item']])->row_array();
+				$units = $this->db->get_where("units", ['id' => $tt['weightage']])->row_array();
+
+				$img_path = 'http://3.7.44.132/aquacredit/assets/images/f_1.png';
+
+				$data[] = array("inventoryid"=>$row['bin_id'],"pid"=>$row['pid'],"value"=>$row['product_name'],"label"=>$row['product_name'],"brand_id"=>$tt["brand_id"],"img"=>$img_path,"pmrp"=>$row['pmrp'],"packing"=>$packing['packing_type'],"units"=>$units['unit_name'],'purchase_amt'=>$row['purchase_amt'],'inventoryqty'=>$row['qty'],'binid'=>$tts['bin_id'],'protag'=>$tag,'procount'=>$productcount['productcount']);
 			}
 			return json_encode($data);
 	}
@@ -294,7 +326,7 @@ class Sales_model extends CI_Model
 		return $query->row()->total_saleprice;
 	}
 
-	function sales_search($limit,$start,$def_search,$search,$col,$dir,$searchValue,$month,$status,$fromdate,$todate,$saletype)    
+	function sales_search($limit,$start,$def_search,$search,$col,$dir,$searchValue,$month,$status,$fromdate,$todate,$saletype,$reportRange)    
     {
 		if($col == 0){ $col = "id";}
 
@@ -318,11 +350,9 @@ class Sales_model extends CI_Model
 			$where .= " AND sale.saletype='1' ";
 		}
 
-		if($month != "")
+		/*if($month != "")
 		{
-			/*if($status == ""){
-				$where .= " AND trade.status <> '2'";				
-			}*/
+			
 			if($month == "m"){
 				//This month
 				$where .= " AND (MONTH(sale.created_date) = MONTH(CURRENT_DATE()) AND YEAR(sale.created_date) = YEAR(CURRENT_DATE())) ";
@@ -345,6 +375,23 @@ class Sales_model extends CI_Model
 				$to_date = date('Y-m-d',strtotime($todate));
 				$where .= " AND (CAST(sale.created_date as DATE) BETWEEN '$from_date' AND '$to_date')";
 			}
+		}*/
+
+		if($reportRange != "" && $reportRange != "Till Date")
+		{
+			$dateExplode = explode("-",$reportRange);
+			$fromDate = str_replace("/"," ",$dateExplode[0]);		
+			$toDate = str_replace("/"," ",$dateExplode[1]);
+
+			$from_date = date('Y-m-d',strtotime($fromDate));
+			$to_date = date('Y-m-d',strtotime($toDate));
+			if($from_date == $to_date)
+			{
+				$where .= " AND CAST(sale.created_date as DATE) LIKE '$from_date'";
+			}else{
+
+				$where .= " AND (CAST(sale.created_date as DATE) BETWEEN '".$from_date."%' AND '".$to_date."%' )";
+			}
 		}
 
 		
@@ -364,6 +411,65 @@ class Sales_model extends CI_Model
          return $response;		
 	}
 	
+	function totalrecords($limit,$start,$def_search,$search,$col,$dir,$searchValue,$month,$status,$fromdate,$todate,$saletype,$reportRange)    
+    {
+		if($col == 0){ $col = "id";}
+
+		if($search != ""){ $where .= " AND (sale_id LIKE '%".$search."%' OR grandtotal LIKE '%".$search."%' OR branch.branch_name LIKE '%".$search."%' OR users.user_name LIKE '%".$search."%')"; }
+
+		if($status != ""){
+			
+			//$str_status = implode(",",$status);$where .= " AND status IN ($str_status)";
+			if(count($status) == 1){ $where .= " AND sale.status IN ('$status[0]')"; }
+			else if(count($status)>1){
+				$where .= " AND sale.status IN ('$status[0]','$status[1]')";
+			}
+			
+		}
+		if($saletype!='')
+		{
+			$where .= " AND sale.saletype='".$saletype."' ";
+		}
+		else
+		{
+			$where .= " AND sale.saletype='1' ";
+		}
+
+	
+
+		if($reportRange != "" && $reportRange != "Till Date")
+		{
+			$dateExplode = explode("-",$reportRange);
+			$fromDate = str_replace("/"," ",$dateExplode[0]);		
+			$toDate = str_replace("/"," ",$dateExplode[1]);
+
+			$from_date = date('Y-m-d',strtotime($fromDate));
+			$to_date = date('Y-m-d',strtotime($toDate));
+			if($from_date == $to_date)
+			{
+				$where .= " AND CAST(sale.created_date as DATE) LIKE '$from_date'";
+			}else{
+
+				$where .= " AND (CAST(sale.created_date as DATE) BETWEEN '".$from_date."%' AND '".$to_date."%' )";
+			}
+		}
+
+		
+		$orderby = 'order by id desc';
+		$response = array();
+
+		//$query = $this->db->query("SELECT * FROM trade where 1=1 $where Order by $col $dir limit $start,$limit");
+		
+		$query = $this->db->query("SELECT sale.*,users.user_name,branch.branch_name FROM sale LEFT JOIN users ON users.user_id = sale.userid LEFT JOIN branch ON branch.branch_id = sale.branchid where 1=1 $where $orderby ");
+		
+		//echo $this->db->last_query();exit;
+        if($query->num_rows()>0)
+        {
+            $data = $query->result(); 
+			$response = json_decode(json_encode($data),true);
+        }
+         return $response;		
+	}
 	
 	
 	// Insert brand
@@ -383,16 +489,51 @@ class Sales_model extends CI_Model
 	function userinsert($posts)
 	{
 		$data = $this->db->insert('users',$posts);
+		//echo $this->db->last_query();
+		if($data)
+		{
+			$insert_id = $this->db->insert_id();
+			return json_encode(array('status' => 'success','insert_id' => $insert_id));
+			//return $insert_id;
+		}else{
+			return json_encode(array('status' => 'fail'));
+		}
+	}
+	function guest_account_insert($posts)
+	{
+		$data = $this->db->insert('user_bank_accounts',$posts);
 		
 		if($data)
 		{
 			$insert_id = $this->db->insert_id();
-			/*return json_encode(array('status' => 'success','insert_id' => $insert_id));*/
+			return json_encode(array('status' => 'success','insert_id' => $insert_id));
+		}else{
+			return json_encode(array('status' => 'fail'));
+		}
+	}
+	function check_bank_accno($accno)
+	{
+		$query = $this->db->get_where("user_bank_accounts", ['account_no' => urldecode($accno)])->row_array();
+		if($query)
+		{
+			return json_encode(array('status'=>'exists'));
+		}else{
+			return json_encode(array('status'=>'notexists'));
+		}	
+	}
+	function adduser_cropdetails($posts)
+	{
+		$data = $this->db->insert('user_crop_details',$posts);
+		
+		if($data)
+		{
+			$insert_id = $this->db->insert_id();
 			return $insert_id;
 		}else{
 			return json_encode(array('status' => 'fail'));
 		}
 	}
+
 	public function deleteSaleactual($bid,$lid)
 	{
 		$tt = $this->db->query("select *from sale_details where id='".$bid."' ")->row_array();

@@ -28,11 +28,16 @@
                     </div>
                 </li>
                 <li class="pur_list">
-                    <div class="check_wt_serc">
+                    <div class="check_wt_serc" id="bsearch_check">
                         <div class="show_va">Brands</div>
                         <div class="selectVal" id="bselectVal">Brands</div>
                         <ul class="check_list">
                             <li>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search Branch" id="bsearch" name="bsearch" onkeyup="Purchase.searchElements();"/>
+                                </div>
+                            </li>
+                            <li id="brandslist">
                                 <?php 
                                     foreach ($brands as $key=>$value) {
                                        ?>

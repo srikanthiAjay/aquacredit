@@ -2,11 +2,74 @@
 <link href="<?php echo base_url();?>assets/css/product.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/common.js" type="javascript"></script>
 <?php require_once 'sidebar.php' ; ?>
+<link href="<?php echo base_url();?>assets/css/all.css" type="text/css" rel="stylesheet">
 <style>
-.errorTxt{
-  border: 1px solid red;
-  min-height: 20px;
+.select2-container--default .select2-selection--single .select2-selection__rendered{ line-height: 40px;}
+.select2-container .select2-selection--single .select2-selection__rendered{ padding-left: 12px; }
+.border-lable-flt label, .border-lable-flt > span{ font-size: 100% !important;}
+.select2-selection{ height:40px !important;}
+.select2-container--default .select2-selection--single { margin: 0; }
+.bname ~ .btn-group .multiselect-container {width: 210px!important; padding-bottom: 15px;}
+.multiselect-container input[type="radio"] {display: none;}
+.remove img {width: 15px;}
+.per_dtls {padding: 20px 20px 0px 20px; border-bottom: 10px solid #f0f1f5;}
+.blck_div {padding: 0px 20px 0px 20px; border-bottom: 10px solid #f0f1f5;}
+.hdg_bk {padding: 10px 20px 10px 20px; border-bottom: 5px solid #f0f1f5; font-weight: normal;}
+.bank_list.blck_div {padding: 0px 20px 0px 20px!important;}
+.blck_div.bal_blk {border-bottom: none!important;}
+.sbt_btn {margin-left: 20px; margin-bottom: 10px; font-size: 13px;}
+/*#brand_sbmt {margin-left: 20px; margin-bottom: 10px; }*/
+#catnew, #subcatnew {font-size: 13px; padding: 2px 10px;}
+.custom-select {position: relative;}
+.form-control:disabled {background: none!important;}
+.custom-select {background-image: url(http://3.7.44.132/aquacredit/assets/images/select_arow.png); position: relative; background-size:auto; }
+.multiselect-container input[type='checkbox']{opacity: 0;}
+.multiselect-container label {position: relative;}
+.multiselect-container label:after {
+	    content: ' ';
+    width: 15px;
+    border-radius: 2px;
+    left: 12px;
+    height: 15px;
+    transition: all linear 0.2s;
+    background: #fff;
+    display: block;
+    position: absolute;
+    top: 10px;
+    border: 1px solid #2962ff;
+    z-index: 4;
 }
+.multiselect-container label:before {
+    content: ' ';
+    width: 15px;
+    transition: all linear 0.2s;
+    height: 15px;
+    display: block;
+    opacity: 0;
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    background: url(http://3.7.44.132/aquacredit/assets/images/done_w.svg) no-repeat;
+    background-size: 14px;
+    background-position: 0 0;
+    z-index: 5;
+}
+.multiselect-container .active label:before {
+    opacity: 1;
+}
+.create_popup {padding: 20px!important;}
+.multiselect-container .active label:after { background: #2962ff;}
+.form-group label {font-weight: normal!important; /*font-size: 13px!important;*/}
+.create_popup .hdg_bk {border-bottom: none!important; font-weight: normal!important; padding: 0px!important;}
+.create_popup .form-group label {font-weight: normal!important;}
+.create_popup .btn-primary {font-size: 13px;}
+.btn_sbmt, .btn_cls {display: inline-block; padding: 5px 10px!important; width: auto!important; font-size: 13px!important;}
+.txt_rt {text-align: right;}
+.pp_clss {position: absolute; right: 20px; cursor: pointer;}
+.bank_dtl_blk .multiselect-container label:before {display: none;}
+.bank_dtl_blk .multiselect-container label:after {display: none;}
+
+.tooltip { z-index: 999999 !important; position: fixed; !important;}
 </style>		
 <div class="right_blk"> 
 	<div class="top_ttl_blk"> <span class="back_btn">
@@ -29,135 +92,118 @@
 					<div class="row"> 
 						<div class="col-md-4">
 							<div class="form-group">
-								<label for="prod_name" class="control-label required"> Product Name</label>
-								<input type="text" class="form-control" id="prod_name" name="prod_name" placeholder="Product Name" value="" >
+								<span class="border-lable-flt">								
+									<input type="text" class="form-control" id="prod_name" name="prod_name" placeholder=" " />
+									<label for="prod_name" class="control-label required"> Product Name</label>
+								</span>
 							</div>
 						</div>
 
 						<div class="col-md-4">
 							<div class="form-group">
-								<label for="hsn" class="control-label required"> HSN</label>
-								<input type="text" class="form-control allownumericwithoutdecimal" id="hsn" name="hsn" value="" placeholder="HSN">
+								<span class="border-lable-flt">									
+									<input type="text" class="form-control allownumericwithoutdecimal" id="hsn" name="hsn" placeholder=" " />
+									<label for="hsn" class="control-label required"> HSN</label>
+								</span>
 							</div>
 						</div>
 
 						<div class="col-md-4">
 							<div class="form-group">
-								<label for="tax" class="control-label required"> TAX</label>
-								<input type="text" class="form-control allownumericwithdecimal" id="tax" name="tax" value="" placeholder="TAX">
+								<span class="border-lable-flt">									
+									<input type="text" class="form-control allownumericwithdecimal" id="tax" name="tax" placeholder=" " onkeyup="amount_with_commas(this.id);" max="99.99" />
+									<label for="tax" class="control-label required"> TAX (%)</label>
+								</span>
 							</div>
 						</div>
-					</div>
-					
-					<div class="row">
-
+						<div class="col-md-4">
+							<label class="form-group border-lable-flt"> 
+								<select  id="cat" name="cat" class="form-control custom-select required" >	
+								</select>
+								<span>Category</span>
+							</label>
+						</div>
 						<div class="col-md-4"> 
-							<div class="form-group"> 
-								<label for="cat" class="control-label required"> Category</label>
-									<select id="cat" name="cat" >
-									</select>
-									<label id="cat-error" class="error" for="cat" style="display:none;"></label>
-							</div>
-
+							<label class="form-group border-lable-flt"> 
+								<select id="subcat" name="subcat" class="form-control custom-select required" >	
+								</select>
+								<span>Subcategory</span>
+							</label>							
 						</div>
-
-						<div class="col-md-4"> 
-							<div class="form-group"> 
-								<label for="subcat" class="control-label required"> Subcategory</label>
-									<select id="subcat" name="subcat" ></select>
-									<label id="subcat-error" class="error" for="subcat" style="display:none;"></label>
-							</div>
-
+						<div class="col-md-4">
+							<label class="form-group border-lable-flt"> 
+								<select id="brand" name="brand" class="form-control custom-select required" placeholder=" ">	
+								</select>
+								<span class="control-label required">Brand</span>
+							</label>							
 						</div>
-
-						<div class="col-md-4"> 
-							<div class="form-group"> 
-								<label for="brand" class="control-label required"> Brand</label>
-								<select id="brand" name="brand"></select>
-								<label id="brand-error" class="error" for="brand" style="display:none;"></label>
-							</div>
-						</div>
-
 						<div class="col-md-4">
 							<div class="mrp">
 
 								<div class="row"> 
 									<div class="col-md-12">
 										<div class="form-group">
-											<label for="mrp" class="control-label required"> MRP</label>
-											<input type="text" class="form-control allownumericwithdecimal" id="mrp" name="mrp" value="" placeholder="MRP">
+											<span class="border-lable-flt">										
+												<input type="text" class="form-control allownumericwithdecimal" id="mrp" name="mrp" placeholder=" " onkeyup="amount_with_commas(this.id);" />
+												<label for="pd_name" class="control-label required">MRP</label>
+											</span>
 										</div>
 									</div>
-								</div>
-								
-								<div class="row"> 
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label required"> Purchase Amount</label>
-											<input type="text" class="form-control allownumericwithdecimal" id="p_amt" name="p_amt" value="" placeholder=" Amount">
+											<span class="border-lable-flt">										
+												<input type="text" class="form-control allownumericwithdecimal" id="p_amt" name="p_amt" placeholder=" " onkeyup="amount_with_commas(this.id);" />
+												<label class="control-label required" for="p_amt"> Purchase Amount</label>
+											</span>
 										</div>
-								<!--     <div class="slct_box form-group"> 
-											<select>
-												<option> % </option>
-												<option selected=> $ </option>
-											</select>
-									</div> -->
 									</div>
-
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label required"> Discount</label>
-											<input type="text" class="form-control allownumericwithdecimal" id="mrp_perc" name="mrp_perc" value="" placeholder=" Discount(%)">
-									  </div>
+											<span class="border-lable-flt">										
+												<input type="text" class="form-control allownumericwithdecimal" id="mrp_perc" name="mrp_perc" placeholder=" " onkeyup="amount_with_commas(this.id);" />
+												<label class="control-label required" for="mrp_perc">Puchase Discount (%)</label>
+											</span>
+									   </div>
 									</div>
-									
 								</div>
 							</div>
 						</div>
-
-						<div class="col-md-8"> 
-							<!-- <label><b>Quantity</b></label> -->
-							<div class="row qty"> 
-								<div class="col-md-4"> 
+						<div class="col-md-8">
+							<div class="row qty">
+								<div class="col-md-4">								
 									<div class="form-group">
-										<label class="control-label required"> Quantity</label>
-										<input type="text" id="qty" name="qty" class="form-control allownumericwithoutdecimal" value="" placeholder="Enter Count">
+										<span class="border-lable-flt">											
+											<input type="text" id="qty" name="qty" class="form-control allownumericwithoutdecimal" placeholder=" " />
+											<label class="control-label required" for="qty"> Quantity</label>
+										</span>
 									</div>
 								</div>
 								<div class="col-md-4"> 
-									<div class="form-group">
-										<label class="control-label required"> Units</label>
-										<select id="qty_weight" name="qty_weight">
-											
-										</select>
-										<label id="qty_weight-error" class="error" for="qty_weight" style="display:none;"></label>
-									</div>
+									<label class="form-group border-lable-flt"> 
+										<select  id="qty_weight" name="qty_weight" class="form-control custom-select required" ></select>
+										<span>Units</span>
+									</label>									
 								</div>
 
 								<div class="col-md-4"> 
-									<div class="form-group">
-										<label class="control-label required"> Packing</label>
-										<select id="qty_opt" name="qty_opt">							
-										</select>
-										<label id="qty_opt-error" class="error" for="qty_opt" style="display:none;"></label>
-									</div>
+									<label class="form-group border-lable-flt"> 
+										<select  id="qty_opt" name="qty_opt" class="form-control custom-select required" ></select>
+										<span>Packing</span>
+									</label>									
 								</div>
-							</div>
-							
-							<div class="row">
+								
 								<div class="col-md-4"> 
-									<div class="form-group"> 
-										<label for="pub" class="control-label required"> Status</label>
-										<select id="pub" name="pub">
+									<label class="form-group border-lable-flt">									
+										<select id="pub" name="pub" class="form-control custom-select required">
 											<option value="1" > Publish </option>
 											<option value="0" > Un Publish </option>
 										</select>
-									</div>
+										<span for="pub" class="control-label required">Status</span>
+									</label>
 								</div>
 							</div>
-							
 						</div>
-					</div>
+					</div>				
 
 					<div class="row"> 
 						<div class="col-md-12 pad_t">
@@ -209,17 +255,20 @@ function getproduct()
 					$("#qty").val(res.data.qty);	
 					$("#qty_weight").val(res.data.weightage);					
 					$("#qty_opt").val(res.data.per_item);				
+					$("#pub").val(res.data.status);				
 					
 					$("#hid_pname").val(res.data.pname);					
 					$("#hid_brand").val(res.data.brand_id);
 					$("#hid_qty").val(res.data.qty);
 					$("#hid_unit").val(res.data.weightage);			
 					
-					$("#cat").multiselect('rebuild');										
+					/* $("#cat").multiselect('rebuild');										
 					$("#subcat").multiselect('rebuild');
 					$("#brand").multiselect('rebuild');
 					$("#qty_weight").multiselect('rebuild');
-					$("#qty_opt").multiselect('rebuild');
+					$("#qty_opt").multiselect('rebuild'); */
+					//$("#brand").select2('refresh');
+					$("#select2-brand-container").html(res.data.brand_name);
 
 					var cat_id = res.data.cat_id;
 					var subcat_id = res.data.subcat_id;
@@ -255,7 +304,7 @@ function getcategories()
 				});
 			}
 			$("#cat").html(opt);
-			$("#cat").multiselect('rebuild');
+			//$("#cat").multiselect('rebuild');
 			getproduct();
 			
 		}
@@ -283,7 +332,7 @@ function getunits()
 				});
 			}
 			$("#qty_weight").html(opt);
-			$("#qty_weight").multiselect('rebuild');
+			//$("#qty_weight").multiselect('rebuild');
 		}
 	});
 } 
@@ -309,7 +358,8 @@ function getpacking()
 				});
 			}
 			$("#qty_opt").html(opt);
-			$("#qty_opt").multiselect('rebuild');
+			//$("#qty_opt").multiselect('rebuild');
+			$("#brand").select2();
 		}
 	});
 } 
@@ -340,9 +390,10 @@ function selected_cat(value,subcat_id)
 						});					
 					}				
 					$("#subcat").html(opt);
-					$("#subcat").multiselect('rebuild');
+					//$("#subcat").multiselect('rebuild');
 					$("#brand").html('');
-					$("#brand").multiselect('rebuild');
+					//$("#brand").multiselect('rebuild');
+					$("#brand").select2('refresh');
 					<?php if($PAGE_SEGMENT == "view"){ ?>
 						$('#prod_frm').find('input, textarea, button, select, ul').attr('disabled','disabled');
 						$('#prod_sbmt').hide(); 
@@ -351,9 +402,10 @@ function selected_cat(value,subcat_id)
 			});
 		}else{
 			$("#subcat").html('');
-			$("#subcat").multiselect('rebuild');
+			//$("#subcat").multiselect('rebuild');
 			$("#brand").html('');
-			$("#brand").multiselect('rebuild');
+			//$("#brand").multiselect('rebuild');
+			$("#brand").select2('refresh');
 		}
 	}
 	function selected_subcat(value,brand_id)
@@ -384,7 +436,8 @@ function selected_cat(value,subcat_id)
 						});					
 					}				
 					$("#brand").html(opt);
-					$("#brand").multiselect('rebuild');
+					//$("#brand").multiselect('rebuild');
+					$("#brand").select2('refresh');
 					
 					<?php if($PAGE_SEGMENT == "view"){ ?>
 						$('#prod_frm').find('input, textarea, button, select, ul').attr('disabled','disabled');
@@ -395,41 +448,22 @@ function selected_cat(value,subcat_id)
 			});
 		}else{
 			$("#brand").html('');
-			$("#brand").multiselect('rebuild');
+			//$("#brand").multiselect('rebuild');
 		}
 		
 	}
  
 $(document).ready(function() {
 	
-	 getcategories(); getunits(); getpacking();	
+	 getcategories(); getunits(); getpacking();		
 
-	$(".allownumericwithoutdecimal").on("keypress keyup blur",function (event) {    
-		$(this).val($(this).val().replace(/[^\d].+/, ""));
-		if ((event.which < 48 || event.which > 57)) {
-		  event.preventDefault();
-		}
-	});
-	
-	$(".allownumericwithdecimal").on("keypress keyup blur",function (event) {
-            //this.value = this.value.replace(/[^0-9\.]/g,'');
-		$(this).val($(this).val().replace(/[^0-9\.]/g,''));
-		if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
-			event.preventDefault();
-		}
-	});
-	
-	$.validator.addMethod("decimal", function(value, element) {
-		return this.optional(element) || /^\d{0,4}(\.\d{0,3})?$/i.test(value);
-	}, "You include only three decimal places");
-	
-
-	$('#cat').multiselect();
+/* 	$('#cat').multiselect();
 	$('#subcat').multiselect();
 	$('#brand').multiselect();
 	$('#qty_weight').multiselect();
 	$('#qty_opt').multiselect();
-	$('#pub').multiselect();	
+	$('#pub').multiselect(); */	
+	
 	
 	// On Chage Category
 	$('#cat').change(function () {		
@@ -437,38 +471,50 @@ $(document).ready(function() {
 		selected_cat(value);				
     });
 	
-		
-	
-	
 	// On Change SubCategory
 	$('#subcat').change(function () {		
 		let value = $(this).val();		
 		selected_subcat(value);				
-    });
-	
+    });	
 	
 	//Form submit
-	$("#prod_frm").submit(function(e) {
-			
+	$("#prod_frm").submit(function(e) {			
 		e.preventDefault();
 	}).validate({
-		rules:{
-			
+		rules:{			
 			prod_name:
 			{
 				required: true,
-				minlength: 3
+				minlength: 3,
+				alphanumeric: true,
+				remote: {
+					depends: function(){
+						return ($("#hid_pname").val() != $("#prod_name").val() || $("#hid_brand").val() != $("#brand").val() || $("#hid_qty").val() != $("#qty").val() || $("#hid_unit").val() != $("#qty_weight").val());
+					},
+					param: {
+						url: url+"api/products/checkproductname_by_qty_weight_for_tooltip",
+						type:'POST',
+						data: {	
+							brand: function(){ return $("#brand").val().trim();	},
+							prod_name: function(){ return $("#prod_name").val().trim();	},
+							qty: function(){ return $("#qty").val().trim(); },
+							units: function(){ return $("#qty_weight").val().trim(); }
+						}
+					}
+				}				
 			},				
 			hsn:{
 				required:true,
-				number: true,
-				maxlength: 8
+				number:true,
+				minlength:6,
+				maxlength:8
 			},				
 			tax:{
 				required:true,
 				number:true,
-				minlength: 1,
-				maxlength: 6
+				min: 1,
+				max: 99.99,
+				twodecimals: true
 			},				
 			cat:{
 				required: true			 
@@ -479,31 +525,82 @@ $(document).ready(function() {
 			mrp:{
 				required: true,
 				number: true,
-				min: 1
+				min: 1,
+				twodecimals: true,
+				//greaterthan: '#p_amt'
 			},
 			p_amt:{
 				required: true,
 				number: true,
-				min: 1
+				min: 1,
+				twodecimals: true,				
+				lessthan: '#mrp'
 			},
 			mrp_perc:{
 				required: true,
 				number: true,
 				decimal: true,
 				min: 0,
-				max: 100,					
+				max: 100,
+				twodecimals: true
 			},
 			brand:{
-				required: true
+				required: true,
+				remote: {
+					depends: function(){
+						return ($("#hid_pname").val() != $("#prod_name").val() || $("#hid_brand").val() != $("#brand").val() || $("#hid_qty").val() != $("#qty").val() || $("#hid_unit").val() != $("#qty_weight").val());
+					},
+					param: {
+						url: url+"api/products/checkproductname_by_qty_weight_for_tooltip",
+						type:'POST',
+						data: {	
+							brand: function(){ return $("#brand").val().trim();	},
+							prod_name: function(){ return $("#prod_name").val().trim();	},
+							qty: function(){ return $("#qty").val().trim(); },
+							units: function(){ return $("#qty_weight").val().trim(); }
+						}
+					}
+				}
 			},
 			qty:{
 				required: true,
 				number: true,
+				min: 1,
 				minlength:1,
-				maxlength:4
+				maxlength:4,
+				remote: {
+					depends: function(){
+						return ($("#hid_pname").val() != $("#prod_name").val() || $("#hid_brand").val() != $("#brand").val() || $("#hid_qty").val() != $("#qty").val() || $("#hid_unit").val() != $("#qty_weight").val());
+					},
+					param: {
+						url: url+"api/products/checkproductname_by_qty_weight_for_tooltip",
+						type:'POST',
+						data: {	
+							brand: function(){ return $("#brand").val().trim();	},
+							prod_name: function(){ return $("#prod_name").val().trim();	},
+							qty: function(){ return $("#qty").val().trim(); },
+							units: function(){ return $("#qty_weight").val().trim(); }
+						}
+					}
+				}
 			},
 			qty_weight:{
-				required: true
+				required: true,
+				remote: {
+					depends: function(){
+						return ($("#hid_pname").val() != $("#prod_name").val() || $("#hid_brand").val() != $("#brand").val() || $("#hid_qty").val() != $("#qty").val() || $("#hid_unit").val() != $("#qty_weight").val());
+					},
+					param: {
+						url: url+"api/products/checkproductname_by_qty_weight_for_tooltip",
+						type:'POST',
+						data: {	
+							brand: function(){ return $("#brand").val().trim();	},
+							prod_name: function(){ return $("#prod_name").val().trim();	},
+							qty: function(){ return $("#qty").val().trim(); },
+							units: function(){ return $("#qty_weight").val().trim(); }
+						}
+					}
+				}
 			},
 			qty_opt:{
 				required: true
@@ -515,16 +612,15 @@ $(document).ready(function() {
 		messages: {
 			prod_name:
 			{
-				required: "Please enter product name",
-				minlength: "Minimum length at least 3 characters"
+				required: "Enter product name",
+				minlength: "Minimum length at least 3 characters",
+				remote: "The combination of product, brand, quantity and units already exists!"
 			},
 			hsn:{
 				required: "Please enter HSN "
 			},				
 			tax:{
 				required:"Please enter TAX",
-				/* minlength:10,
-				maxlength:10 */
 			},				
 			cat:{
 				required: "Please select category"			 
@@ -533,29 +629,50 @@ $(document).ready(function() {
 				required: "Please select subcategory"
 			},
 			brand:{
-				required: "Please select brand"
+				required: "Please select brand",
+				remote: "The combination of product, brand, quantity and units already exists!"
 			},
 			mrp:{
 				required: "Please enter MRP"
 			},
 			p_amt:{
-				required: "Please enter amount"
+				required: "Enter purchase amount "
 			},
 			mrp_perc:{
 				required: "Please enter discount (%)"				
 			},			
 			qty:{
-				required: "Please enter quntity"
+				required: "Please enter quntity",
+				remote: "The combination of product, brand, quantity and units already exists!"
 			},
 			qty_weight:{
-				required: "Please enter unit"
+				required: "Please enter unit",
+				remote: "The combination of product, brand, quantity and units already exists!"
 			},
 			qty_opt:{
 				required: "Please enter package type"
 			},
 		},
-		/* errorElement : 'div',
-		errorLabelContainer: '.errorTxt', */
+		showErrors: function(errorMap, errorList) {
+			  // Clean up any tooltips for valid elements
+			  $.each(this.validElements(), function (index, element) {
+				  var $element = $(element);
+				  $element.data("title", "") // Clear the title - there is no error associated anymore
+					  .removeClass("error")
+					  .tooltip("dispose");
+					$(element).css("border", "");
+					$(".custom-select").css("border", "");
+					$(".select2-selection").css("border", "");
+			  });
+			  // Create new tooltips for invalid elements
+			  $.each(errorList, function (index, error) {
+				  var $element = $(error.element);
+				  $element.tooltip("dispose").data("title", error.message).addClass("error").tooltip();
+					$("#" + error.element.id).css("border", "1px solid red");
+					$(".custom-select").css("border", "1px solid red");
+					$(".select2-selection").css("border", "1px solid red");
+			  });
+		},
 		submitHandler: function(form) 
 		{
 			var prodexists = $("#prodexists").val();
@@ -592,7 +709,10 @@ $(document).ready(function() {
 								shadow: true
 							});
 							//$("#prod_frm").reset();							
-							setInterval('location.reload()', 3000);														
+							//setInterval('location.reload()', 3000);
+							setTimeout(function(){
+								window.location.href = url+'admin/products';
+							 }, 2000);														
 						}
 						else{
 							new PNotify({
@@ -611,41 +731,14 @@ $(document).ready(function() {
 	// Puchase amount change
 	$("#p_amt").keyup(function(){
 		
-		//var num = 5.56789;
-		//var n = num.toFixed(2); 
-		//Ans: 5.57
-		/* var mrp = Number($("#mrp").val());
-		var purch_val = Number($(this).val()); */
 		var mrp = +$("#mrp").val();
 		var purch_val = +$(this).val();
 		
-		if(mrp == ""){
-			new PNotify({
-				title: 'Error',
-				text: 'Please enter MRP value!',
-				type: 'failure',
-				shadow: true
-			});
-			$("#mrp").focus();
-			
-			return false;			
-		}
-		if(purch_val >=mrp){
-			new PNotify({
-				title: 'Error',
-				text: 'Please enter less than MRP value!',
-				type: 'failure',
-				shadow: true
-			});
-			$("#p_amt").focus();
-			
-			return false;			
-		}
 		var percent = (100 - ((100 * purch_val) / mrp));
 		
 		if(percent %1 == 0){
 			$("#mrp_perc").val(percent);
-		}else{	$("#mrp_perc").val(percent.toFixed(3)); }
+		}else{	$("#mrp_perc").val(percent.toFixed(2)); }
 		//alert(purch_val);
 	});
 	
@@ -654,20 +747,9 @@ $(document).ready(function() {
 		var mrp = +$("#mrp").val();
 		var percent = +$(this).val();
 		
-		if(mrp == ""){
-			new PNotify({
-				title: 'Error',
-				text: 'Please enter MRP value!',
-				type: 'failure',
-				shadow: true
-			});
-			$("#mrp").focus();
-			$("#mrp_perc").val(0);
-			return false;			
-		}
-		
 		var purch_val = (mrp - ((mrp * percent) / 100));
-		$("#p_amt").val(purch_val);
+		//$("#p_amt").val(purch_val);
+		$("#p_amt").val(purch_val.toFixed(2))
 	});
 	
 	// On Submit button click
@@ -693,10 +775,10 @@ function checkproductname()
 	var pqty = $("#hid_qty").val();
 	var punits = $("#hid_unit").val();
 	
-	var prod_name = $("#prod_name").val().trim();	
-	var brand = $("#brand").val().trim();	
-	var qty = $("#qty").val().trim();	
-	var units = $("#qty_weight").val().trim();	
+	var prod_name = $("#prod_name").val();	
+	var brand = $("#brand").val();	
+	var qty = $("#qty").val();	
+	var units = $("#qty_weight").val();	
 	//if(prod_name !=""){
 
 		if(pname != prod_name || pbrand != brand || pqty != qty || punits != units)
@@ -711,12 +793,12 @@ function checkproductname()
 				success : function(response){
 					if(response == 1)
 					{
-						new PNotify({
+						/* new PNotify({
 							title: 'Error',
 							text: 'The combination of product, brand, quantity and units already exists!',
 							type: 'failure',
 							shadow: true
-						});						
+						});	 */					
 						$("#prodexists").val(1);
 						$("#brand_name").focus();
 						return false;
@@ -728,6 +810,25 @@ function checkproductname()
 			});
 		}
 	//}
+}
+function amount_with_commas(tagid) {	
+   
+    var textbox = '#'+tagid;    
+
+    var num = $(textbox).val();
+    var comma = /,/g;
+    num = num.replace(comma, '');
+
+    var len = num.length;
+    var index = num.indexOf('.');
+    if (index > 0) {
+        var CharAfterdot = (len + 1) - index;
+        if (CharAfterdot > 3) {
+            num = parseFloat(num).toFixed(2);
+        }
+    }    
+    var numCommas = addCommas(num);
+    $(textbox).val(numCommas);
 }
 </script>
 <?php require_once 'footer.php' ; ?>

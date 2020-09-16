@@ -16,6 +16,8 @@ body {font-family: 'Roboto', sans-serif; color: #58666e}
 .show_menu{width: 230px; z-index: 9999999999;}
 .show_over {width: 100%; opacity: 1; z-index:999999999;}
 .logo {width: 100%; overflow: hidden; padding: 10px 20px; box-sizing: border-box;}
+.bank_list .mCSB_container {background: none!important;}
+.crp_list  .mCSB_container {background:none!important;}
 /*.logo img {width: 80px;}*/
 .fa {outline: none!important;}
 .glyphicon-remove:after {   top: -4px;    content: "\002715";
@@ -142,6 +144,7 @@ input, select {box-shadow: none!important; outline: none; font-size: 13px!import
 }
 .res_tbl {max-width: 100%; background: #fff; /* overflow: auto; */ padding-right: 0px!important;}
 .res_tbl .row, .res_tbl .col-sm-12 {padding: 0px; margin: 0px;}
+.res_tbl .row:nth-child(2) .col-sm-12 {min-height:200px; }
 .top_in_op p {
     font-size: 12px;
     color: #808f97;
@@ -269,6 +272,8 @@ div.show, p.show, span.show, h1.show, h2.show, input.show, select.show {display:
 }
 .mCSB_container {min-height: 100%;}
 .side_menu .mCSB_container, .modal .mCSB_container, .tr_exp_dtl .mCSB_container {background: #fff!important;}
+#apr_loan .mCSB_container {background: none!important;}
+/*.modal-open .mCSB_container {z-index: 99999!important;}*/
 .dataTables_scrollHeadInner {width: 100%!important; padding-right: 0px!important;}
 .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {border-color: #fff #fff #e6e9ec;}
 .nav-tabs .nav-link {transition: all linear 0.2s; font-size: 13px;}
@@ -337,7 +342,7 @@ div.show, p.show, span.show, h1.show, h2.show, input.show, select.show {display:
 .note_entr {box-shadow:-0px 0px 0px 0px rgba(0,0,0,0.13); left: 30px;  position: absolute; top: -32px; width: 0px; overflow: hidden; transition: all linear 0.2s;}
 .note_blk .modal-content {padding: 20px;}
 .admin_bank li {height: auto;}
-.act_ms i {padding: 10px; outline: none; width: 100%; cursor: pointer;}
+.act_ms i {padding: 10px; outline: none; width: 100%!important; cursor: pointer;}
 .dataTable {
     border: none;
     border-top: 6px solid #f0f1f5!important;
@@ -445,7 +450,7 @@ div.show, p.show, span.show, h1.show, h2.show, input.show, select.show {display:
 .dataTable thead tr:hover {background: none!important;}
 .frm_prc div {display: table; width: 100%;}
 .frm_prc div.sm_blk {display: inline-block; width: auto;}
-
+.res_tbl {min-height: 300px!important;}
 .sts_fil_blk .chek_bx:after {top:3px;}
 .sts_fil_blk .chek_bx:before {top:3px;}
 .swith_blk span {position: absolute; transition: all linear 0.2s; left:25px; margin-top: 2px; color: #fff; font-size: 13px;}
@@ -455,7 +460,11 @@ div.show, p.show, span.show, h1.show, h2.show, input.show, select.show {display:
 .swith_blk.tog_yes span {left: 9px;}
 .tog_yes.swith_blk:after {left: 14px; background: #007bff;}
 .dataTables_scrollHead .dataTable {margin-top: 0px!important;}
-
+.pop_bk {width: 200px!important;}
+.pop_bk ul {width: 100%;}
+.pop_bk ul li {width: 100%;}
+.pop_bk ul li {margin-bottom: 0px!important; padding-bottom: 0px!important;}
+.pop_bk ul li span {padding-bottom: 0px!important; margin-bottom: 0px!important; display: block;}
 .top_no_txt .material-icons {font-size: 13px;}
 .top_no_txt {border: 1px solid #ced4da; transition: all linear 0.2s; padding:25px 20px 20px 20px; position: relative; box-sizing: border-box; width: 100%; box-shadow: 18px 18px 15px -20px rgba(0,0,0,0.08); border-radius: 5px;}
 /*.top_no_txt.blu_bd_txt {border: 1px solid #9ac5f3;}*/
@@ -496,7 +505,7 @@ div.show, p.show, span.show, h1.show, h2.show, input.show, select.show {display:
     opacity: 1;
     transition: all linear 0.2s;
     border:1px solid #9f9f9f;
-    border-radius: 15px;
+    border-radius: 5px;
 }
 .edt_bl_lnk.opacity_1 {border:1px solid #007bff;}
 
@@ -705,7 +714,9 @@ div.show, p.show, span.show, h1.show, h2.show, input.show, select.show {display:
 @media (min-width: 1200px) {
     .trd_cr_r { padding-top: 8px;}
 }
-
+@media (max-width: 1200px) {
+    .menu_icn {position: absolute!important;}
+}
 @media (max-width: 767px){
         .dataTables_length, .dataTables_filter {text-align: left!important;}
     .tp_tt_blk .top_in_op {border-left: none;}
@@ -718,6 +729,7 @@ div.show, p.show, span.show, h1.show, h2.show, input.show, select.show {display:
     .dataTables_length {margin-bottom: 10px;}
     .dropdowns {margin-top: 42px;}
     .top_ttl_blk {padding: 10px 10px 10px 50px!important;}
+    
 }
 
 @media(min-width: 701px){

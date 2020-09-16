@@ -50,11 +50,17 @@ var formsteps = {
                 ajax: {
                     url: API_URL + 'purchaselist',
                     data: function(data) {
-                        //Date Filter
-                        //var dateopt=$("input[name='dateopt']:checked").val();
-                        //data.dateopt=dateopt;
-
                         //Status Filter
+                        var multi_status = [];
+                        $.each($("input[name='optradio']:checked"), function() {
+                            multi_status.push($(this).val());
+                        });
+
+                        data.optradio = multi_status;
+
+                        //Date Filter
+                        var reportrange = $('#date_val').val();
+                        data.reportrange = reportrange;
 
                         //Tab
                         var hid_tabval = $('#hid_tabval').val();
@@ -90,6 +96,7 @@ var formsteps = {
             $('#pur_lst_tbl_wrapper .dataTables_length').html('<ul class="tabs_tbl"><li class="act_tab drft_cl"> <span>Pending Requests</span> </li><li class="comp_cl"> <span>Completed Requests </span> </li></ul> <span class="tbl_btn">  </span>');
 
             $('.comp_cl').click(function() {
+                $('#status_icon').hide();
                 $("#hid_tabval").val(1);
                 $(this).addClass('act_tab');
                 $('.tabs_tbl').addClass('cmp_ul');
@@ -101,6 +108,7 @@ var formsteps = {
             });
 
             $('.drft_cl').click(function() {
+                $('#status_icon').show();
                 $("#hid_tabval").val(0);
                 $(this).addClass('act_tab');
                 $('.tabs_tbl').removeClass('cmp_ul');
@@ -165,7 +173,7 @@ var formsteps = {
                 }
             });
 
-            $(document).on("click", "#pedit", function() {
+            $(document).on("click", "#epedit,#pedit", function() {
                 Purchase.editRequest();
             });
 
@@ -181,6 +189,58 @@ var formsteps = {
                     $('[data-toggle="popover"]').popover('hide');
                 }
             });
+
+            //Filters
+            $("input[name='optradio']").on('click', function() {
+                pur_lst_tbl.draw();
+            });
+
+            $('#reportrange').daterangepicker({
+                opens: 'right',
+                drops: 'down',
+                showDropdowns: true,
+                locale: {
+                    format: 'D-MMM-YYYY',
+                    customRangeLabel: 'Date Range'
+                },
+                parentEl: '.dateEle',
+                ranges: {
+                    'Till Date': [],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    'Last 6 Months': [moment().subtract(5, 'month').startOf('month'), moment().endOf('month')],
+                    "Last Year": [moment().subtract(1, "y").startOf("year"), moment().subtract(1, "y").endOf("year")]
+                }
+            }, Purchase.cb);
+
+            $(document).on('click', '.ranges ul li', function() {
+                $(this).parent().children().removeClass('active');
+                $(this).addClass('active');
+                $('.drp-selected').css('font-weight', 'bold');
+                if ($(this).text() == "Till Date") {
+                    $("#date_val").val('Till Date');
+                }
+
+                if ($(this).text() != "Date Range") {
+                    pur_lst_tbl.draw();
+                }
+            });
+
+            $(document).on('click', '.applyBtn', function() {
+                pur_lst_tbl.draw();
+            });
+
+            $("input[name='month_opt']").on('click', function() {
+                pur_lst_tbl.draw();
+            });
+        },
+        cb: function(start, end) {
+            $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+            if ($('#date_val').val() == "Invalid date - Invalid date") {
+                $('#date_val').val('');
+            } else {
+                $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+            }
         },
         addCommasinamt: function(x) {
             x = x.toString();
@@ -219,13 +279,22 @@ var formsteps = {
             ap_id = apid;
             ebrand_id = brand_id;
 
+            var brand = $('#req_' + ap_id).attr("data-brand");
+            var pbr = $('#req_' + ap_id).attr("data-pbr");
+            var status = $('#req_' + ap_id).attr("data-status");
             $('#req_' + ap_id).popover({
                 html: true,
                 content: function() {
-                    return $('#popover-contents').html();
+                    if (status == 'Approved' || status == 'Payment') {
+                        return $('#popover-contents-edit').html();
+                    } else {
+                        return $('#popover-contents-all').html();
+                    }
                 },
                 trigger: 'click'
             });
+
+
         },
         editRequest: function() {
             formsteps = {
@@ -316,6 +385,7 @@ var formsteps = {
                         $('.paid_amont_bb').hide();
                         $('.confrm_blk').hide();
                         $('.pay_sec').show();
+                        $('#paybtn').show();
                         $('.comp_blk, .ord_comp_blk').hide();
                     } else if (purchase_info.status == 'PM') {
                         //Default
@@ -352,30 +422,30 @@ var formsteps = {
                             }, 1000);
                         });
 
-                        $('#do_payment').hide();
+                        /*$('#do_payment').hide();
                         $('#payment_info_block').show();
                         $('#payment_info').empty();
 
-                        var payment_info = '';
-                        payment_info += '<tr><td>Payment Type</td><td class="text_cent qty_pp">' + purchase_info.ptype + '</td></tr>';
-                        if (purchase_info.payment_type == 'BK') {
-                            payment_info += '<tr><td width="50%">Date</td><td class="text_cent qty_pp">' + purchase_info.payment_date + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Admin Bank Acc NO</td><td class="text_cent qty_pp">' + purchase_info.admin_acc_name + '-' + purchase_info.admin_acc + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Company Bank Acc NO</td><td class="text_cent qty_pp">' + purchase_info.co_acc_name + '-' + purchase_info.co_acc + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">' + purchase_info.refno + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Note</td><td class="text_cent qty_pp">' + purchase_info.note + '</td></tr>';
-                        } else if (purchase_info.payment_type == 'CH') {
-                            payment_info += '<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">' + purchase_info.refno + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Note</td><td class="text_cent qty_pp">' + purchase_info.note + '</td></tr>';
-                        } else {
+                        var payment_info='';
+                        payment_info+='<tr><td>Payment Type</td><td class="text_cent qty_pp">'+purchase_info.ptype+'</td></tr>';
+                        if(purchase_info.payment_type=='BK'){
+                        	payment_info+='<tr><td width="50%">Date</td><td class="text_cent qty_pp">'+purchase_info.payment_date+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Admin Bank Acc NO</td><td class="text_cent qty_pp">'+purchase_info.admin_acc_name+'-'+purchase_info.admin_acc+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Company Bank Acc NO</td><td class="text_cent qty_pp">'+purchase_info.co_acc_name+'-'+purchase_info.co_acc+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">'+purchase_info.refno+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Note</td><td class="text_cent qty_pp">'+purchase_info.note+'</td></tr>';
+                        }else if(purchase_info.payment_type=='CH'){
+                        	payment_info+='<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">'+purchase_info.refno+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Note</td><td class="text_cent qty_pp">'+purchase_info.note+'</td></tr>';
+                        }else{
 
                         }
 
-                        var total_price = parseInt(purchase_info.total_price);
-                        payment_info += '<tr><td class="text_rt ttl_amnt">Total Amount</td><td class="blue_text text_rt ttl_amnt">₹' + Purchase.addCommasinamt(total_price) + '</td></tr>';
-                        payment_info += '<tr><td class="text_rt ttl_amnt">Paid Amount</td><td class="blue_text text_rt ttl_amnt">₹' + Purchase.addCommasinamt(purchase_info.trasaction_info.total_amount) + '</td></tr>';
+                        var total_price=parseInt(purchase_info.total_price);
+                        payment_info+='<tr><td class="text_rt ttl_amnt">Total Amount</td><td class="blue_text text_rt ttl_amnt">₹'+Purchase.addCommasinamt(total_price)+'</td></tr>';
+                        payment_info+='<tr><td class="text_rt ttl_amnt">Paid Amount</td><td class="blue_text text_rt ttl_amnt">₹'+Purchase.addCommasinamt(purchase_info.trasaction_info.total_amount)+'</td></tr>';
 
-                        $('#payment_info').append(payment_info);
+                        $('#payment_info').append(payment_info);*/
                     } else if (purchase_info.status == 'CE') {
                         formsteps.complete = true;
                         $('#confirm_id').hide();
@@ -426,33 +496,36 @@ var formsteps = {
                         var pcnt = branch_prod.length;
                         var bpurchase_info = branches[b].purchase_info;
 
-                        branch_list += '<li>';
+                        branch_list += '<li onclick="Purchase.openBranch(' + branches[b].branch_id + ',event);">';
                         //branch_list+='<div>';
                         branch_list += '<div class="check_wt_serc_new check_wt_serc val_seld" id="bb_' + branches[b].branch_id + '">';
                         branch_list += '<div>';
                         branch_list += '<div class="show_va" id="branch_name_' + branches[b].branch_id + '" data-bp-id="' + branches[b].purchase_info.bp_id + '">' + branches[b].branch_name + '</div>';
-                        branch_list += '<div class="selectVal" onclick="Purchase.openBranch(' + branches[b].branch_id + ');">Products(' + pcnt + ')</div>';
+                        branch_list += '<div class="selectVal">Products(' + pcnt + ')</div>';
                         branch_list += '<ul class="check_list" id="blist_' + branches[b].branch_id + '">';
-                        /*branch_list+='<li>';
-                        branch_list+='<div class="form-group" id="bsearch_'+branches[b].branch_id+'"><input type="text" class="form-control" placeholder="Search Branch" /></div>';
-                        branch_list+='</li>';*/
+
+                        branch_list += '<li>';
+                        branch_list += '<div class="form-group" id="bsearch_' + branches[b].branch_id + '"><input type="text" class="form-control" placeholder="Search Product" id="search_' + branches[b].branch_id + '" onkeyup="Purchase.searchElements(' + branches[b].branch_id + ');"/></div>';
+                        branch_list += '</li>';
+
+                        branch_list += '<li id="bpglist_' + branches[b].branch_id + '">';
                         for (var p = 0; p < branch_prod.length; p++) {
                             //console.log(branch_prod[p]);
-                            branch_list += '<li>';
-                            branch_list += '<div class="form-check chek_bx checkd" id="fcheck_' + branches[b].branch_id + '_' + branch_prod[p].pid + '"><input class="form-check-input" type="checkbox" id="bp_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" name="bp_' + branches[b].branch_id + '[]" value="' + branch_prod[p].pid + '" checked="checked" onclick="Purchase.isChecked(' + branches[b].branch_id + ',' + branch_prod[p].pid + ');"/><label class="form-check-label" for="uss1" id="bpname_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" data-price="' + branch_prod[p].price + '" data-bpd-id="' + branch_prod[p].bpd_id + '">' + branch_prod[p].pname + '</label><input type="text" class="cnt allownumericwithoutdecimal" placeholder="count" id="bpc_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" name="bpc_' + branches[b].branch_id + '[]" value="' + branch_prod[p].quantity + '"/></div>';
-                            branch_list += '</li>';
+                            //branch_list+='<li>';
+                            branch_list += '<div class="form-check chek_bx checkd" id="fcheck_' + branches[b].branch_id + '_' + branch_prod[p].pid + '"><input class="form-check-input" type="checkbox" id="bp_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" name="bp_' + branches[b].branch_id + '[]" value="' + branch_prod[p].pid + '" checked="checked" onclick="Purchase.isChecked(' + branches[b].branch_id + ',' + branch_prod[p].pid + ');"/><label class="form-check-label" for="uss_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" id="bpname_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" data-price="' + branch_prod[p].price + '" data-bpd-id="' + branch_prod[p].bpd_id + '">' + branch_prod[p].pname + '</label><input type="text" class="cnt allownumericwithoutdecimal" placeholder="count" id="bpc_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" name="bpc_' + branches[b].branch_id + '[]" value="' + branch_prod[p].quantity + '" style="opacity:1 !important;"/></div>';
+                            //branch_list+='</li>';
                         }
 
                         //Extra Products
                         var extra_products = branches[b].extra_products;
                         if (extra_products.length > 0) {
                             for (var e = 0; e < extra_products.length; e++) {
-                                branch_list += '<li>';
-                                branch_list += '<div class="form-check chek_bx" id="fcheck_' + branches[b].branch_id + '_' + extra_products[e].pid + '"><input class="form-check-input" type="checkbox" id="bp_' + branches[b].branch_id + '_' + extra_products[e].pid + '" name="bp_' + branches[b].branch_id + '[]" value="' + extra_products[e].pid + '" onclick="Purchase.isChecked(' + branches[b].branch_id + ',' + extra_products[e].pid + ');"/><label class="form-check-label" for="uss1" id="bpname_' + branches[b].branch_id + '_' + extra_products[e].pid + '" data-price="' + extra_products[e].pmrp + '" data-bpd-id="">' + extra_products[e].pname + '</label><input type="text" class="cnt allownumericwithoutdecimal" placeholder="count" id="bpc_' + branches[b].branch_id + '_' + extra_products[e].pid + '" name="bpc_' + branches[b].branch_id + '[]" value="' + extra_products[e].quantity + '"/></div>';
-                                branch_list += '</li>';
+                                //branch_list+='<li>';
+                                branch_list += '<div class="form-check chek_bx" id="fcheck_' + branches[b].branch_id + '_' + extra_products[e].pid + '"><input class="form-check-input" type="checkbox" id="bp_' + branches[b].branch_id + '_' + extra_products[e].pid + '" name="bp_' + branches[b].branch_id + '[]" value="' + extra_products[e].pid + '" onclick="Purchase.isChecked(' + branches[b].branch_id + ',' + extra_products[e].pid + ');"/><label class="form-check-label" for="uss_' + branches[b].branch_id + '_' + extra_products[e].pid + '" id="bpname_' + branches[b].branch_id + '_' + extra_products[e].pid + '" data-price="' + extra_products[e].purchase_amt + '" data-bpd-id="">' + extra_products[e].pname + '</label><input type="text" class="cnt allownumericwithoutdecimal" placeholder="count" id="bpc_' + branches[b].branch_id + '_' + extra_products[e].pid + '" name="bpc_' + branches[b].branch_id + '[]" value="' + extra_products[e].quantity + '" style="opacity:1 !important;"/></div>';
+                                //branch_list+='</li>';
                             }
                         }
-
+                        branch_list += '</li>';
                         if (bpurchase_info.status == 'P' || bpurchase_info.status == 'C' || bpurchase_info.status == 'PM') {
                             branch_list += '<li><button class="btn save_blk btn-primary" onclick="Purchase.updateBranchProd(' + branches[b].branch_id + ');">Save</button></li>';
                         }
@@ -490,6 +563,74 @@ var formsteps = {
 
                     //step 2
                     //bankVal,banklist,cobankVal,cobanklist
+                    /*$('#do_payment').hide();
+                    $('#payment_info_block').show();
+                    $('#payment_info').empty();
+
+                    var payment_info='';
+                    payment_info+='<tr><td>Payment Type</td><td class="text_cent qty_pp">'+purchase_info.ptype+'</td></tr>';
+                    if(purchase_info.payment_type=='BK'){
+                    	payment_info+='<tr><td width="50%">Date</td><td class="text_cent qty_pp">'+purchase_info.payment_date+'</td></tr>';
+                    	payment_info+='<tr><td width="50%">Admin Bank Acc NO</td><td class="text_cent qty_pp">'+purchase_info.admin_acc_name+'-'+purchase_info.admin_acc+'</td></tr>';
+                    	payment_info+='<tr><td width="50%">Company Bank Acc NO</td><td class="text_cent qty_pp">'+purchase_info.co_acc_name+'-'+purchase_info.co_acc+'</td></tr>';
+                    	payment_info+='<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">'+purchase_info.refno+'</td></tr>';
+                    	payment_info+='<tr><td width="50%">Note</td><td class="text_cent qty_pp">'+purchase_info.note+'</td></tr>';
+                    }else if(purchase_info.payment_type=='CH'){
+                    	payment_info+='<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">'+purchase_info.refno+'</td></tr>';
+                    	payment_info+='<tr><td width="50%">Note</td><td class="text_cent qty_pp">'+purchase_info.note+'</td></tr>';
+                    }else{
+
+                    }
+
+                    var total_price=parseInt(purchase_info.total_price);
+                    payment_info+='<tr><td class="text_rt ttl_amnt">Total Amount</td><td class="blue_text text_rt ttl_amnt">₹'+Purchase.addCommasinamt(total_price)+'</td></tr>';
+                    payment_info+='<tr><td class="text_rt ttl_amnt">Paid Amount</td><td class="blue_text text_rt ttl_amnt">₹'+Purchase.addCommasinamt(purchase_info.trasaction_info.total_amount)+'</td></tr>';
+
+                    $('#payment_info').append(payment_info);*/
+
+                    $('#do_payment').css("pointer-events", "auto");
+                    $('.lnk_typ').removeClass('act_type');
+                    $('#paydatetxt_p,#refno_txt').removeClass('inp_ss');
+                    $("#paydate").val('');
+                    $("#adminVal").text('Select Bank');
+                    $("#cobankVal").text('Company Bank');
+                    $("#refno").val('');
+                    $('.pp_note').hide();
+                    $('#addnote').val('');
+
+                    if (purchase_info.payment_type == "BK" && purchase_info.bank_id > 0) {
+                        $('#do_payment').css("pointer-events", "none");
+                        $('#bk').addClass('act_type');
+                        $('#paydatetxt_p,#refno_txt').addClass('inp_ss');
+                        $("#paydate").val(purchase_info.payment_date);
+                        $("#adminVal").text(purchase_info.admin_acc);
+                        $("#cobankVal").text(purchase_info.co_acc);
+                        $("#refno").val(purchase_info.refno);
+                        if (purchase_info.note != "") {
+                            $('.pp_note').show();
+                            $('#addnote').val(purchase_info.note);
+                        } else {
+                            $('.pp_note').hide();
+                            $('#addnote').val('');
+                        }
+                    } else if (purchase_info.payment_type == "CH") {
+                        $('#do_payment').css("pointer-events", "none");
+                        $('#ch').addClass('act_type');
+                        $("#refno").val(purchase_info.refno);
+                        if (purchase_info.note != "") {
+                            $('.pp_note').show();
+                            $('#addnote').val(purchase_info.note);
+                        } else {
+                            $('.pp_note').hide();
+                            $('#addnote').val('');
+                        }
+                    } else if (purchase_info.payment_type == "CC") {
+                        $('#do_payment').css("pointer-events", "none");
+                        $('#cc').addClass('act_type');
+                    } else {
+                        $('#bk').addClass('act_type');
+                    }
+
                     var dateToday = new Date();
                     $("#paydate").datepicker({
                         beforeShow: function() {
@@ -518,16 +659,16 @@ var formsteps = {
                     //Admin Accounts
                     var admin_acc = '<li>';
                     for (var i = 0; i < adminacc.length; i++) {
-                        var icon = adminacc[i].bank_name.toLowerCase() + '_icn.png';
+                        var icon = adminacc[i].account_name.toLowerCase() + '_icn.png';
                         var bank_bal = '₹' + Purchase.addCommasinamt(adminacc[i].avail_amount);
-                        var accont_numb = adminacc[i].account_no;
-                        admin_acc += '<div class="form-check" onclick="Purchase.selectAccount(\'admin\',\'banklist\',\'' + adminacc[i].bank_id + '\')">';
-                        admin_acc += '<input class="form-check-input" type="radio" name="adminacc" id="adinput_' + adminacc[i].bank_id + '" value="' + adminacc[i].bank_id + '"/>';
-                        admin_acc += '<label class="form-check-label" for="adlb_' + adminacc[i].bank_id + '">';
+                        var accont_numb = adminacc[i].account_number;
+                        admin_acc += '<div class="form-check" onclick="Purchase.selectAccount(\'admin\',\'banklist\',\'' + adminacc[i].id + '\')">';
+                        admin_acc += '<input class="form-check-input" type="radio" name="adminacc" id="adinput_' + adminacc[i].id + '" value="' + adminacc[i].id + '"/>';
+                        admin_acc += '<label class="form-check-label" for="adlb_' + adminacc[i].id + '">';
                         admin_acc += '<div class="bank_logo"><img src="' + url + '/assets/images/' + icon + '" alt="" title=""/></div>';
                         admin_acc += '<div class="bank_mny">';
                         admin_acc += '<div class="bank_bal">' + bank_bal + '</div>';
-                        admin_acc += '<div class="accont_numb" id="admin_' + adminacc[i].bank_id + '">' + accont_numb + '</div>';
+                        admin_acc += '<div class="accont_numb" id="admin_' + adminacc[i].id + '">' + accont_numb + '</div>';
                         admin_acc += '</div>';
                         admin_acc += '</label>';
                         admin_acc += '</div>';
@@ -768,16 +909,16 @@ var formsteps = {
                         branch_tab += '<ul class="check_list" id="dbanklist_' + branches[b].branch_id + '">';
                         branch_tab += '<li>';
                         for (var i = 0; i < adminacc.length; i++) {
-                            var icon = adminacc[i].bank_name.toLowerCase() + '_icn.png';
+                            var icon = adminacc[i].account_name.toLowerCase() + '_icn.png';
                             var bank_bal = '₹' + Purchase.addCommasinamt(adminacc[i].avail_amount);
-                            var accont_numb = adminacc[i].account_no;
-                            branch_tab += '<div class="form-check" onclick="Purchase.selectTsAccount(\'dadmin\',\'banklist\',\'' + adminacc[i].bank_id + '\',\'' + branches[b].branch_id + '\')">';
-                            branch_tab += '<input class="form-check-input" type="radio" name="dadminacc_' + branches[b].branch_id + '" id="dadinput_' + adminacc[i].bank_id + '_' + branches[b].branch_id + '" value="' + adminacc[i].bank_id + '"/>';
-                            branch_tab += '<label class="form-check-label" for="dadlb_' + adminacc[i].bank_id + '_' + branches[b].branch_id + '">';
+                            var accont_numb = adminacc[i].account_number;
+                            branch_tab += '<div class="form-check" onclick="Purchase.selectTsAccount(\'dadmin\',\'banklist\',\'' + adminacc[i].id + '\',\'' + branches[b].branch_id + '\')">';
+                            branch_tab += '<input class="form-check-input" type="radio" name="dadminacc_' + branches[b].branch_id + '" id="dadinput_' + adminacc[i].id + '_' + branches[b].branch_id + '" value="' + adminacc[i].id + '"/>';
+                            branch_tab += '<label class="form-check-label" for="dadlb_' + adminacc[i].id + '_' + branches[b].branch_id + '">';
                             branch_tab += '<div class="bank_logo"><img src="' + url + '/assets/images/' + icon + '" alt="" title=""/></div>';
                             branch_tab += '<div class="bank_mny">';
                             branch_tab += '<div class="bank_bal">' + bank_bal + '</div>';
-                            branch_tab += '<div class="accont_numb" id="dadmin_' + adminacc[i].bank_id + '_' + branches[b].branch_id + '">' + accont_numb + '</div>';
+                            branch_tab += '<div class="accont_numb" id="dadmin_' + adminacc[i].id + '_' + branches[b].branch_id + '">' + accont_numb + '</div>';
                             branch_tab += '</div>';
                             branch_tab += '</label>';
                             branch_tab += '</div>';
@@ -902,15 +1043,51 @@ var formsteps = {
                 });
 
         },
-        openBranch: function(branch_id) {
+        openBranch: function(branch_id, ev) {
+
+            //bp_,bpc_
+            if (ev.target.id != "") {
+                var ob_arr = ev.target.id.split('_');
+                //console.log(ob_arr);
+                if (ob_arr[0] == 'bp' || ob_arr[0] == 'bpc' || ob_arr[0] == 'search') {
+                    return;
+                }
+
+            }
+
             var bb_id = $('#bb_' + branch_id);
             var blist = $('#blist_' + branch_id);
             if (bb_id.hasClass("act_v")) {
                 bb_id.removeClass('act_v');
                 blist.removeClass('show_chk');
+                //$(".check_wt_serc").not(this_ev).removeClass('act_v');
+                //$(".check_wt_serc").not(this_ev).find('.check_list').removeClass('show_chk');
             } else {
                 bb_id.addClass('act_v');
                 blist.addClass('show_chk');
+                //$(this_ev).toggleClass('act_v');
+                //$(this_ev).find('.check_list').toggleClass('show_chk');
+            }
+        },
+        searchElements: function(branch_id) {
+            // Declare variables
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById('search_' + branch_id);
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("bpglist_" + branch_id);
+            li = ul.getElementsByTagName('div');
+
+            // Loop through all list items, and hide those who don't match the search query
+            for (i = 0; i < li.length; i++) {
+                //a = li[i].getElementsByTagName("a")[0];
+                a = li[i].getElementsByTagName("label")[0];
+                txtValue = a.textContent || a.innerText;
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
             }
         },
         showAccounts: function(id) {
@@ -1337,6 +1514,7 @@ var formsteps = {
                         $('.paid_amont_bb').hide();
                         $('.confrm_blk').hide();
                         $('.pay_sec').show();
+                        $('#paybtn').show();
                         $('.comp_blk, .ord_comp_blk').hide();
                     } else if (purchase_info.status == 'PM') {
                         //Default
@@ -1371,30 +1549,30 @@ var formsteps = {
                             }, 1000);
                         });
 
-                        $('#do_payment').hide();
+                        /*$('#do_payment').hide();
                         $('#payment_info_block').show();
                         $('#payment_info').empty();
-
-                        var payment_info = '';
-                        payment_info += '<tr><td>Payment Type</td><td class="text_cent qty_pp">' + purchase_info.ptype + '</td></tr>';
-                        if (purchase_info.payment_type == 'BK') {
-                            payment_info += '<tr><td width="50%">Date</td><td class="text_cent qty_pp">' + purchase_info.payment_date + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Admin Bank Acc NO</td><td class="text_cent qty_pp">' + purchase_info.admin_acc_name + '-' + purchase_info.admin_acc + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Company Bank Acc NO</td><td class="text_cent qty_pp">' + purchase_info.co_acc_name + '-' + purchase_info.co_acc + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">' + purchase_info.refno + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Note</td><td class="text_cent qty_pp">' + purchase_info.note + '</td></tr>';
-                        } else if (purchase_info.payment_type == 'CH') {
-                            payment_info += '<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">' + purchase_info.refno + '</td></tr>';
-                            payment_info += '<tr><td width="50%">Note</td><td class="text_cent qty_pp">' + purchase_info.note + '</td></tr>';
-                        } else {
+					
+                        var payment_info='';
+                        payment_info+='<tr><td>Payment Type</td><td class="text_cent qty_pp">'+purchase_info.ptype+'</td></tr>';
+                        if(purchase_info.payment_type=='BK'){
+                        	payment_info+='<tr><td width="50%">Date</td><td class="text_cent qty_pp">'+purchase_info.payment_date+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Admin Bank Acc NO</td><td class="text_cent qty_pp">'+purchase_info.admin_acc_name+'-'+purchase_info.admin_acc+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Company Bank Acc NO</td><td class="text_cent qty_pp">'+purchase_info.co_acc_name+'-'+purchase_info.co_acc+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">'+purchase_info.refno+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Note</td><td class="text_cent qty_pp">'+purchase_info.note+'</td></tr>';
+                        }else if(purchase_info.payment_type=='CH'){
+                        	payment_info+='<tr><td width="50%">Ref.Number</td><td class="text_cent qty_pp">'+purchase_info.refno+'</td></tr>';
+                        	payment_info+='<tr><td width="50%">Note</td><td class="text_cent qty_pp">'+purchase_info.note+'</td></tr>';
+                        }else{
 
                         }
 
-                        var total_price = parseInt(purchase_info.total_price);
-                        payment_info += '<tr><td class="text_rt ttl_amnt">Total Amount</td><td class="blue_text text_rt ttl_amnt">₹' + Purchase.addCommasinamt(total_price) + '</td></tr>';
-                        payment_info += '<tr><td class="text_rt ttl_amnt">Paid Amount</td><td class="blue_text text_rt ttl_amnt">₹' + Purchase.addCommasinamt(purchase_info.trasaction_info.total_amount) + '</td></tr>';
+                        var total_price=parseInt(purchase_info.total_price);
+                        payment_info+='<tr><td class="text_rt ttl_amnt">Total Amount</td><td class="blue_text text_rt ttl_amnt">₹'+Purchase.addCommasinamt(total_price)+'</td></tr>';
+                        payment_info+='<tr><td class="text_rt ttl_amnt">Paid Amount</td><td class="blue_text text_rt ttl_amnt">₹'+Purchase.addCommasinamt(purchase_info.trasaction_info.total_amount)+'</td></tr>';
 
-                        $('#payment_info').append(payment_info);
+                        $('#payment_info').append(payment_info);*/
 
                     } else if (purchase_info.status == 'CE') {
                         formsteps.complete = true;
@@ -1443,37 +1621,41 @@ var formsteps = {
                     for (var b = 0; b < branches.length; b++) {
                         //console.log(branches[b]);
                         var branch_prod = branches[b].products;
-                        var bpurchase_info = branches[b].purchase_info;
                         var pcnt = branch_prod.length;
-                        branch_list += '<li>';
+                        var bpurchase_info = branches[b].purchase_info;
+
+                        branch_list += '<li onclick="Purchase.openBranch(' + branches[b].branch_id + ',event);">';
                         //branch_list+='<div>';
                         branch_list += '<div class="check_wt_serc_new check_wt_serc val_seld" id="bb_' + branches[b].branch_id + '">';
                         branch_list += '<div>';
                         branch_list += '<div class="show_va" id="branch_name_' + branches[b].branch_id + '" data-bp-id="' + branches[b].purchase_info.bp_id + '">' + branches[b].branch_name + '</div>';
-                        branch_list += '<div class="selectVal" onclick="Purchase.openBranch(' + branches[b].branch_id + ');">Products(' + pcnt + ')</div>';
+                        branch_list += '<div class="selectVal">Products(' + pcnt + ')</div>';
                         branch_list += '<ul class="check_list" id="blist_' + branches[b].branch_id + '">';
-                        /*branch_list+='<li>';
-                        branch_list+='<div class="form-group" id="bsearch_'+branches[b].branch_id+'"><input type="text" class="form-control" placeholder="Search Branch" /></div>';
-                        branch_list+='</li>';*/
+
+                        branch_list += '<li>';
+                        branch_list += '<div class="form-group" id="bsearch_' + branches[b].branch_id + '"><input type="text" class="form-control" placeholder="Search Product" id="search_' + branches[b].branch_id + '" onkeyup="Purchase.searchElements(' + branches[b].branch_id + ');"/></div>';
+                        branch_list += '</li>';
+
+                        branch_list += '<li id="bpglist_' + branches[b].branch_id + '">';
                         for (var p = 0; p < branch_prod.length; p++) {
                             //console.log(branch_prod[p]);
-                            branch_list += '<li>';
-                            branch_list += '<div class="form-check checkd" id="fcheck_' + branches[b].branch_id + '_' + branch_prod[p].pid + '"><input class="form-check-input" type="checkbox" id="bp_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" name="bp_' + branches[b].branch_id + '[]" value="' + branch_prod[p].pid + '" checked="checked" onclick="Purchase.isChecked(' + branches[b].branch_id + ',' + branch_prod[p].pid + ');"/><label class="form-check-label" for="uss1" id="bpname_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" data-price="' + branch_prod[p].price + '" data-bpd-id="' + branch_prod[p].bpd_id + '">' + branch_prod[p].pname + '</label><input type="text" class="cnt allownumericwithoutdecimal" placeholder="count" id="bpc_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" name="bpc_' + branches[b].branch_id + '[]" value="' + branch_prod[p].quantity + '"/></div>';
-                            branch_list += '</li>';
+                            //branch_list+='<li>';
+                            branch_list += '<div class="form-check chek_bx checkd" id="fcheck_' + branches[b].branch_id + '_' + branch_prod[p].pid + '"><input class="form-check-input" type="checkbox" id="bp_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" name="bp_' + branches[b].branch_id + '[]" value="' + branch_prod[p].pid + '" checked="checked" onclick="Purchase.isChecked(' + branches[b].branch_id + ',' + branch_prod[p].pid + ');"/><label class="form-check-label" for="uss_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" id="bpname_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" data-price="' + branch_prod[p].price + '" data-bpd-id="' + branch_prod[p].bpd_id + '">' + branch_prod[p].pname + '</label><input type="text" class="cnt allownumericwithoutdecimal" placeholder="count" id="bpc_' + branches[b].branch_id + '_' + branch_prod[p].pid + '" name="bpc_' + branches[b].branch_id + '[]" value="' + branch_prod[p].quantity + '" style="opacity:1 !important;"/></div>';
+                            //branch_list+='</li>';
                         }
 
                         //Extra Products
                         var extra_products = branches[b].extra_products;
                         if (extra_products.length > 0) {
                             for (var e = 0; e < extra_products.length; e++) {
-                                branch_list += '<li>';
-                                branch_list += '<div class="form-check chek_bx" id="fcheck_' + branches[b].branch_id + '_' + extra_products[e].pid + '"><input class="form-check-input" type="checkbox" id="bp_' + branches[b].branch_id + '_' + extra_products[e].pid + '" name="bp_' + branches[b].branch_id + '[]" value="' + extra_products[e].pid + '" onclick="Purchase.isChecked(' + branches[b].branch_id + ',' + extra_products[e].pid + ');"/><label class="form-check-label" for="uss1" id="bpname_' + branches[b].branch_id + '_' + extra_products[e].pid + '" data-price="' + extra_products[e].pmrp + '" data-bpd-id="">' + extra_products[e].pname + '</label><input type="text" class="cnt allownumericwithoutdecimal" placeholder="count" id="bpc_' + branches[b].branch_id + '_' + extra_products[e].pid + '" name="bpc_' + branches[b].branch_id + '[]" value="' + extra_products[e].quantity + '"/></div>';
-                                branch_list += '</li>';
+                                //branch_list+='<li>';
+                                branch_list += '<div class="form-check chek_bx" id="fcheck_' + branches[b].branch_id + '_' + extra_products[e].pid + '"><input class="form-check-input" type="checkbox" id="bp_' + branches[b].branch_id + '_' + extra_products[e].pid + '" name="bp_' + branches[b].branch_id + '[]" value="' + extra_products[e].pid + '" onclick="Purchase.isChecked(' + branches[b].branch_id + ',' + extra_products[e].pid + ');"/><label class="form-check-label" for="uss_' + branches[b].branch_id + '_' + extra_products[e].pid + '" id="bpname_' + branches[b].branch_id + '_' + extra_products[e].pid + '" data-price="' + extra_products[e].purchase_amt + '" data-bpd-id="">' + extra_products[e].pname + '</label><input type="text" class="cnt allownumericwithoutdecimal" placeholder="count" id="bpc_' + branches[b].branch_id + '_' + extra_products[e].pid + '" name="bpc_' + branches[b].branch_id + '[]" value="' + extra_products[e].quantity + '" style="opacity:1 !important;"/></div>';
+                                //branch_list+='</li>';
                             }
                         }
-
+                        branch_list += '</li>';
                         if (bpurchase_info.status == 'P' || bpurchase_info.status == 'C' || bpurchase_info.status == 'PM') {
-                            branch_list += '<li id="bsavebtn_' + branches[b].branch_id + '"><button class="btn save_blk btn-primary" onclick="Purchase.updateBranchProd(' + branches[b].branch_id + ');">Save</button></li>';
+                            branch_list += '<li><button class="btn save_blk btn-primary" onclick="Purchase.updateBranchProd(' + branches[b].branch_id + ');">Save</button></li>';
                         }
 
                         branch_list += '</ul>';
@@ -1507,6 +1689,21 @@ var formsteps = {
                     //Total Purchase Amount
                     $('#tot_pcamt').val(Purchase.addCommasinamt(tot_amt));
 
+                    if (purchase_info.payment_type == "BK") {
+                        $('#paydatetxt_p,#refno_txt').addClass('inp_ss');
+                        $("#paydate").val(purchase_info.payment_date);
+                        $("#adminVal").text(purchase_info.admin_acc);
+                        $("#cobankVal").text(purchase_info.co_acc);
+                        $("#refno").val(purchase_info.refno);
+                        if (purchase_info.note != "") {
+                            $('.pp_note').show();
+                            $('#addnote').val(purchase_info.note);
+                        } else {
+                            $('.pp_note').hide();
+                            $('#addnote').val('');
+                        }
+                    }
+
                     //step 2
                     //bankVal,banklist,cobankVal,cobanklist
                     var dateToday = new Date();
@@ -1537,16 +1734,16 @@ var formsteps = {
                     //Admin Accounts
                     var admin_acc = '<li>';
                     for (var i = 0; i < adminacc.length; i++) {
-                        var icon = adminacc[i].bank_name.toLowerCase() + '_icn.png';
+                        var icon = adminacc[i].account_name.toLowerCase() + '_icn.png';
                         var bank_bal = '₹' + Purchase.addCommasinamt(adminacc[i].avail_amount);
-                        var accont_numb = adminacc[i].account_no;
-                        admin_acc += '<div class="form-check" onclick="Purchase.selectAccount(\'admin\',\'banklist\',\'' + adminacc[i].bank_id + '\')">';
-                        admin_acc += '<input class="form-check-input" type="radio" name="adminacc" id="adinput_' + adminacc[i].bank_id + '" value="' + adminacc[i].bank_id + '"/>';
-                        admin_acc += '<label class="form-check-label" for="adlb_' + adminacc[i].bank_id + '">';
+                        var accont_numb = adminacc[i].account_number;
+                        admin_acc += '<div class="form-check" onclick="Purchase.selectAccount(\'admin\',\'banklist\',\'' + adminacc[i].id + '\')">';
+                        admin_acc += '<input class="form-check-input" type="radio" name="adminacc" id="adinput_' + adminacc[i].id + '" value="' + adminacc[i].id + '"/>';
+                        admin_acc += '<label class="form-check-label" for="adlb_' + adminacc[i].id + '">';
                         admin_acc += '<div class="bank_logo"><img src="' + url + '/assets/images/' + icon + '" alt="" title=""/></div>';
                         admin_acc += '<div class="bank_mny">';
                         admin_acc += '<div class="bank_bal">' + bank_bal + '</div>';
-                        admin_acc += '<div class="accont_numb" id="admin_' + adminacc[i].bank_id + '">' + accont_numb + '</div>';
+                        admin_acc += '<div class="accont_numb" id="admin_' + adminacc[i].id + '">' + accont_numb + '</div>';
                         admin_acc += '</div>';
                         admin_acc += '</label>';
                         admin_acc += '</div>';
@@ -1787,16 +1984,16 @@ var formsteps = {
                         branch_tab += '<ul class="check_list" id="dbanklist_' + branches[b].branch_id + '">';
                         branch_tab += '<li>';
                         for (var i = 0; i < adminacc.length; i++) {
-                            var icon = adminacc[i].bank_name.toLowerCase() + '_icn.png';
+                            var icon = adminacc[i].account_name.toLowerCase() + '_icn.png';
                             var bank_bal = '₹' + Purchase.addCommasinamt(adminacc[i].avail_amount);
-                            var accont_numb = adminacc[i].account_no;
-                            branch_tab += '<div class="form-check" onclick="Purchase.selectTsAccount(\'dadmin\',\'banklist\',\'' + adminacc[i].bank_id + '\',\'' + branches[b].branch_id + '\')">';
-                            branch_tab += '<input class="form-check-input" type="radio" name="dadminacc_' + branches[b].branch_id + '" id="dadinput_' + adminacc[i].bank_id + '_' + branches[b].branch_id + '" value="' + adminacc[i].bank_id + '"/>';
-                            branch_tab += '<label class="form-check-label" for="dadlb_' + adminacc[i].bank_id + '_' + branches[b].branch_id + '">';
+                            var accont_numb = adminacc[i].account_number;
+                            branch_tab += '<div class="form-check" onclick="Purchase.selectTsAccount(\'dadmin\',\'banklist\',\'' + adminacc[i].id + '\',\'' + branches[b].branch_id + '\')">';
+                            branch_tab += '<input class="form-check-input" type="radio" name="dadminacc_' + branches[b].branch_id + '" id="dadinput_' + adminacc[i].id + '_' + branches[b].branch_id + '" value="' + adminacc[i].id + '"/>';
+                            branch_tab += '<label class="form-check-label" for="dadlb_' + adminacc[i].id + '_' + branches[b].branch_id + '">';
                             branch_tab += '<div class="bank_logo"><img src="' + url + '/assets/images/' + icon + '" alt="" title=""/></div>';
                             branch_tab += '<div class="bank_mny">';
                             branch_tab += '<div class="bank_bal">' + bank_bal + '</div>';
-                            branch_tab += '<div class="accont_numb" id="dadmin_' + adminacc[i].bank_id + '_' + branches[b].branch_id + '">' + accont_numb + '</div>';
+                            branch_tab += '<div class="accont_numb" id="dadmin_' + adminacc[i].id + '_' + branches[b].branch_id + '">' + accont_numb + '</div>';
                             branch_tab += '</div>';
                             branch_tab += '</label>';
                             branch_tab += '</div>';
@@ -1923,6 +2120,10 @@ var formsteps = {
             userselectedpdis = [];
             $('input[name="brand_id"]').attr('checked', false);
             $('#bselectVal').text("Brands");
+
+            $('#selectBranchVal').text(mbranch_name);
+            $('#rbranch_' + mbranch_id).attr('checked', true);
+
             $('#reqbtn').show();
             $('#addproducts').empty();
             req_prod_list += '<tr>';
@@ -1999,13 +2200,14 @@ var formsteps = {
             });
         },
         autoSearch: function() {
+            var branch_id = $("input[name='rbranch']:checked").val();
             $("#search").autocomplete({
                 source: function(request, response) {
                     $.ajax({
                         url: API_URL + 'searchproduct',
                         method: "POST",
                         //headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                        data: { keyword: $('#search').val(), 'brand_id': ad_brand_id, 'userselectedpdis': userselectedpdis },
+                        data: { keyword: $('#search').val(), 'brand_id': ad_brand_id, branch_id: branch_id, 'userselectedpdis': userselectedpdis },
                         dataType: "JSON",
                         success: function(data) {
                             response(data.products);
@@ -2091,12 +2293,12 @@ var formsteps = {
                 return;
             }
 
-
             document.getElementById("reqbtn").disabled = true;
             $("#reqloader").html(loader_fa);
 
+            var branch_id = $("input[name='rbranch']:checked").val();
             //Save Request
-            jQuery.post(API_URL + '/saverequest', { brand_id: ad_brand_id, userproducts: userselectedprod })
+            jQuery.post(API_URL + '/saverequest', { brand_id: ad_brand_id, branch_id: branch_id, userproducts: userselectedprod })
                 .done(function(data) {
                     var result = $.parseJSON(data);
                     //console.log(result);
@@ -2389,6 +2591,39 @@ var formsteps = {
             } catch (err) {
 
             }
+        },
+        delRequest: function() {
+            //ap_id=apid;
+            //ebrand_id=brand_id;
+            //console.log(ap_id+'==='+ebrand_id);
+            $('#brand_name').empty();
+            var brand = $('#req_' + ap_id).attr("data-brand");
+            var pbr = $('#req_' + ap_id).attr("data-pbr");
+            var status = $('#req_' + ap_id).attr("data-status");
+            //var result=$.parseJSON(JSON.stringify(res));
+            //console.log(brand);
+            $('#brand_name').html('<b>' + pbr + ' - ' + brand + '</b>')
+            $('#delete_req').modal('show');
+        },
+        confirmDelRequest: function() {
+            $('#delete_req').modal('hide');
+            $('#overlay_list_id').show();
+
+            var brand = $('#req_' + ap_id).attr("data-brand");
+            var pbr = $('#req_' + ap_id).attr("data-pbr");
+
+            jQuery.post(API_URL + '/deleteadminreq', { ap_id: ap_id, brand_id: ebrand_id })
+                .done(function(data) {
+                    pur_lst_tbl.draw();
+                    $('#overlay_list_id').hide();
+
+                    new PNotify({
+                        title: 'Success',
+                        text: pbr + ' - ' + brand + ' deleted successfully!',
+                        type: 'success',
+                        shadow: true
+                    });
+                });
         },
         onlyNumbers: function(event) {
             var charCode = (event.which) ? event.which : event.keyCode

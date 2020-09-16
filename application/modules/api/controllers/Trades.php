@@ -10,7 +10,7 @@ class Trades extends CI_Controller
 		$this->load->model('api/Admin_model');	
 		$this->load->model('api/Trades_model');
 		$this->load->model('api/Transaction_model');
-		$this->load->model('api/Cash_model');
+		$this->load->model('api/Cash_model');		
 		
 		setlocale(LC_MONETARY, 'en_IN');		
 		
@@ -80,7 +80,7 @@ class Trades extends CI_Controller
 				);
 				
 			$response = json_decode($this->Trades_model->userinsert($posts));
-			$_POST["userid"] = $response->insert_id;			
+			$_POST["userid"] = $response->insert_id;
 		}
 		else
 		{
@@ -131,6 +131,7 @@ class Trades extends CI_Controller
 
 	public function update()
 	{
+		//echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
 		$trade_id = $_POST["trade_id"];
 		
 		$fcount = 0;
@@ -233,11 +234,11 @@ class Trades extends CI_Controller
 					"avl_bal"		=> $account_amount,
 					"admin_id"	=>	$this->session->userdata('adminid'),
 				);
-				$this->Cash_model->insert($cash);	
+				$this->Cash_model->insert($cash);
 			}
 			//Lab Fee
 			if($this->input->post("labfee") != '0')
-			{				
+			{			
 				$data = array(
 					"trans_type" 	=> "TRADE", //
 					"trans"			=> "LAB FEE",

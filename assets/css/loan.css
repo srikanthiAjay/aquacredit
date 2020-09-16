@@ -160,7 +160,8 @@
 }
 
 .bank_lst_blk li {
-    width: 182px;
+    /*width: 185px;*/
+    height: 40px;
     float: left;
     margin-bottom: 15px;
     padding-right: 30px;

@@ -1,5 +1,6 @@
 <?php require_once 'header.php';?>
 <link href="<?php echo base_url(); ?>assets/css/brands.css" type="text/css" rel="stylesheet">
+<!-- <script src='https://kit.fontawesome.com/a076d05399.js'></script> -->
 <?php require_once 'sidebar.php';?>
 <div class="right_blk">
 	<div class="top_ttl_blk"> <span class="back_btn">
@@ -12,15 +13,16 @@
 		<div class="mar_btm_20">
 			<div class="card_view dis_tbl">
 				<ul class="trd_anl">
-					<?php foreach($categories as $category){ ?>
-						<li class="bor_lf_none">
+					<?php $n = 0; 
+						foreach($categories as $category){ 
+							if($n == 0){ $cls = "bor_lf_none";}else{ $cls = "";} ?>
+						<li class="<?php echo $cls;?>">
 							<div class="top_in_op crop_top">
 								<p><?php echo $category->cat_name;?> </p>
 								<h1><?php echo $category->brands;?></h1>
 							</div>
 						</li>
-					<?php	
-					}?>
+					<?php $n++;} ?>
 					
 					<!-- <li class="fr"> <button class="btn purc_btn btn-primary sho_m"> Show More</button> </li> -->
 				</ul>
@@ -129,7 +131,7 @@
 <div id="popover-contents" style="display: none">
 	<div class="custom-popover">
 		<ul class="list-group">
-			<li class="list-group-item edt green_txt"> <a href="<?php echo base_url();?>view_it">View</a></li>
+			<li class="list-group-item vw green_txt"><a href="<?php echo base_url();?>view_it">View</a></li>
 			<li class="list-group-item edt green_txt"> <a href="<?php echo base_url();?>edit_it">Edit</a></li>
 			<li class="list-group-item  reject_loan del">
 				<a href="javascript:void();" title="" class="delete_brand" id="delete_id"> Delete </a></li>
@@ -223,9 +225,9 @@ $(document).ready(function() {
 		}
 	});
 
-	$('.chek_bx input').change(function() {
+	/* $('.chek_bx input').change(function() {
 		$(this).parent('.chek_bx').toggleClass('checkd');
-	});
+	}); */
 
 	$("input[name='utype_opt']").on('click',function() {
 		dataTable.draw();

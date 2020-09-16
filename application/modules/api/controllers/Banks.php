@@ -26,6 +26,11 @@ class Banks extends CI_Controller
 		//echo $response = $this->Banks_model->getAccounts($id,$_POST['seltype']);
 		echo $response = $this->Banks_model->getCashAccounts($id,$_POST['seltype']);
 	}
+	public function getdata1($id = "")
+	{
+		//echo $response = $this->Banks_model->getAccounts($id,$_POST['seltype']);
+		echo $response = $this->Banks_model->getCashAccountsbranch($id,$_POST['seltype'],$_POST['branch'],$_POST['mainsaletype']);
+	}
 	public function banks($id = "")
 	{
 		echo $response = $this->Banks_model->getBanksdata($id);

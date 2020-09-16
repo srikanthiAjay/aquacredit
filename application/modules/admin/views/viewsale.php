@@ -249,9 +249,9 @@
 					<th> Product Name </th>
 					<th class="qty txt_cnt"> Qty </th>
 					<th class="mrp txt_rt"> MRP </th>
-					<th class="disc txt_rt"> Discount </th>
+					<th class="disc txt_rt" id="prodiscdisplaytd"> Discount </th>
 					<th class="ttl_prc txt_rt"> Total Price </th>
-					
+					<!-- <th style="color: red"> Delete </th> -->
 				</tr>
 				</thead>
 				<tbody id="invoiceItem">
@@ -270,7 +270,7 @@
 				<tfoot>
 					<tr>
 						<td colspan="4" class="txt_rt"> <b> Total Amount </b> </td>
-						<td class="txt_rt ttl_prc"  > <b id="totamt"> 0 </b> 
+						<td class="txt_rt ttl_prc" colspan="2" > <b id="totamt"> 0 </b> 
 						<input type="hidden" placeholder="0" name="totamtval" id="totamtval" >
 						</td>
 					</tr>
@@ -389,7 +389,7 @@
 		<div class="show_note">
 			<p id="textcredit"></p>
 			<div class="note_add"> <a href="#" title=""> Note </a> </div> 
-				<textarea class="mykey" placeholder="Note" name="note"></textarea>
+				<textarea class="mykey" placeholder="Note" name="note" id="note"></textarea>
 			</div>
 			<div class="po_ftr">
 				<!-- <button class="btn fr sb_btn btn-primary" data-toggle="modal" data-target="#view_order"> Create Order </button> -->
@@ -880,9 +880,9 @@ function getsale()
 					$("#b_pincode").val(res.data.b_pincode);
 					$("#b_gst").val(res.data.b_gst);	
 
-					$("#totamt").html(addCommas(res.data.total_saleprice));
+					$("#totamt").html(currency_format(res.data.total_saleprice,2));
 					$("#totamtval").val(res.data.total_saleprice);
-					$("#gtotamt").html(addCommas(res.data.grandtotal));
+					$("#gtotamt").html(currency_format(res.data.grandtotal,2));
 					$("#gtotamtval").val(res.data.grandtotal);	
 
 					$("#load_charge").val(res.data.load_charge);
@@ -919,13 +919,27 @@ function getsale()
 			                $('#rcntval').val(res1.data.length);
 			                $.each(res1.data, function(index, trades) {
 			                	
-			                  var tcamtt = addCommas(trades.mrp);
-			                  var tfamtt = addCommas(trades.total_price);
+			                  var tcamtt = currency_format(trades.mrp,2);
+			                  var tfamtt = currency_format(trades.total_price,2);
 
 
-			                  htmlRows = '<tr id="rowNums'+trades.id+'"><td> <input type="hidden" class="mykey" placeholder="Product Name" name="proid[]" id="proid'+trades.id+'" value="'+trades.product_id+'" disabled><input type="text" class="mykey" placeholder="Product Name" name="proname[]" id="proname'+trades.id+'" value="'+trades.pname+'" disabled></td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty'+trades.id+'" value="'+trades.quantity+'" disabled> </td><td class="mrp txt_rt"> <input type="text" class="mykey" placeholder="0" name="promrp[]" id="promrp'+trades.id+'" readonly value="'+tcamtt+'"><input type="hidden" class="mykey" placeholder="0" name="promrpval[]" id="promrpval'+trades.id+'" value="'+trades.mrp+'"> </td><td class="disc txt_rt"> <input type="text" class="mykey disckey" onkeypress="return onlyNumberKey(event)" placeholder="0" name="prodisc[]" id="prodisc'+trades.id+'" value="'+trades.discount+'" disabled> </td><td class="ttl_prc txt_rt"> <input type="text" class="mykey" placeholder="0" name="protot[]" id="protot'+trades.id+'" readonly value="'+tfamtt+'" disabled><input type="hidden" placeholder="0" name="prototval[]" id="prototval'+trades.id+'" value="'+trades.total_price+'" disabled><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_'+trades.id+'" value="'+trades.id+'"></td></tr>';
+			                  htmlRows = '<tr id="rowNums'+trades.id+'"><td> <input type="hidden" class="mykey" placeholder="Product Name" name="proid[]" id="proid'+trades.id+'" value="'+trades.product_id+'" disabled><input type="text" class="mykey" placeholder="Product Name" name="proname[]" id="proname'+trades.id+'" value="'+trades.pname+'" disabled></td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty'+trades.id+'" value="'+trades.quantity+'" disabled> </td><td class="mrp txt_rt"> <input type="text" class="mykey" placeholder="0" name="promrp[]" id="promrp'+trades.id+'" readonly value="'+tcamtt+'"><input type="hidden" class="mykey" placeholder="0" name="promrpval[]" id="promrpval'+trades.id+'" value="'+currency_format(trades.mrp,2)+'"> </td><td class="disc txt_rt prodiscdisplay"> <input type="text" class="mykey disckey" onkeypress="return onlyNumberKey(event)" placeholder="0" name="prodisc[]" id="prodisc'+trades.id+'" value="'+trades.discount+'" disabled> </td><td class="ttl_prc txt_rt"> <input type="text" class="mykey" placeholder="0" name="protot[]" id="protot'+trades.id+'" readonly value="'+tfamtt+'" disabled><input type="hidden" placeholder="0" name="prototval[]" id="prototval'+trades.id+'" value="'+currency_format(trades.total_price,2)+'" disabled><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_'+trades.id+'" value="'+trades.id+'"></td></tr>';
 
 			                  $('#invoiceItem').append(htmlRows);
+
+			                  var saletype = $("input[name='sale_types']:checked").val();
+			                  	//alert(saletype);
+						    	if(saletype=='cash')
+						    	{
+							     	$('.disckey').prop('readonly', true);
+							     	$('.prodiscdisplay').show();
+							    	$('#prodiscdisplaytd').show();
+							    }
+							    else{
+							    	$('.disckey').prop('readonly', true);
+							    	$('.prodiscdisplay').hide();
+							    	$('#prodiscdisplaytd').hide();
+							    }
 
 			                  
 			                   /* if(res.data.status==1)
@@ -1513,7 +1527,7 @@ function calculateTotal() {
         var promrpval = $('#promrpval' + id).val();
         var prodisc = $('#prodisc' + id).val();
        
-        $('#promrp' + id).val(addCommas(promrpval));
+        $('#promrp' + id).val(currency_format(promrpval,2));
 
         var total = proqty * promrpval;
         
@@ -1522,7 +1536,7 @@ function calculateTotal() {
         var tot1 = total-dsc;
 
         var ftot = Math.round(tot1);
-        $('#protot' + id).val(addCommas(ftot));
+        $('#protot' + id).val(currency_format(ftot,2));
         $('#prototval' + id).val(ftot);
 
         grandTotal += Math.round(tot1);
@@ -1550,8 +1564,8 @@ function calculateTotal() {
     }
 
     var GrandTot = parseInt(grandTotal) + parseInt(loadc) + parseInt(transportc);
-    $('#totamt').html(addCommas(grandTotal));
-    $('#gtotamt').html(addCommas(GrandTot));
+    $('#totamt').html(currency_format(grandTotal,2));
+    $('#gtotamt').html(currency_format(GrandTot,2));
 
     $('#totamtval').val(grandTotal);
     $('#gtotamtval').val(GrandTot);

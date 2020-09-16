@@ -20,5 +20,11 @@ class Crops extends CI_Controller
 	{
 		echo $response = $this->Crops_model->getCropsdata($id);
 	}
+	
+	//Crop Types
+	public function croptypes()
+	{
+		echo $response = $this->Crops_model->getCropTypes();
+	}
 }
 ?>

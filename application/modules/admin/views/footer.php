@@ -5,6 +5,7 @@
 </div>
 <style type="text/css"> body {margin: 0px; padding: 0px;}</style>
 <style>
+.bank_list{ position: relative;}
 #overlay {
 	position: absolute;
 	top: 0;
@@ -97,26 +98,61 @@
 </style>
 <script src="<?php echo base_url();?>assets/js/scrollbar.js"></script>
 <script>
-		(function($){
+		(function($){			
+			
 			var wth = $(window).width();
 			
-			if(wth > 1024){
-				$(window).on("load",function(){
+			//if(wth > 1024){
+				$(window).on("load",function(){				
 				
-				$(".main_cnt_blk").mCustomScrollbar({
+					$(".main_cnt_blk").mCustomScrollbar({
+						theme:"minimal",
+						mouseWheelPixels: 100,
+						scrollInertia:250,
+						advanced:{ autoScrollOnFocus: false, 
+							autoExpandHorizontalScroll: true},
+						callbacks:{
+							onScroll:function(){
+								$(".tooltip").tooltip('hide');							
+								//$('.top_ttl_blk').trigger('click');							
+							}
+						}
+					});
+
+					
+					
+				});
+				/* $(".menu_list, .dataTables_scrollBody, #apr_loan, #apr_loans, .rprt_anl, .pop_blk_prive .lrg_flt, .tab_cnt_blk, .pop_min_h_div, .ord_comp_bl, .comp_blk, .crp_list, .bank_list").mCustomScrollbar({
 					theme:"minimal",
 					mouseWheelPixels: 100,
 					scrollInertia:250,
-				});
-				$(".menu_list, .dataTables_scrollBody, #apr_loan, #apr_loans, .rprt_anl, .pop_blk_prive .lrg_flt, .tab_cnt_blk, .pop_min_h_div, .ord_comp_bl, .comp_blk").mCustomScrollbar({
-					theme:"minimal",
-					mouseWheelPixels: 100,
-					scrollInertia:250,
-				});
+					callbacks:{
+						onScroll:function(){
+							$(".tooltip").tooltip('hide');							
+							//$('.top_ttl_blk').trigger('click');							
+						}
+					}
+				}); */
 				
-			});
+					$(".menu_list, .dataTables_scrollBody, #apr_loan, #apr_loans, .rprt_anl, .pop_blk_prive .lrg_flt, .tab_cnt_blk, .pop_min_h_div, .ord_comp_bl, .comp_blk").mCustomScrollbar({
+						theme:"minimal",
+						mouseWheelPixels: 100,
+						scrollInertia:250,
+						advanced:{ autoExpandHorizontalScroll: true }
+						
+					});
+					
+					$(".crp_list, .bank_list").mCustomScrollbar({
+						axis: "x",
+						theme:"minimal",
+						mouseWheelPixels: 100,
+						scrollInertia:250,
+						advanced:{ autoExpandHorizontalScroll: true }
+						
+					});
+				
 		
-			}
+			//}
 		})(jQuery);
 
 	function check_session()
@@ -136,7 +172,7 @@
         })
 	}
 	var count_interval = setInterval(function(){
-        //check_session();
+        check_session();
     }, 10000);
 			
 	</script>

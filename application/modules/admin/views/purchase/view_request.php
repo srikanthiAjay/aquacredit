@@ -56,6 +56,15 @@
                 <tbody id="viewproducts">
                 </tbody>
             </table>
+            <table class="ord_lst" cellspacing="0" cellpadding="0" border="0">
+                <thead>
+                    <tr>
+                        <th colspan="2">Details</th>
+                    </tr>
+                </thead> 
+                <tbody id="viewdetails">
+                </tbody>  
+            </table>
         </div>
     </div>
 </div>

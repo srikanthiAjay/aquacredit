@@ -21,6 +21,10 @@
 .txt_cntr {text-align: center;}
 .txt_red {color: red;}
 .opic_non {opacity: 0}
+.sel_ca .form-check-inline {display: block!important;}
+.sel_ca .radio_blk:after {top:1px!important;}
+.sel_ca .radio_blk:before {top:5px!important;}
+.sel_ca .radio_blk {font-size: 12px; margin-right: 5px;}
 .table-bordered td, .table-bordered th {border-bottom:none;}
 .hdg_bk .slct_box {
     width: 200px;

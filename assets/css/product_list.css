@@ -51,6 +51,12 @@
     border-top: 0px;
     padding-bottom: 40px;
 }
+.res_tbl .col-sm-12 {
+    overflow: auto;
+}
+.res_tbl table {
+    min-width: 1000px;
+}
 .modal-body h1, .modal-body p {
     text-align: center;
 }

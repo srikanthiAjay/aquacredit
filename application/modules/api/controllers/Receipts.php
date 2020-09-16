@@ -7,8 +7,8 @@ class Receipts extends CI_Controller
 		parent::__construct();
 		
 		$this->load->library('session');		
-		$this->load->model('api/Admin_model');
-		$this->load->model('api/Cash_model');	
+		$this->load->model('api/Admin_model');	
+		$this->load->model('api/Cash_model');
 		$this->load->model('api/Users_model');	
 		$this->load->model('api/Loans_model');	
 		$this->load->model('api/Traders_model');	
@@ -165,7 +165,7 @@ class Receipts extends CI_Controller
 		/* if($_POST["trans_type"] == "bank")
 		{ */
 			$admin_bank = $_POST["admin_bank"];
-			$admin_bank_details = json_decode($this->Banks_model->getCashAccounts($admin_bank),true);		
+			$admin_bank_details = json_decode($this->Banks_model->getCashAccounts($admin_bank),true);					
 			$res_bank_details = $admin_bank_details["data"]["bank_name"].", ".$admin_bank_details["data"]["account_no"].", ".$admin_bank_details["data"]["bank_ifsc"];
 		/* } */
 		
@@ -236,7 +236,7 @@ class Receipts extends CI_Controller
 				"status"		=>	"0",
 				"created_by"	=>	$this->session->userdata('adminid'),
 			);
-			$this->Transaction_model->insert($data);
+			$this->Transaction_model->insert($data);			
 		}
 		echo $response;
 		
@@ -284,22 +284,6 @@ class Receipts extends CI_Controller
 		if($final_res["status"] == "success")
 		{
 			$transfer_type = $final_res["data"]["transfer_type"];
-			/* if($transfer_type == "bank")
-			{
-				$this->db->set('avail_amount', 'avail_amount - '.$final_res["data"]["transfer_amount"].'',false);
-				$this->db->set('updated_on', date('Y-m-d H:i:s'));
-				$this->db->where('bank_id', $final_res["data"]["admin_bank_id"]);
-				$query = $this->db->update('ac_banks');
-				
-			}else if($transfer_type == "cash")
-			{
-				$admin_id = $this->session->userdata('adminid');
-				$branch_data = json_decode($this->Branch_model->cashbalance_by_userid($admin_id),true);
-				
-				$branch_id = $branch_data["data"]["branch_id"];
-				$final_amt = $branch_data["data"]["amount"] - $final_res["data"]["transfer_amount"];
-				$upd_cash = $this->Loans_model->updateAdminCashAmount($branch_id,$final_amt);
-			} */
 			if($transfer_type=="bank")
 			{
 				$upd_account = json_decode($this->Cash_model->updateAdminAccount($final_res["data"]["admin_bank_id"],$final_res["data"]["transfer_amount"]));

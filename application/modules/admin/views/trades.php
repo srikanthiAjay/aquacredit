@@ -161,7 +161,7 @@
 							<div class="form-group cre_inp" style="display: none;" id="guestmobile">
 								<div class="sm_blk"> Enter Mobile </div>
 								<input type="text" maxlength="10" class="form-control noalpha mykey" id="mobile" name="mobile"/>
-                            </div>                        
+                            </div> 
 							<div class="form-group cre_inp" style="display: none;" id="guest_location">
 								<div class="sm_blk"> Location </div>
 								<input type="text"  class="form-control mykey" placeholder="" name="location" id="location">
@@ -394,27 +394,27 @@
 					</div>
 					</li>
 					<li id="mobiledis" style="display: none;">
-						<div class="cre_inp inp_ss">
-							<div class="sm_blk"> Mobile</div>
-							<input type="text" class="form-control mykey noalpha"  placeholder="" data-original-title="" name="mobile_edit" id="mobile_edit"  >
-						</div>
+					<div class="cre_inp inp_ss">
+						<div class="sm_blk"> Mobile</div>
+						<input type="text" class="form-control mykey noalpha"  placeholder="" data-original-title="" name="mobile_edit" id="mobile_edit"  >
+					</div>
 					</li>
 					<li>
-						<div class="check_wt_serc val_seld" id="crplist_edit">
-							<div class="show_va">Crop location</div>
-							<div class="selectVal  crop_type_val">  Crop location </div>
-							<ul class="check_list" id="crp_e1">
-								<li id="crop_opt_li_edit">
-								<div class="form-check">
-									<input class="form-check-input mykey" type="radio" name="crop_opt_edit" id="crop_opt_edit" required value="">
-									<label class="form-check-label" for="crp">
-									Crop Location
-									</label>
+					<div class="check_wt_serc val_seld" id="crplist_edit">
+								<div class="show_va">Crop location</div>
+								<div class="selectVal  crop_type_val">  Crop location </div>
+								<ul class="check_list" id="crp_e1">
+									<li id="crop_opt_li_edit">
+									<div class="form-check">
+										<input class="form-check-input mykey" type="radio" name="crop_opt_edit" id="crop_opt_edit" required value="">
+										<label class="form-check-label" for="crp">
+										Crop Location
+										</label>
+									</div>
+									</li>
+								</ul>
+								<label id="crop_opt-error" class="error" for="crop_opt"></label>
 								</div>
-								</li>
-							</ul>
-							<label id="crop_opt-error" class="error" for="crop_opt"></label>
-						</div>
 					</li>
 				</ul>
 				<ul class="btm_exp_blk disb_sel">
@@ -514,7 +514,7 @@
 						</tr>
 						<tr>
 							<td colspan="2" class="pad_none">
-									
+								
 							</td>
 							<td class="bor_t_b_none"> <div> &nbsp;</div> </td>
 							<td colspan="3" class="pad_none"> 

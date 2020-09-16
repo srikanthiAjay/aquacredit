@@ -88,7 +88,7 @@ class Brands extends CI_Controller
 					//exit;
 				$brand_id = $r["brand_id"];
 			   $data[] = array(	
-					'CMP'.$r['brand_id'],
+					'<a href="'.base_url().'admin/companies/view/'.$r["brand_id"].'">CMP'.$r['brand_id'].'</a>',
 					'<a href="'.base_url().'admin/companies/statement/'.$brand_id.'" title="">'.$r["brand_name"].'</a> ',
 					$cat_names,
 					$r['status'],
@@ -129,10 +129,41 @@ class Brands extends CI_Controller
 		}
 		echo json_encode($sbcat,true);
 	}
+	public function getSubCat_New()
+	{
+		$sbcat = []; 
+		$subcat_arry = explode(",",$_POST["subcats"]);
+		if($_POST["catid"]!="")
+		{
+			foreach($_POST["catid"] as $catid)
+			{				
+				$scdata_res = json_decode($this->Subcategories_model->getSubCategories($catid),true);
+				$cat_id = "";
+				$sc_data = [];
+				foreach($scdata_res["data"] as $subcat){					
+					
+					if($cat_id != $subcat["parent_id"])
+					{
+						$cat_res = json_decode($this->Categories_model->getCategories($subcat["parent_id"]),true);
+						$sc_data["label"] = $cat_res["data"]['cat_name'];						
+					}
+					
+					$cat_id = $subcat["parent_id"];
+					if (in_array($subcat["cat_id"], $subcat_arry)){ $chk = true; }else{ $chk = false;}
+						
+					$sc_data["children"][] = array("label"=> $subcat["cat_name"],"value"=> $subcat["parent_id"]."-".$subcat["cat_id"],"selected"=>$chk,"parent_id" => $subcat["parent_id"],"subcat_id" => $subcat["cat_id"],"subcat_name" => $subcat["cat_name"]);	
+					
+				}
+				$sbcat[] = $sc_data;
+			}
+		}
+		echo json_encode($sbcat,true);
+	}
 
 	// Add Brand
 	public function add()
-	{		
+	{	
+		//print_r(count($_POST["fname"]));exit;
 		$cats = $subcats = "";
 		if(isset($_POST["med"])){ $med_val = $_POST["med"];}else{ $med_val = 0; }
 		if(count($_POST["sub_cati"])>0){ 
@@ -156,7 +187,7 @@ class Brands extends CI_Controller
 			'brand_cat' => $cats,
 			'brand_subcat' => $subcats,
 			'medicine_type' => $med_val,
-			'status' => $_POST["pub"]			
+			'status' => 1			
 			);		
 		$response = $this->Brands_model->insert($posts);
 		$final_res = json_decode($response,true);
@@ -183,16 +214,23 @@ class Brands extends CI_Controller
 				$this->Transaction_model->insert($data);
 			}
 			
-			$brand_acc_posts = array('brand_id' => $insert_id,
-			'full_name' => urldecode(ucwords($_POST["holder_name"])),
-			'account_no' => $_POST["acc_no"],
-			'bank_name' => $_POST["bank_name"],
-			'ifsc' => $_POST["ifsc_code"],
-			'branch_name' => ucwords($_POST["branch_name"]),	
-			'status' => '1',		
-			'created_on' => date('Y-m-d H:i:s')		
-			);	
-			$brand_acc = $this->Brands_model->brand_account_insert($brand_acc_posts);
+			if(count($_POST["holder_name"]) > 0)
+			{
+				for($i=0; $i < count($_POST["holder_name"]); $i++)
+				{
+					if($i==0){ $status = 1;}else{ $status = 0;}
+					$brand_acc_posts = array('brand_id' => $insert_id,
+					'full_name' => urldecode(ucwords($_POST["holder_name"][$i])),
+					'account_no' => $_POST["acc_no"][$i],
+					'bank_name' => $_POST["bank_name"][$i],
+					'ifsc' => $_POST["ifsc_code"][$i],
+					'branch_name' => ucwords($_POST["branch_name"][$i]),	
+					'status' => $status,		
+					'created_on' => date('Y-m-d H:i:s')		
+					);	
+					$brand_acc = $this->Brands_model->brand_account_insert($brand_acc_posts);
+				}
+			}
 		}
 		echo $response;
 		
@@ -226,6 +264,12 @@ class Brands extends CI_Controller
 		if($final_res["status"] == "exists" ){	echo 1; }else{ echo 0;}
 		exit;
 	}
+	public function checkcategory_for_tooltip()
+	{		
+		$final_res = json_decode($this->Categories_model->check_category_name($_POST["catname"]),true);
+		if($final_res["status"] == "exists" ){	echo 'false'; }else{ echo 'true';}
+		exit;
+	}
 	
 	public function checkbrandname()
 	{		
@@ -233,10 +277,47 @@ class Brands extends CI_Controller
 		if($final_res["status"] == "exists" ){	echo 1; }else{ echo 0;}
 		exit;
 	}
+	public function checkbrandname_for_tooltip()
+	{		
+		$final_res = json_decode($this->Brands_model->check_brand_name($_POST["brand_name"]),true);
+		if($final_res["status"] == "exists" ){	echo 'false'; }else{ echo 'true';}
+		exit;
+	}
+	public function checkbrandemail()
+	{		
+		$final_res = json_decode($this->Brands_model->check_brand_email($_POST["brand_email"]),true);
+		if($final_res["status"] == "exists" ){	echo 1; }else{ echo 0;}
+		exit;
+	}
+	public function checkbrandemail_for_tooltip()
+	{		
+		$final_res = json_decode($this->Brands_model->check_brand_email($_POST["brand_email"]),true);
+		if($final_res["status"] == "exists" ){	echo 'false'; }else{ echo 'true';}
+		exit;
+	}
+	public function checkbrandmobile()
+	{		
+		$final_res = json_decode($this->Brands_model->check_brand_mobile($_POST["brand_mobile"]),true);
+		if($final_res["status"] == "exists" ){	echo 1; }else{ echo 0;}
+		exit;
+	}
+	public function checkbrandmobile_for_tooltip()
+	{		
+		$final_res = json_decode($this->Brands_model->check_brand_mobile($_POST["brand_mobile"]),true);
+		if($final_res["status"] == "exists" ){	echo 'false'; }else{ echo 'true';}
+		exit;
+	}
 	
+	public function check_accno_for_tooltip()
+	{		
+		$final_res = json_decode($this->Brands_model->check_brand_accno($_POST["acc_no"]),true);
+		if($final_res["status"] == "exists" ){	echo 'false'; }else{ echo 'true';}
+		exit;
+	}
 		
 	public function update()
 	{
+		//print_r($_POST);exit;
 		$cats = $subcats = "";
 		if(count($_POST["sub_cati"])>0){ 
 			
@@ -263,7 +344,15 @@ class Brands extends CI_Controller
 			'updated_on' => date('Y-m-d H:i:s')
 			);		
 		$response = $this->Brands_model->updateBrand($brand_id,$posts);
-		if($_POST["hid_acc_id"] != "")
+		
+		if($_POST["active_bank"] != $_POST["cur_bank"])
+		{
+			$deactive_post = array('status' => 0);
+			$brand_acc = $this->Brands_model->brand_account_update($_POST["active_bank"],$deactive_post);
+			$brand_acc_posts = array('status' => 1);
+			$brand_acc = $this->Brands_model->brand_account_update($_POST["cur_bank"],$brand_acc_posts);
+		}
+		/* if($_POST["hid_acc_id"] != "")
 		{
 			$brand_acc_posts = array('full_name' => urldecode($_POST["holder_name"]),
 			'account_no' => $_POST["acc_no"],
@@ -272,6 +361,22 @@ class Brands extends CI_Controller
 			'branch_name' => $_POST["branch_name"]	
 			);	
 			$brand_acc = $this->Brands_model->brand_account_update($_POST["hid_acc_id"],$brand_acc_posts);
+		} */
+		if(count($_POST["holder_name"]) > 0)
+		{
+			for($i=0; $i < count($_POST["holder_name"]); $i++)
+			{
+				$brand_acc_posts = array('brand_id' => $brand_id,
+				'full_name' => urldecode(ucwords($_POST["holder_name"][$i])),
+				'account_no' => $_POST["acc_no"][$i],
+				'bank_name' => $_POST["bank_name"][$i],
+				'ifsc' => $_POST["ifsc_code"][$i],
+				'branch_name' => ucwords($_POST["branch_name"][$i]),	
+				'status' => '0',		
+				'created_on' => date('Y-m-d H:i:s')		
+				);	
+				$brand_acc = $this->Brands_model->brand_account_insert($brand_acc_posts);
+			}
 		}
 		echo $response;
 	}
@@ -393,6 +498,24 @@ class Brands extends CI_Controller
 		$bid = $_POST["bid"];		
 		echo $response = $this->Brands_model->deleteBrand($bid);
 		
+	}
+	public function bank_delete()
+	{
+		$brand_acc_posts = array('deleted' => 1);
+		echo $response = $this->Brands_model->brand_account_update($_POST["acc_id"],$brand_acc_posts);
+		
+	}
+	public function primary_bank()
+	{
+		$pre_post = array('status' => 0);
+		$res = $this->Brands_model->brand_account_update($_POST["prev_bank"],$pre_post);
+		$primary_post = array('status' => 1);
+		echo $response = $this->Brands_model->brand_account_update($_POST["acc_id"],$primary_post);
+		
+	}
+	public function banks($bid = "")
+	{		
+		echo $response = $this->Brands_model->getBrandBanks($bid);
 	}
 }
 ?>

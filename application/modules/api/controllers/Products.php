@@ -73,12 +73,13 @@ class Products extends CI_Controller
 				$purchase_amt = IND_money_format($r["purchase_amt"]);
 		
 			   $data[] = array(					
+					"<a href='".base_url()."admin/products/view/".$r["pid"]."'>PROD".$r["pid"]."</a>",
 					$r["pname"],
 					$brand_name,
 					$r["cat_name"],
 					'₹'.$pmrp,
-					'₹'.$purchase_amt,
-					$r["percentage"].'%',
+					'₹'.$purchase_amt.' ('.$r["percentage"].'%)',
+					//$r["percentage"].'%',
 					$status,
 					'<i class="fa fa-ellipsis-v act_icns" id="'.$r['pid'].'" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" aria-hidden="true" style="width:30px;" data-content=""></i>'
 			   );
@@ -118,7 +119,7 @@ class Products extends CI_Controller
 			'qty' => $_POST["qty"],
 			'weightage' => $_POST["qty_weight"],
 			'per_item' => $_POST["qty_opt"],
-			'status' => $_POST["pub"]			
+			'status' => '1'			
 			);
 			
 		$response = $this->Products_model->insert($posts);
@@ -131,6 +132,14 @@ class Products extends CI_Controller
 		$final_res = json_decode($this->Products_model->checkproductname_by_qty_weight($_POST),true);
 		
 		if($final_res["status"] == "exists"){	echo 1; }else{ echo 0;}
+		exit;
+	}
+	
+	public function checkproductname_by_qty_weight_for_tooltip()
+	{
+		$final_res = json_decode($this->Products_model->checkproductname_by_qty_weight($_POST),true);
+		
+		if($final_res["status"] == "exists"){	echo 'false'; }else{ echo 'true';}
 		exit;
 	}
 	

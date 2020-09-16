@@ -1,11 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-/**
-	 * Author:Ramakrishna
-*/
 error_reporting(0);
-//ini_set('memory_limit', '100M');
-
 class Users_model extends CI_Model 
 {
 	function __construct()
@@ -73,17 +68,11 @@ class Users_model extends CI_Model
 		$response = array();
         $query = $this->db
                 ->like('user_type',$utype)
-                //->or_like('utype',$search)                
-                /* ->limit($limit,$start)
-                ->order_by($col,$dir) */
                 ->get('users');        
-		//echo $this->db->last_query();exit;
         if($query->num_rows()>0)
         {
             $data = $query->result(); 
 			$response = json_decode(json_encode($data),true);
-			/* $response = $this->response($data, REST_Controller::HTTP_OK);
-			return $response . PHP_EOL; */
         }
          return $response;
     }
@@ -519,6 +508,18 @@ class Users_model extends CI_Model
 		}else{
 			return false;
 		}
+	}
+	
+	// Check User account number
+	function check_brand_accno($accno)
+	{
+		$query = $this->db->get_where("user_bank_accounts", ['account_no' => urldecode($accno)])->row_array();
+		if($query)
+		{
+			return json_encode(array('status'=>'exists'));
+		}else{
+			return json_encode(array('status'=>'notexists'));
+		}	
 	}
 
 }//Main function ends here

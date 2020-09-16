@@ -30,6 +30,7 @@ class Purchases extends CI_Controller
 			$data["branch_id"]=$this->session->userdata('branch_id');
 			$data["role"]=$this->session->userdata('adminrole');
 			$data["branch"]=$this->Purchases_model->getBranchDetails($data["branch_id"]);
+			$data["all_branches"]=$this->Purchases_model->getAllBranches();
 			$data["brands"]=$this->Purchases_model->getBrands();	
 			$this->load->view('admin/admin_purchases',$data);
 		}else{

@@ -13,6 +13,13 @@ class Purchases_model extends CI_Model
 		parent::__construct();
 	}
 
+	//All Branches
+	public function getAllBranches(){
+		$this->db->select('branch_id,branch_name,location,person_name,mobile_no,email,parent,amount');
+		$this->db->from('branch');
+		return $this->db->get()->result_array();
+	}
+
 	//Branch Details
 	public function getBranchDetails($branch_id){
 		$this->db->select('branch_id,branch_name,location,person_name,mobile_no,email,parent,amount');
@@ -110,9 +117,28 @@ class Purchases_model extends CI_Model
 			$this->db->where(['user_type'=>$params['searchByUtype'],'partnership'=>$params['partnership']]);
 		}*/
 
+		if($params['reportRange'] != "" && $params['reportRange'] != "Till Date")
+		{
+			$dateExplode = explode("-",$params['reportRange']);
+			$fromDate = str_replace("/"," ",$dateExplode[0]);		
+			$toDate = str_replace("/"," ",$dateExplode[1]);
+
+			$from_date = date('Y-m-d',strtotime($fromDate));
+			$to_date = date('Y-m-d',strtotime($toDate));
+			if($from_date == $to_date)
+			{
+				//$where .= " AND CAST(ap.created_on as DATE) LIKE '$from_date'";
+				$this->db->where('CAST(bp.created_on as DATE) LIKE "'.$from_date.'"');
+			}else{
+				$this->db->where('CAST(bp.created_on as DATE) BETWEEN "'.$from_date.'" AND "'.$to_date.'"');
+				//$where .= " AND (CAST(ap.created_on as DATE) BETWEEN '$from_date' AND '$to_date')";
+			}
+		}
+
 		//$this->db->where(['bp.status'=>'P']);
 		$this->db->where(['bp.branch_id'=>$params['branch_id']]);
 		$this->db->where_in('bp.status',$params['status']);
+		$this->db->order_by('bp.bp_id', 'DESC');
 		$this->db->limit($limit,$start);
 		$query=$this->db->get();
 		// $str = $this->db->last_query();
@@ -138,6 +164,24 @@ class Purchases_model extends CI_Model
 		/*if(!empty($params['searchByUtype'])){
 			$this->db->where(['user_type'=>$params['searchByUtype'],'partnership'=>$params['partnership']]);
 		}*/
+
+		if($params['reportRange'] != "" && $params['reportRange'] != "Till Date")
+		{
+			$dateExplode = explode("-",$params['reportRange']);
+			$fromDate = str_replace("/"," ",$dateExplode[0]);		
+			$toDate = str_replace("/"," ",$dateExplode[1]);
+
+			$from_date = date('Y-m-d',strtotime($fromDate));
+			$to_date = date('Y-m-d',strtotime($toDate));
+			if($from_date == $to_date)
+			{
+				//$where .= " AND CAST(ap.created_on as DATE) LIKE '$from_date'";
+				$this->db->where('CAST(bp.created_on as DATE) LIKE "'.$from_date.'"');
+			}else{
+				$this->db->where('CAST(bp.created_on as DATE) BETWEEN "'.$from_date.'" AND "'.$to_date.'"');
+				//$where .= " AND (CAST(ap.created_on as DATE) BETWEEN '$from_date' AND '$to_date')";
+			}
+		}
 
 		$this->db->where(['bp.branch_id'=>$params['branch_id']]);
 		$this->db->where_in('bp.status',$params['status']);
@@ -326,8 +370,8 @@ class Purchases_model extends CI_Model
 
 	//Update Branch Amount
 	public function updateBranchAmount($branch_id,$params){
-		$this->db->where(['branch_id'=>$branch_id]);
-    	$this->db->update('branch',$params);
+		$this->db->where(['branch_id'=>$branch_id,'account_type'=>'CASH']);
+    	$this->db->update('accounts',$params);
 	  	$report = array();
 		$report['error'] =$this->db->error();
 		if($report!= 0){
@@ -386,12 +430,27 @@ class Purchases_model extends CI_Model
 			$this->db->like(['b.brand_name'=>$params['searchValue']]);
 		}
 
-		/*if(!empty($params['searchByUtype'])){
-			$this->db->where(['user_type'=>$params['searchByUtype'],'partnership'=>$params['partnership']]);
-		}*/
+		if($params['reportRange'] != "" && $params['reportRange'] != "Till Date")
+		{
+			$dateExplode = explode("-",$params['reportRange']);
+			$fromDate = str_replace("/"," ",$dateExplode[0]);		
+			$toDate = str_replace("/"," ",$dateExplode[1]);
+
+			$from_date = date('Y-m-d',strtotime($fromDate));
+			$to_date = date('Y-m-d',strtotime($toDate));
+			if($from_date == $to_date)
+			{
+				//$where .= " AND CAST(ap.created_on as DATE) LIKE '$from_date'";
+				$this->db->where('CAST(ap.created_on as DATE) LIKE "'.$from_date.'"');
+			}else{
+				$this->db->where('CAST(ap.created_on as DATE) BETWEEN "'.$from_date.'" AND "'.$to_date.'"');
+				//$where .= " AND (CAST(ap.created_on as DATE) BETWEEN '$from_date' AND '$to_date')";
+			}
+		}
 
 		//$this->db->where(['bp.status'=>'P']);
 		$this->db->where_in('ap.status',$params['status']);
+		$this->db->order_by('ap.ap_id', 'DESC');
 		$this->db->limit($limit,$start);
 		$query=$this->db->get();
 		// $str = $this->db->last_query();
@@ -412,6 +471,24 @@ class Purchases_model extends CI_Model
 		$this->db->join('brands as b','ap.company_id=b.brand_id');
 		if(!empty($params['searchValue'])){
 			$this->db->like(['b.brand_name'=>$params['searchValue']]);
+		}
+
+		if($params['reportRange'] != "" && $params['reportRange'] != "Till Date")
+		{
+			$dateExplode = explode("-",$params['reportRange']);
+			$fromDate = str_replace("/"," ",$dateExplode[0]);		
+			$toDate = str_replace("/"," ",$dateExplode[1]);
+
+			$from_date = date('Y-m-d',strtotime($fromDate));
+			$to_date = date('Y-m-d',strtotime($toDate));
+			if($from_date == $to_date)
+			{
+				//$where .= " AND CAST(ap.created_on as DATE) LIKE '$from_date'";
+				$this->db->where('CAST(ap.created_on as DATE) LIKE "'.$from_date.'"');
+			}else{
+				$this->db->where('CAST(ap.created_on as DATE) BETWEEN "'.$from_date.'" AND "'.$to_date.'"');
+				//$where .= " AND (CAST(ap.created_on as DATE) BETWEEN '$from_date' AND '$to_date')";
+			}
 		}
 
 		/*if(!empty($params['searchByUtype'])){
@@ -480,11 +557,22 @@ class Purchases_model extends CI_Model
 
 	//Acounts
 	public function getAdminAcc(){
-		$this->db->select('bank_id,bank_name,account_no,bank_ifsc,avail_amount');
-		$this->db->from('ac_banks');
+		// $this->db->select('bank_id,bank_name,account_no,bank_ifsc,avail_amount');
+		// $this->db->from('ac_banks');
+		$this->db->select('id,account_type,account_name,branch_id,account_number,ifsc_code,avail_amount');
+		$this->db->from('accounts');
+		$this->db->where(['account_type'=>'BANK']);
 		return $this->db->get()->result_array();
 	}
 
+	//Branch Wallet Info
+	public function getBranchWalletInfo($branch_id){
+		$this->db->select('id,account_type,account_name,branch_id,account_number,ifsc_code,avail_amount');
+		$this->db->from('accounts');
+		$this->db->where(['account_type'=>'CASH','branch_id'=>$branch_id]);
+		return $this->db->get()->row_array();
+	}
+	
 	//Branch Accounts
 	public function getBranchAcc($params){
 		$this->db->select('acc_id,brand_id,full_name,account_no,bank_name,ifsc,branch_name');
@@ -563,6 +651,45 @@ class Purchases_model extends CI_Model
 	public function delAP($ap_id){
 		$this->db->where(['ap_id'=>$ap_id]);
 		$this->db->delete('admin_purchase');
+		$report = array();
+		$report['error'] =$this->db->error();
+		if($report!= 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	//Delete Admin Purchase Request Details
+	public function delAdminPurchaseDetails($ap_id){
+		$this->db->where(['ap_id'=>$ap_id]);
+		$this->db->delete('admin_purchase_details');
+		$report = array();
+		$report['error'] =$this->db->error();
+		if($report!= 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	//Delete Branch Purchase Request
+	public function delBranchPurchaseRequest($ap_id){
+		$this->db->where(['ap_id'=>$ap_id]);
+		$this->db->delete('branch_purchase');
+		$report = array();
+		$report['error'] =$this->db->error();
+		if($report!= 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	//Delete Branch Purchase Request Details
+	public function delBranchPurchaseRequestDetails($ap_id){
+		$this->db->where(['ap_id'=>$ap_id]);
+		$this->db->delete('branch_purchase_details');
 		$report = array();
 		$report['error'] =$this->db->error();
 		if($report!= 0){

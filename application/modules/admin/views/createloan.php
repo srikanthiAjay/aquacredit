@@ -3,8 +3,8 @@
 <link href="<?php echo base_url();?>assets/css/swiper.min.css" type="text/css" rel="stylesheet">
 <link rel="stylesheet" href="<?php echo base_url();?>assets/css/fstdropdown.css">
 <script src='https://kit.fontawesome.com/a076d05399.js'></script> 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script> -->
 <style>
 .idt_icn {
     width: 13px;
@@ -381,12 +381,15 @@
 			<h1> Loan Approve  <span id="loan_id"></span></h1>
 			<form id="loanfrm_edit" name="loanfrm_edit" action="javascript:void(0);" method="post">
 			<div class="top_no_txt">
+				<!-- <i class="fa fa-edit edt_bl_lnk" aria-hidden="true"></i> 
+				<span id="edthide" class="material-icons edt_bl_lnk opacity_1" style="display: block;">edit</span> -->
 				<div class="brd_lft brd_all"></div>
 				<div class="brd_rt brd_all"></div>
 				<div class="brd_tp brd_all"></div>
 				<div class="brd_btm brd_all"></div>
 				<div class="edt_bl_lnk">
 					<span class="edt_lnk" id="edthide">
+					<!-- <i id="edthide1" class="fa fa-edit" aria-hidden="true"></i> -->
 					<img class="idt_icn" src="http://3.7.44.132/aquacredit/assets/images/edit.svg" alt="" title="">
 					Edit</span>
 					<input type="submit" value="Save" class="save_lnk">

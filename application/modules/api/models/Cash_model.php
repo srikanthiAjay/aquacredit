@@ -86,5 +86,119 @@ class Cash_model extends CI_Model
 			return json_encode(array('status'=>'fail'));
 		}	
 	}
+
+	function cashAnalytics()
+	{
+		$response = array();
+		$query = $this->db->query("SELECT *,(select SUM(amount) from cash_book where account_type = 'bank') as bankamount,(select SUM(amount) from cash_book where account_type = 'cash') as cashamount,(select SUM(amount) from cash_book ) as totamount FROM cash_book");
+		//echo $this->db->last_query();
+        if($query->num_rows()>0)
+        {
+            $data = $query->row_array(); 
+			$response = json_decode(json_encode($data),true);	
+        }
+		return $response;
+	}
+	function totalrecords($limit,$start,$def_search,$search,$col,$dir,$searchValue,$searchcash_type_opt,$searchcash_type,$fromdate,$todate,$reportRange)
+	{
+
+		if($col == 0){ $col = "id";}
+
+		if($search != ""){ $where .= " AND (trans_type LIKE '%".$search."%' )"; }
+
+		
+		if($searchcash_type_opt!='')
+		{
+			$where .= " AND trans_type='".$searchcash_type_opt."' ";
+		}
+		if($searchcash_type!='')
+		{
+			$where .= " AND account_type='".$searchcash_type."' ";
+		}
+
+		if($reportRange != "" && $reportRange != "Till Date")
+		{
+			$dateExplode = explode("to",$reportRange);
+			$fromDate = str_replace("-"," ",$dateExplode[0]);		
+			$toDate = str_replace("-"," ",$dateExplode[1]);
+
+			$from_date = date('Y-m-d',strtotime($fromDate));
+			$to_date = date('Y-m-d',strtotime($toDate));
+			if($from_date == $to_date)
+			{
+				$where .= " AND CAST(created_on as DATE) LIKE '$from_date'";
+			}else{
+
+				$where .= " AND (CAST(created_on as DATE) BETWEEN '".$from_date."%' AND '".$to_date."%' )";
+			}
+		}
+
+
+		
+		$orderby = 'order by id desc';
+		$response = array();
+
+		//$query = $this->db->query("SELECT * FROM trade where 1=1 $where Order by $col $dir limit $start,$limit");
+		
+		$query = $this->db->query("SELECT *from cash_book where 1=1 $where $orderby ");
+		
+		//echo $this->db->last_query();exit;
+        if($query->num_rows()>0)
+        {
+            $data = $query->result(); 
+			$response = json_decode(json_encode($data),true);
+        }
+         return $response;		
 	
+	}
+
+	function cash_search($limit,$start,$def_search,$search,$col,$dir,$searchValue,$searchcash_type_opt,$searchcash_type,$fromdate,$todate,$reportRange)    
+    {
+		if($col == 0){ $col = "id";}
+
+		if($search != ""){ $where .= " AND (trans_type LIKE '%".$search."%' )"; }
+
+		
+		if($searchcash_type_opt!='')
+		{
+			$where .= " AND trans_type='".$searchcash_type_opt."' ";
+		}
+		if($searchcash_type!='')
+		{
+			$where .= " AND account_type='".$searchcash_type."' ";
+		}
+
+		if($reportRange != "" && $reportRange != "Till Date")
+		{
+			$dateExplode = explode("to",$reportRange);
+			$fromDate = str_replace("-"," ",$dateExplode[0]);		
+			$toDate = str_replace("-"," ",$dateExplode[1]);
+
+			$from_date = date('Y-m-d',strtotime($fromDate));
+			$to_date = date('Y-m-d',strtotime($toDate));
+			if($from_date == $to_date)
+			{
+				$where .= " AND CAST(created_on as DATE) LIKE '$from_date'";
+			}else{
+
+				$where .= " AND (CAST(created_on as DATE) BETWEEN '".$from_date."%' AND '".$to_date."%' )";
+			}
+		}
+
+		
+		$orderby = 'order by id desc';
+		$response = array();
+
+		//$query = $this->db->query("SELECT * FROM trade where 1=1 $where Order by $col $dir limit $start,$limit");
+		
+		$query = $this->db->query("SELECT *from cash_book where 1=1 $where $orderby limit $start,$limit");
+		
+		//echo $this->db->last_query();exit;
+        if($query->num_rows()>0)
+        {
+            $data = $query->result(); 
+			$response = json_decode(json_encode($data),true);
+        }
+         return $response;		
+	}
 }

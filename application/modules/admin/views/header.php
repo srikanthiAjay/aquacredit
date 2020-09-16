@@ -35,7 +35,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 	
 	<script src="<?php echo base_url();?>assets/pnotify/pnotify.custom.js"></script>
-	<script src="<?php echo base_url();?>assets/js/jquery.responsivetabs.js"></script>
+	<script src="<?php echo base_url();?>assets/js/jquery.responsivetabs"></script>
 	<link rel="stylesheet" href="<?php echo base_url();?>/assets/pnotify/pnotify.custom.css" />
 	
 	<!-- Create Users -->	 
@@ -50,6 +50,9 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/daterangepicker/daterangepicker.css" />
 	
 	<script src="<?php echo base_url();?>assets/js/all.js" ></script>
+	
+	<link href="<?php echo base_url();?>assets/js/select2/select2.min.css" rel="stylesheet" />
+	<script src="<?php echo base_url();?>assets/js/select2/select2.min.js"></script>
 
 </head>
 <body class="">

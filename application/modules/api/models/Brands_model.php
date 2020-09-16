@@ -22,7 +22,6 @@ class Brands_model extends CI_Model
 		return $data = $query->result();
 		//return json_encode(array('status'=>'success','data' => $data));
 	}
-	
 	function brands_search($limit,$start,$search,$cats,$subcats,$publish,$col,$dir)    
     {
 		$this->db->select("brand_id,brand_name,contact_person,contact_mobile,contact_email,brand_cat,brand_subcat,medicine_type,case when status=1 then 'Published' else 'Unpublished' end as status");
@@ -45,7 +44,7 @@ class Brands_model extends CI_Model
 		}
 
 		$filtered_count = $this->db->count_all_results('', false);
-
+		$this->db->order_by('created_on', 'desc');
 		$this->db->limit($limit,$start);
 		$query=$this->db->get();
 		//$str = $this->db->last_query();
@@ -80,6 +79,22 @@ class Brands_model extends CI_Model
 		
 	}
 	
+	function getBrandBanks($bid = "")
+	{
+		
+		if(!empty($bid)){
+
+			$this->db->select('*');
+			$data = $this->db->get_where("brand_bank_accounts", ['brand_id' => $bid,'deleted' => 0])->result();
+        }else{
+
+            $data = $this->db->get("brands")->result();
+
+        }
+		return json_encode(array('status'=>'success','data' => $data));
+		
+	}
+	
 	// Check Brand name
 	function check_brand_name($bname)
 	{
@@ -90,7 +105,48 @@ class Brands_model extends CI_Model
 		}else{
 			return json_encode(array('status'=>'notexists'));
 		}	
+	}
+	
+	function check_guest_mobile()
+	{
+		
+	}
+
+	// Check Brand email
+	function check_brand_email($pemail)
+	{
+		$query = $this->db->get_where("brands", ['contact_email' => urldecode($pemail)])->row_array();
+		if($query)
+		{
+			return json_encode(array('status'=>'exists'));
+		}else{
+			return json_encode(array('status'=>'notexists'));
+		}	
 	}	
+	// Check Brand mobile
+	function check_brand_mobile($pmobile)
+	{
+		$query = $this->db->get_where("brands", ['contact_mobile' => urldecode($pmobile)])->row_array();
+		if($query)
+		{
+			return json_encode(array('status'=>'exists'));
+		}else{
+			return json_encode(array('status'=>'notexists'));
+		}	
+	}
+	
+	// Check Brand account number
+	function check_brand_accno($accno)
+	{
+		$query = $this->db->get_where("brand_bank_accounts", ['account_no' => urldecode($accno)])->row_array();
+		if($query)
+		{
+			return json_encode(array('status'=>'exists'));
+		}else{
+			return json_encode(array('status'=>'notexists'));
+		}	
+	}
+	
 	// Insert brand
 	function insert($posts)
 	{

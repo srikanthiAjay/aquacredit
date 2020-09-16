@@ -33,7 +33,7 @@
 
 
 		
-	<!-- 	<li class="fr"> <button class="btn purc_btn btn-primary"> Create Order</button> </li> -->
+		<li class="fr"> <a href="http://3.7.44.132/aquacredit/admin/sales/create" class="btn purc_btn btn-primary"> Create Sale</a> </li>
 		</ul>
 	</div>
 	<div class="list_blk"> 
@@ -42,10 +42,10 @@
 	 			<table id="pur_lst_tbl" class="table table-striped table-bordered" style="width:100%">
 	 				<thead>
 	 					<tr> 
-	 						 <th class="id_td"> Id </th>
-	 						 <th class="date"> Date 
-               <input type="hidden" name="saletype" id="saletype">
-						                <span class="sts_pp">
+	 						  <th class="id_td"> Id </th>
+	 						  <th class="date"> Date 
+                  <input type="hidden" name="saletype" id="saletype">
+						     <!--  <span class="sts_pp">
                       <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>   
                   </span>
                   <div class="sts_fil_blk"> 
@@ -84,15 +84,20 @@
                         <input type="text" id="to_date" name="to_date" class="form-control" placeholder="To date" readonly />
                         <button class="btn btn-primary" id="custom_date">Search</button>
                       </div>
-                  </div>
-						              </th>
-							 						 <th> User Name </th>
-							 						 <!-- <th> Crop </th> -->
-							 						 <th class="godown"> Branch </th>
-							 						 <th class="ord_type"> Status
-						                 <span class="sts_pp">
-                    <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>   
+                  </div> -->
+                  <span class="pull-right" id="reportrange">
+                    <i class="fa fa-filter"  aria-hidden="true" style="font-size: 9px;"></i> 
+                    <span></span>
                   </span>
+                  <input type="hidden" id="date_val" name="date_val" />
+						    </th>
+							 	<th> User Name </th>
+							 	<!-- <th> Crop </th> -->
+							 	<th class="godown"> Branch </th>
+							 	<th class="ord_type"> Status
+						        <span class="sts_pp">
+                      <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>   
+                    </span>
                   <div class="sts_fil_blk"> 
                         <div class="trd_lst">
                                  <div class="form-check chek_bx">
@@ -134,8 +139,8 @@
       <ul class="list-group">
         <li class="list-group-item edt editval green_txt" >Edit</li>
          <li class="list-group-item view viewval green_txt">View</li>
-        <li class="list-group-item del delval">Cancel</li>
-
+        <!-- <li class="list-group-item del delval">Cancel</li>
+ -->
       </ul>
   </div>
 </div>
@@ -153,6 +158,36 @@ $(document).ready(function() {
 
 
 //alert( years+" year(s) "+months+" month(s) "+days+" and day(s)");
+
+  function cb(start, end) {
+        $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+        if ($('#date_val').val() == "Invalid date - Invalid date") {
+            $('#date_val').val('');
+        } else {
+            $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+        }
+    }
+
+    $('#reportrange').daterangepicker({
+        //timePicker: true,
+        /* startDate: null,
+        endDate: null, */
+        opens: 'left',
+        drops: 'down',
+        showDropdowns: true,
+        locale: {
+            format: 'D-MMM-YYYY',
+            customRangeLabel: 'Date Range'
+        },
+        parentEl: '.dateEle',
+        ranges: {
+            'Till Date': [],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Last 6 Months': [moment().subtract(6, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            "Last Year": [moment().subtract(1, "y").startOf("year"), moment().subtract(1, "y").endOf("year")]
+        }
+    }, cb);
 
 
   $("#from_date").datepicker({
@@ -190,7 +225,7 @@ $(document).ready(function() {
     });
 
 
-	var table = $('#pur_lst_tbl').DataTable({     
+	  var table = $('#pur_lst_tbl').DataTable({     
       'ordering': false,
       'processing': true,
         'serverSide': true,
@@ -218,6 +253,7 @@ $(document).ready(function() {
                 multi_status.push($(this).val());
               });
 
+              var reportrange = $('#date_val').val();
               var month_opt = $("input[name='month_opt']:checked").val();
               var from_date = $("#from_date").val();
               var to_date = $("#to_date").val();
@@ -225,6 +261,7 @@ $(document).ready(function() {
               var status_opt = multi_status;
             
               data.month_opt = month_opt;
+              data.reportrange = reportrange;
               data.from_date = from_date;
               data.to_date = to_date;
               data.status_opt = status_opt;
@@ -232,8 +269,8 @@ $(document).ready(function() {
            },
            "dataSrc": function (json) {    
            
-            $("#creditorders").html('₹'+addCommas(json.creditsale)); 
-            $("#cashorders").html('₹'+addCommas(json.cashsale)); 
+            $("#creditorders").html('₹'+currency_format(json.creditsale,2)); 
+            $("#cashorders").html('₹'+currency_format(json.cashsale,2)); 
 
 
               setInterval(function(){ 
@@ -277,6 +314,33 @@ $(document).ready(function() {
     });
     $("#from_date").change(function(e){       
       e.stopPropagation()
+    });
+
+    $(document).on('click', '.ranges ul li', function() {
+        $(this).parent().children().removeClass('active');
+        $(this).addClass('active');
+        $('.drp-selected').css('font-weight', 'bold');
+
+        /*if ($(this).text() != "Date Range") {*/
+          $('.datevalshow').html($(this).text());
+        /*}*/
+        if ($(this).text() == "Till Date") {
+            $("#date_val").val('Till Date');
+        }
+
+        if ($(this).text() != "Date Range") {
+            table.draw();
+        }
+    });
+
+    $(document).on('click', '.applyBtn', function() {
+      var reportrange = $('#date_val').val(); 
+        $('.datevalshow').html(reportrange);
+        table.draw();
+    });
+
+    $("#custom_date").click(function() {
+        table.draw();
     });
 
 
@@ -382,6 +446,7 @@ $(document).ready(function() {
 });
 function clickaction(id,sta,est)
 {  
+
   $("#hid_lid").val(id);
   if(est==1)
   {

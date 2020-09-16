@@ -39,13 +39,15 @@ class Companies extends CI_Controller
 	{
 		$data["page_title"] = "Company";
 		$data["bid"] = $bid;		
-		$this->load->view('admin/editbrand',$data);
+		//$this->load->view('admin/editbrand',$data);
+		$this->load->view('admin/editcompany',$data);
 	}
 		
 	public function create()
 	{
 		$data["page_title"] = "Create Company";
-		$this->load->view('admin/createbrand',$data);
+		//$this->load->view('admin/createbrand',$data);
+		$this->load->view('admin/createcompany',$data);
 	}
 	
 	public function statement($cid = null)
@@ -65,13 +67,23 @@ class Companies extends CI_Controller
 	{
 		$data["page_title"] = "Edit Company";				
 		$data["bid"] = $bid;		
-		$this->load->view('admin/editbrand',$data);
+		//$this->load->view('admin/editbrand',$data);
+		$this->load->view('admin/editcompany',$data);
 	}
 	public function previewStatement($cid)
 	{
 		$data["company_id"] =  $cid;
 		$this->load->view('admin/previewStatement',$data); 
 	}
-		
+	public function test()
+	{
+		$data["page_title"] = "Create Company";
+		$this->load->view('admin/test',$data);
+	}
+	public function animate()
+	{
+		$data["page_title"] = "Create Company";
+		$this->load->view('admin/animate',$data);
+	}	
 }
 ?>

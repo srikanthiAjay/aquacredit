@@ -47,7 +47,10 @@
 .bor_lf_none .top_in_op {
     border-left: none;
 }
-
+.res_tbl .col-sm-12 {
+    overflow: auto;
+}
+.res_tbl table {min-width: 1000px;}
 .form-group {
     margin-bottom: 0px!important;
 }
@@ -129,7 +132,7 @@
 .brd_ls .col-md-2 {
     padding: 0px!important;
 }
-
+.popover a {display: block;}
 .brd_ls .top_in_op {
     padding-right: 15px;
     cursor: inherit;

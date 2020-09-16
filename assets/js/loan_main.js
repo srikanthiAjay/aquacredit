@@ -270,31 +270,31 @@ $(document).ready(function() {
         }
     });
     /* $('#skey_edit').blur(function() {
-        $(".selectVal").html('');
-        if ($(this).val() == '') {
-            $("#selectuser_id_edit").val('');
-        }
-        var user_id = $("#selectuser_id_edit").val().trim();
-        if (user_id != "") {
-            getusercrops(user_id, 'edit');
-            getuserbanks(user_id, 'edit');
+            $(".selectVal").html('');
+            if ($(this).val() == '') {
+                $("#selectuser_id_edit").val('');
+            }
+            var user_id = $("#selectuser_id_edit").val().trim();
+            if (user_id != "") {
+                getusercrops(user_id, 'edit');
+                getuserbanks(user_id, 'edit');
 
-            setTimeout(function() {
-                $("input[name='crop_opt_edit'][value='11']").prop('checked', false);
-                $("input[name='bank_opt_edit'][value='11']").prop('checked', false);
-            }, 500);
-        } else {
-            console.log('clear crop');
-            $("#crop_opt_li_edit").html('<div class="form-check"><input class="form-check-input" type="radio" name="crop_opt_edit" id="crp" required /><label class="form-check-label" for="crp"></label></div>');
-            $(".crop_val").text('Crop Location');
-            $("#bank_opt_li_edit").html('<div class="form-check"><input class="form-check-input" type="radio" name="bank_opt_edit" id="tps_l" required /><label class="form-check-label" for="tps_l" /></label></div>');
-            $(".bank_val").text('Select User Bank');
+                setTimeout(function() {
+                    $("input[name='crop_opt_edit'][value='11']").prop('checked', false);
+                    $("input[name='bank_opt_edit'][value='11']").prop('checked', false);
+                }, 500);
+            } else {
+                console.log('clear crop');
+                $("#crop_opt_li_edit").html('<div class="form-check"><input class="form-check-input" type="radio" name="crop_opt_edit" id="crp" required /><label class="form-check-label" for="crp"></label></div>');
+                $(".crop_val").text('Crop Location');
+                $("#bank_opt_li_edit").html('<div class="form-check"><input class="form-check-input" type="radio" name="bank_opt_edit" id="tps_l" required /><label class="form-check-label" for="tps_l" /></label></div>');
+                $(".bank_val").text('Select User Bank');
 
-            $("#hid_bank_id").val('');
-            $("#hid_crop_id").val('');
+                $("#hid_bank_id").val('');
+                $("#hid_crop_id").val('');
 
-        }
-    }); */
+            }
+        }); */
 
     $('.lnk_typ.ban_trns').click(function() {
 
@@ -338,7 +338,7 @@ $(document).ready(function() {
         $("input[name='admin_bank']").removeClass('required');
         $(".lon_typ_edit").hide();
         /* $(".amount_class").addClass('row_left');
-         $(".amount_class").removeClass('row_right'); */
+        $(".amount_class").removeClass('row_right'); */
         $(".adm_bn_ls").hide();
         $(".branch_ls").show();
     });
@@ -1283,14 +1283,22 @@ function edit_loan(lid, lstatus) {
     $('#myDIV').hide();
 
     if (lstatus != 0) {
+
         $(".pop_footer").hide();
         $('.edt_bl_lnk').hide();
         $('#loanfrm_edit').find('input').attr('disabled', 'disabled');
         $('#loanfrm_cnf').find('input').attr('disabled', 'disabled');
         $('.app_pop_tbl1').addClass('disb_sel');
         $("#rema_narr").attr('disabled', 'disabled');
+
+        //To enable 
+        //$('.check_list').removeAttr('disabled');
+
+        // OR you can set attr to "" 
         $('.check_list').attr('disabled', 'disabled');
+        //$('.check_list').addAttr('disabled');
     } else if (lstatus == 0) {
+
         $(".pop_footer").show();
         $('.edt_bl_lnk').show();
         $('.check_list').removeAttr('disabled');
@@ -1429,10 +1437,10 @@ function edit_loan(lid, lstatus) {
             } else {
 
                 /* var new_start_date = new Date();
-                 $("#start_date").datepicker({
-                     dateFormat: 'd-M-yy',
-                 }).datepicker('setDate', new_start_date);
-                 $('#end_date').datepicker('option', 'minDate', new Date(new_start_date)); */
+                $("#start_date").datepicker({
+                    dateFormat: 'd-M-yy',
+                }).datepicker('setDate', new_start_date);
+                $('#end_date').datepicker('option', 'minDate', new Date(new_start_date)); */
             }
 
             if (res.data.end_date != null && res.data.end_date != "0000-00-00") {

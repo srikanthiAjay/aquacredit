@@ -7,6 +7,11 @@ $(document).ready(function() {
             event.preventDefault();
         }
     });
+	
+	$('.alphaonly').bind('keyup blur',function(event){ 
+		var node = $(this);
+		node.val(node.val().replace(/[^a-zA-Z\s]/g,'') );		
+	});
 
     $(".allownumericwithoutdecimal").on("keypress keyup blur", function(event) {
         $(this).val($(this).val().replace(/[^\d].+/, ""));
@@ -23,6 +28,36 @@ $(document).ready(function() {
         }
     });
 
+    $.validator.addMethod("decimal", function(value, element) {
+        return this.optional(element) || /^\d{0,4}(\.\d{0,3})?$/i.test(value);
+    }, "You include only three decimal places");
+
+    $.validator.addMethod("alphanumeric_underscore", function(value, element) {
+        return this.optional(element) || /^[\w.]+$/i.test(value);
+    }, "Letters, numbers, and underscores only please");
+
+    $.validator.addMethod("alphanumeric", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z][a-zA-Z0-9\s]+$/i.test(value);
+    }, "No special characters");
+	
+	$.validator.addMethod("alpha", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z][a-zA-Z\s]+$/i.test(value);
+    }, "Alphabets Only");
+
+    $.validator.addMethod("alphanumericnospace", function(value, element) {
+        return this.optional(element) || /^[a-zA-Z][a-zA-Z0-9]+$/i.test(value);
+    }, "No spaces and special characters");
+
+    $.validator.addMethod("twodecimals", function(value, element) {
+        return this.optional(element) || /^\d{0,4}(\.\d{0,2})?$/i.test(value);
+    }, "Include only two decimal places");
+
+    $.validator.addMethod('lessthan', function(value, element, param) {
+        return this.optional(element) || parseFloat(value) <= parseFloat($(param).val());
+    }, 'Enter less than MRP value');
+    $.validator.addMethod('greaterthan', function(value, element, param) {
+        return this.optional(element) || parseFloat(value) >= parseFloat($(param).val());
+    }, 'Enter greater than Purchase value');
 
 
 
@@ -149,7 +184,10 @@ $(document).ready(function() {
         }
     });
 
-    $('.check_wt_serc').click(function() {
+    $('.check_wt_serc').click(function(event) {
+        if (event.target.id == 'bsearch') {
+            return;
+        }
         $(".check_wt_serc").not(this).removeClass('act_v');
         $(this).toggleClass('act_v')
         $(".check_wt_serc").not(this).find('.check_list').removeClass('show_chk');
@@ -166,7 +204,6 @@ $(document).ready(function() {
             $(this).parent().parent('li').parent('ul').removeClass('show_chk');
             $(this).parent().parent('li').parent('ul').parent('.check_wt_serc').removeClass('act_v').addClass('val_seld');
         });
-
     });
 
 });

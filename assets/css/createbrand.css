@@ -1,4 +1,4 @@
-.form-control {font-size: 14px!important;}
+.form-control {font-size: 13px!important;}
 .mar_tp {margin-top: 20px;}
 .multiselect {
     border: 1px solid #ced4da;
@@ -15,6 +15,7 @@
     float: right;
     margin-top: 11px;
 }
+.sel_ca .form-check-inline {display: block!important;}
 .multiselect-container > li > a > label > input[type="checkbox"] {
     float: left;
     height: auto !important;
@@ -40,4 +41,11 @@
 .create_popup .btn {width: 100%;}
 .sel_ca {margin-bottom: 10px;}
 .form-group input {height: 40px;}
+.sel_ca .radio_blk:after {top:1px!important;}
+.sel_ca .radio_blk:before {top:5px!important;}
+.sel_ca .radio_blk {font-size: 12px; margin-right: 10px;}
 /*.cat_blk_nn {padding: 15px; background: #fff; border: 1px solid #f8f8f8; border-radius: 5px; margin-bottom: 15px;}*/
+@media (max-width: 767px){
+.bank_list {height: 352px!important;}
+.bank_dtl_blk {margin-bottom: 20px; width: 100%!important;}
+}

@@ -836,7 +836,7 @@ $(document).ready(function() {
         var id = $('input[name=crop_opt]:checked').val();
         $("#crop_id").val(id);
         $(".swith_blk").toggleClass('tog_yes');
-        $('.usr_lst_tbl').DataTable().destroy(); //dont change
+        $('.usr_lst_tbl').DataTable().destroy();
         load_unsettled();
         load_analytics();
     });
@@ -887,7 +887,7 @@ $(document).ready(function() {
         $(this).addClass('act_tab');
         $('.tabs_tbl').addClass('cmp_ul');
         $('.drft_cl').removeClass('act_tab');
-        $('.usr_lst_tbl').DataTable().destroy(); //dont change
+        $('.usr_lst_tbl').DataTable().destroy();
         load_settled();
     });
 
@@ -895,7 +895,7 @@ $(document).ready(function() {
         $(this).addClass('act_tab');
         $('.tabs_tbl').removeClass('cmp_ul');
         $('.comp_cl').removeClass('act_tab');
-        $('.usr_lst_tbl').DataTable().destroy(); //dont change
+        $('.usr_lst_tbl').DataTable().destroy();
         load_unsettled();
     });
 
@@ -1056,7 +1056,7 @@ $(document).ready(function() {
 
 function load_unsettled() {
     $("#table_footer").show();
-    $(".usr_lst_tbl").empty(); //dont change
+    $(".usr_lst_tbl").empty();
     var h = $(window).height();
     var min_h = h - 315;
     var tables = $('#usr_lst_tbl').DataTable({

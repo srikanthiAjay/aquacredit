@@ -159,12 +159,12 @@ $(document).ready(function() {
 			"dataSrc": function (json) {
 				total_trans_amount = json.total_trans_amount;
 				grand_total = parseFloat(total_trans_amount) + parseFloat(json.open_balance);
-				//$(".trans_total").html('₹'+currency_format(total_trans_amount,2));
+				$(".trans_total").html('₹'+currency_format(total_trans_amount,2));
 				if (total_trans_amount > 0) {
-                    $(".trans_total").html('<span class="grn_clr">₹' + currency_format(total_trans_amount, 2) + '</span>');
+                    $(".in_td").html('<span class="grn_clr">₹' + currency_format(total_trans_amount, 2) + '</span>');
                 } else {
                     tta = Math.abs(total_trans_amount);
-                    $(".trans_total").html('<span class="txt_red">₹' + currency_format(tta, 2) + '</span>');
+                    $(".in_td").html('<span class="txt_red">₹' + currency_format(tta, 2) + '</span>');
 				}
 				if (json.open_balance > 0) {
                     $(".open_bal").html('<span class="grn_clr">₹' + currency_format(json.open_balance, 2) + '</span>');

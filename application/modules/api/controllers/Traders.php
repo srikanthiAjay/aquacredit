@@ -315,7 +315,7 @@ class Traders extends CI_Controller
 			$trader_id = $_POST["trader_id"];
 		$tname = $_POST["tname"];
 		$this->db->select('td_id');
-		
+
 		if($_POST["trader_type"] == "Agent")
 		{
 			$this->db->where('full_name',$tname);
@@ -324,7 +324,7 @@ class Traders extends CI_Controller
 		{
 			$this->db->where('contact_person',$tname);
 		}
-		$this->db->where('trader_type',$_POST["trader_type"]);
+		$this->db->where('trader_type',$_POST["trader_type"]);		
 		if($trader_id != "")	
 			$this->db->where('td_id !=',$trader_id);
 		$count = $this->db->get('traders')->num_rows();
@@ -386,7 +386,7 @@ class Traders extends CI_Controller
 		if($trader_id != "")	
 			$this->db->where('td_id !=',$trader_id);
 		$count = $this->db->get('traders')->num_rows();
-		echo ($count) ? 'false' : 'true';exit;		
+		echo ($count) ? 'false' : 'true';exit;
 	}
 }
 ?>

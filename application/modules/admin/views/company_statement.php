@@ -303,7 +303,6 @@ $(document).ready(function() {
                     tta = Math.abs(total_trans_amount);
                     $(".trans_total").html('<span class="txt_red">₹' + currency_format(tta, 2) + '</span>');
 				}
-				//var pn_sign = Math.sign(total_trans_amount);
 				if(json.open_balance == null){ json.open_balance = 0; }
 				if (json.open_balance > 0) {
                     $(".open_bal").html('<span class="grn_clr">₹' + currency_format(json.open_balance, 2) + '</span>');
@@ -340,9 +339,8 @@ $(document).ready(function() {
                     gtotal = Math.abs(grand_total);
                     $(".grand_total").html('<span class="txt_red">₹' + currency_format(gtotal, 2) + '</span>');
 				}
-				//$(".trans_total").html('₹'+currency_format(total_trans_amount,2));
 				$("#hid_tot").val('₹'+currency_format(total_trans_amount,2));
-				$(".open_date").html($("#date_val").val());					
+				$(".open_date").html($("#date_val").val());
 				$("#hid_gtot").val('₹'+currency_format(grand_total,2));		
 				$(".pamt").html('₹'+currency_format(json.purchased_amt,2));		
 				$(".gamt").html('₹'+currency_format(json.goods_amt,2));	

@@ -35,6 +35,7 @@ class Products_model extends CI_Model
 		$this->db->select("p.pid,p.pname,p.cat_id,c.cat_name,p.brand_id,p.pmrp,p.purchase_amt,p.percentage,p.status");
 		$this->db->from('products p');
 		$this->db->join('categories c', 'c.cat_id= p.cat_id');
+		$this->db->join('brands b', 'b.brand_id= p.brand_id');
 		if($brand)
 		{
 			$this->db->where_in('p.brand_id',$brand);
@@ -51,8 +52,10 @@ class Products_model extends CI_Model
 		{
 			$this->db->like('p.pname',$search);
 			$this->db->or_like('p.hsn',$search);
+			$this->db->or_like('b.brand_name',$search);
 		}
 		$filtered_count = $this->db->count_all_results('', false);
+		$this->db->order_by('p.created_on','desc');
 		$this->db->limit($limit,$start);
 		$query=$this->db->get();
 		//$str = $this->db->last_query();
@@ -94,8 +97,10 @@ class Products_model extends CI_Model
 	function getProductsdata($pid = "")
 	{		
 		if(!empty($pid))
-		{			
-            $data = $this->db->get_where("products", ['pid' => $pid])->row_array();
+		{	
+			$this->db->select("p.*,b.brand_name");
+			$this->db->join('brands b', 'b.brand_id= p.brand_id');
+            $data = $this->db->get_where("products p", ['p.pid' => $pid])->row_array();
 			
         }else{
 

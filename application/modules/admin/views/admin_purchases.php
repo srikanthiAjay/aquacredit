@@ -18,6 +18,28 @@
     text-align: center;
     color: #555;
 }
+.trans_inf{
+    padding-bottom:0px !important;
+}
+
+#delete_req .modal-content{
+    padding:0px;
+    min-height:0px;
+}
+#delete_req .modal-body {
+    text-align: center;
+}
+
+#delete_req .modal-content h1 {
+    font-size: 16px;
+    color: #000;
+    font-weight: normal;
+    margin-bottom: 15px;
+}
+
+#delete_req .modal-body p {
+    margin: 0px!important;
+}
 </style> 
 <?php require_once 'sidebar.php' ; ?>		
 <div class="right_blk">
@@ -64,6 +86,7 @@
             </div>
 
             <div class="list_blk">
+            <div class="overlay" id="overlay_list_id" style="display: none;"><div class="overlay-content"><img src="<?php echo base_url();?>/assets/images/loading.gif" alt="Loading..."/></div></div>
                 <div class="list_tbl">
                     <div class="res_tbl">
                         <table id="pur_lst_tbl" class="table table-striped table-bordered" style="width: 100%;">
@@ -71,66 +94,35 @@
                                 <th class="id_td">Id</th>
                                 <th class="app_date">
                                     Date
-                                    <span class="sts_pp">
-                                        <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
-                                    </span>
-                                    <div class="sts_fil_blk">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="this_mnt" />
-                                            <label class="form-check-label" for="this_mnt">
-                                                This Month
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="last_3mont" />
-                                            <label class="form-check-label" for="last_3mont">
-                                                Last 3 Months
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="last_6mon" />
-                                            <label class="form-check-label" for="last_6mon">
-                                                Last 6 Months
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="one_year" />
-                                            <label class="form-check-label" for="one_year">
-                                                1 Year
-                                            </label>
-                                        </div>
-
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="choos_date" />
-                                            <label class="form-check-label" for="choos_date">
-                                                Choose Date
-                                            </label>
-                                        </div>
-                                    </div>
+                                    <span class="pull-right" id="reportrange">
+                                        <i class="fa fa-filter"  aria-hidden="true" style="font-size: 9px;"></i> 
+                                        <span></span>
+                                    </span> 
+                                    <input type="hidden" id="date_val" name="date_val" />
                                 </th>
                                 <th>Company Name</th>
                                 <th class="">Amount</th>
                                 <th class="stat_blk">
                                     Status
-                                    <span class="sts_pp">
+                                    <span class="sts_pp" id="status_icon">
                                         <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
                                     </span>
                                     <div class="sts_fil_blk">
                                         <div class="trd_lst">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta1" />
+                                        <div class="form-check chek_bx">
+                                                <input class="form-check-input" type="checkbox" name="optradio" value="P" id="sta1" />
                                                 <label class="form-check-label" for="sta1">
                                                     Pending
                                                 </label>
                                             </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta2" />
+                                            <div class="form-check chek_bx">
+                                                <input class="form-check-input" type="checkbox" name="optradio" value="PM" id="sta2" />
                                                 <label class="form-check-label" for="sta2">
                                                     Payment
                                                 </label>
                                             </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta3" />
+                                            <div class="form-check chek_bx">
+                                                <input class="form-check-input" type="checkbox" name="optradio" value="C" id="sta3" />
                                                 <label class="form-check-label" for="sta3">
                                                     Approved
                                                 </label>
@@ -148,7 +140,8 @@
         </div>
     </div>
 </div>
-<div id="popover-contents" style="display: none">
+<!--Actions-->
+<div id="popover-contents-all" style="display: none">
 	<div class="custom-popover">
 	  <ul class="list-group">
 	    <li class="list-group-item edt green_txt" id="pedit">Edit</li>
@@ -156,11 +149,37 @@
 	  </ul>
 	</div>
 </div>
+<div id="popover-contents-edit" style="display: none">
+    <div class="custom-popover">
+      <ul class="list-group">
+        <li class="list-group-item edt green_txt" id="epedit">Edit</li>
+      </ul>
+    </div>
+</div>
+<!--Actions End-->
+<!--Delete Request-->
+<div class="modal" id="delete_req">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                  <h1> Are You Sure ! </h1>
+                  <p> You want Delete this request <span id="brand_name"></span> ? </p>
+            </div>
+            <div class="modal_footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="Purchase.confirmDelRequest();">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Delete Request End-->
 <?php 
     $this->load->view('purchase/admin_purchase_request.php',$data);
     $this->load->view('purchase/admin_edit_request.php');
 ?>
 <script type="text/javascript"> 
+var mbranch_id='<?php echo $branch["branch_id"];?>';
+var mbranch_name='<?php echo $branch["branch_name"];?>';
 var url = '<?php echo base_url()?>';
 
 $(document).ready(function() {

@@ -288,7 +288,24 @@ class Loans_model extends CI_Model
 		}		
 	}
 
-	
+	/* 
+	same function there in cash_model
+	function updateAdminAccount($account_id,$dedu_amt)
+	{
+		$this->db->set('avail_amount', 'avail_amount - '.$dedu_amt.'',false);
+		$this->db->set('updated_on', date('Y-m-d H:i:s'));
+		$this->db->where('id', $account_id);
+		$query = $this->db->update('accounts');
+		//echo $this->db->last_query();exit;
+		if($query)
+		{
+			$avl_bal = $this->db->select('avail_amount')->where('id', $account_id)->get("accounts")->row();
+			$amount = $avl_bal->avail_amount;
+			return json_encode(array('status'=>'success','avl_bal'=> $amount));
+		}else{
+			return json_encode(array('status'=>'fail'));
+		}	
+	} */
 	/* function updateAdminBankAmount($bank_id,$dedu_amt)
 	{
 		$this->db->set('avail_amount', 'avail_amount - '.$dedu_amt.'',false);

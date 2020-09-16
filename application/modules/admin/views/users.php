@@ -338,6 +338,13 @@ $(document).on('click', '[data-toggle="popover"]', function() {
 		}).popover('show');
 	}
 });
+
+$(document).on("click", ".delete_user",function(){
+	id = $(this).attr('id');
+	id = id.replace('delete_','');
+	$('#delete_user').modal('show');
+	userobj.user_id=id;
+});
 function popoverContent() {
 	var content = '';
 	var element = $(this);
@@ -347,13 +354,6 @@ function popoverContent() {
 	content = content.replace(/delete_id/g, "delete_"+id);
 	return content;
 }
-$(document).on("click", ".delete_user",function(){
-	id = $(this).attr('id');
-	id = id.replace('delete_','');
-	$('#delete_user').modal('show');
-	userobj.user_id=id;
-});
-
 
 //Delete User
 function deleteUser(){

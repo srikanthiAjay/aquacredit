@@ -7,17 +7,34 @@
             </h2>
             <ul class="trans_inf ll_inp">
                 <li>
-                    <div class="check_wt_serc val_seld">
+                <div class="check_wt_serc">
                         <div class="show_va">Branchs</div>
-                        <div class="selectVal"><?php echo $branch["branch_name"];?></div>
+                        <div class="selectVal" id="selectBranchVal"><?php echo $branch["branch_name"];?></div>
                         <ul class="check_list">
                             <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="branch" name="branch" value="Branch1" checked="checked" />
-                                    <label class="form-check-label" for="branch">
-                                        <?php echo $branch["branch_name"];?>
-                                    </label>
-                                </div>
+                                    <?php 
+                                        for($i=0;$i<count($all_branches);$i++){
+                                            if($all_branches[$i]['branch_id']==$branch["branch_id"]){
+                                                ?>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" id="rbranch_<?php echo $branch["branch_id"];?>" name="rbranch" value="<?php echo $branch["branch_id"];?>" checked="checked" />
+                                                <label class="form-check-label" for="rbranch_<?php echo $branch["branch_id"];?>">
+                                                    <?php echo $branch["branch_name"];?>
+                                                </label>
+                                            </div>
+                                                <?php
+                                            }else{
+                                                ?>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" id="rbranch_<?php echo $all_branches[$i]['branch_id'];?>" name="rbranch" value="<?php echo $all_branches[$i]['branch_id'];?>"/>
+                                                <label class="form-check-label" for="rbranch_<?php echo $all_branches[$i]['branch_id'];?>">
+                                                    <?php echo $all_branches[$i]["branch_name"];?>
+                                                </label>
+                                            </div>
+                                                <?php
+                                            }
+                                        }
+                                    ?>                                
                             </li>
                         </ul>
                     </div>

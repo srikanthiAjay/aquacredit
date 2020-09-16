@@ -9,14 +9,16 @@
 .stat_pen i {animation: rotate 3s;animation-iteration-count: infinite;}
 .id_td {width: 55px!important;}
 .swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {left:0px!important;}
-.stat_blk {width: 180px!important; min-width: 130px;}
+.stat_blk {width: 100px!important; min-width: 100px;}
 .pmnt_blk {width: 130px!important; min-width: 130px;}
 .loan_create {min-height: 187px; position: relative;}
 .bnk_icn {position: absolute; z-index: 99999999; top: 10px; padding: 12px 10px 5px 10px; cursor: pointer; right: 10px; cursor: pointer;}
 .act_ms {width: 50px!important; text-align: center;}
 .modal-body {text-align: center}
 .loan_type_td {width: 100px;}
-.app_date {width: 145px!important;}
+.res_tbl .col-md-12 {overflow: auto;}
+.app_date {width: 85px!important;}
+.usr_type_txt {width: 100px; max-width: 100px; min-width: 100px;}
 .crp_loc {min-width: 120px; width: 120px;}
 /*.sts_pp:after {height: 37px!important; top: -10px!important;}*/
 .sts_fil_blk .form-check {text-align: left;}
@@ -55,12 +57,14 @@
 .trd_cr {display: table; width: 100%; padding-top: 0px; padding-bottom: 10px; /*border-bottom: 1px solid #ddd;*/}
 .cas_acc {font-weight: bold;}
 .trd_cr.sec_blk {display: none;}
-.res_tbl table {min-width: 815px; border-top: none; margin-bottom: 15px;}
+.res_tbl table {min-width: 100px; border-top: none; margin-bottom: 15px;}
 .tbl_btn {
     float: right;
     position: relative;
     top: 0px;
 }
+.date_with {width: 40%!important;}
+.bank_with {width: 60%!important;}
 .dataTables_length {margin-top: 0px!important;}
 #loan_lst_tbl_pend_filter label {margin-bottom: 0px!important;}
 .loan_lst_tbl_pend_wrapper td {background: #fff;}
@@ -72,8 +76,10 @@
 .check_wt_serc .check_list {height: auto;}
 .loan_btm {margin-top: 10px;}
 .loan_top{margin-bottom: 10px; margin-right: 0px; margin-left: 0px;}
-.loan_top .col-md-9  {padding-right: 5px; padding-left: 0px;}
-.loan_top .col-md-3 {padding-left: 5px; padding-right: 0px;}
+/*.loan_top .col-md-9  {padding-right: 5px; padding-left: 0px;}
+.loan_top .col-md-3 {padding-left: 5px; padding-right: 0px;}*/
+.loan_top .col-md-10  {padding-right: 5px; padding-left: 0px;}
+.loan_top .cl_md_2 {padding-left: 5px; padding-right: 0px;}
 .bt_tbl .col-md-4  {padding-right: 5px; padding-left: 5px;}
 .bt_tbl.row {margin: 10px -5px;}
 .tbl_ttl_txt {position: relative; bottom: -5px;}
@@ -343,7 +349,7 @@ a hover {text-decoration: underline;}
  .lng_hdg {margin-left: 20px; margin-top: 20px;}
  .trn_type {position: relative; text-align: center; padding-top: 20px;}
  .trn_type input {position: absolute; opacity: 0; top: 0px; left: 0px; width: 100%; height: 100%;}
- .usr_selt ul, .adm_selt ul {list-style: none; padding: 0px; margin: 0px;}
+ .usr_selt ul, .adm_selt ul {list-style: none; padding: 0px; margin: 0px; width: 100%}
  .usr_selt ul li, .adm_selt ul li {width: 50%; height: 46px; float: left; margin-right: 0px;}
  .usr_selt ul li:nth-child(odd), .adm_selt ul li:nth-child(odd) {padding-right: 5px;}
   .usr_selt ul li:nth-child(even), .adm_selt ul li:nth-child(even) {padding-left: 5px;}
@@ -364,6 +370,9 @@ a hover {text-decoration: underline;}
 #apr_loan .assign_type li span {font-size: 12px;}
 #apr_loan .assign_type li img {width: 30px;}
 #apr_loan .assign_type li {width: 60px!important; height: 52px;}
+ @media(max-width: 1820px){ 
+    .lns_sub_blk li {width: 100%;}
+    }
   @media(min-width: 1000px){ 
     .res_tbl {overflow: inherit!important;}
   }
@@ -378,15 +387,20 @@ a hover {text-decoration: underline;}
             .actvty, .crt_blk {height: 249px;}
      }
      @media(min-width: 1301px){
-     .bnk_sel, .usr_radio, .adm_selt, .usr_selt {width: 355px; max-width: 355px; flex: none;}
-     .trn_type, .cnt_amn_blk {width: calc(100% - 710px); flex: none; max-width: calc(100% - 710px);}
+     .bnk_sel, .usr_radio, .adm_selt, .usr_selt {width: 400px; max-width: 400px; flex: none;}
+     .trn_type, .cnt_amn_blk {width: calc(100% - 800px); flex: none; max-width: calc(100% - 800px);}
      }
      @media(max-width: 1310px){ 
-        .loan_top .col-md-9 {width: 100%; padding: 0px; margin: 0px; max-width: 100%; flex: 0 0 100%;}
-        .loan_top .col-md-3 {width: 100%; padding: 0px; margin: 10px 0px 0px 0px; max-width: 100%; flex: 0 0 100%;}
-        .lns_sub_blk li {width: 25%!important;}
-        .actvty {height: auto!important; min-height: auto!important;}
+        /*.loan_top .col-md-9 {width: 100%; padding: 0px; margin: 0px; max-width: 100%; flex: 0 0 100%;}
+        .loan_top .col-md-3 {width: 100%; padding: 0px; margin: 10px 0px 0px 0px; max-width: 100%; flex: 0 0 100%;}*/
+        /*.lns_sub_blk li {width: 25%!important;}*/
+        /*.actvty {height: auto!important; min-height: auto!important;}*/
         }
+         @media(max-width: 1035px){
+            .loan_top .col-md-10 {width: 100%; padding: 0px; margin: 0px; max-width: 100%; flex: 0 0 100%;}
+        .loan_top .cl_md_2 {width: 100%; padding: 0px; margin: 10px 0px 0px 0px; max-width: 100%; flex: 0 0 100%;}
+        .actvty {min-height: auto!important;}
+         }
 @media(max-width: 1395px) and (min-width: 1310px){
         .crt_blk, .actvty {height: 220px;}
         .lns_sub_blk li {width: 100%;}
@@ -402,11 +416,14 @@ a hover {text-decoration: underline;}
     .bnk_sel, .usr_radio {width: 255px; flex: none; max-width: 250px;}
     .trn_type {width: 80px; flex: none; max-width: 80px;}
     .usr_radio {width: 255px!important; flex: none; max-width: 314px!important;}
-    .adm_selt, .cnt_amn_blk, .usr_selt {flex: none; width: 50%; max-width: 50%;}
+    .adm_selt, .cnt_amn_blk, .usr_selt {flex: none; width: 100%; max-width: 100%;}
+    #bank_block .check_wt_serc, .create_li.amnt .cre_inp {max-width: 100%;}
    }
 @media(max-width: 767px){
-    .loan_top .col-md-9 {padding-right: 0px;}
-    .loan_top .col-md-3 {padding-left: 0px; margin-top: 10px;}
+   /* .loan_top .col-md-9 {padding-right: 0px;}
+    .loan_top .col-md-3 {padding-left: 0px; margin-top: 10px;}*/
+     .loan_top .col-md-10 {padding-right: 0px;}
+    .loan_top .cl_md_2 {padding-left: 0px; margin-top: 10px;}
     .actvty li {width: 50%; float: left;}
     .bt_tbl .col-md-4 {margin-bottom: 10px;}
     }
@@ -458,14 +475,19 @@ a hover {text-decoration: underline;}
 @media(max-width: 1024px){
     .lns_sub_blk li {width: 50%;}
     .lns_sub_blk li span {display: block; width: 100%; text-align: left; float: none;}
-    .loan_top .col-md-9 {width: 100%; padding-right: 0px; flex: 0 0 100%; max-width: 100%;}
-    .loan_top .col-md-3 {width: 100%; padding-left: 0px; flex: 0 0 100%; max-width: 100%;}
+    /*.loan_top .col-md-9 {width: 100%; padding-right: 0px; flex: 0 0 100%; max-width: 100%;}
+    .loan_top .col-md-3 {width: 100%; padding-left: 0px; flex: 0 0 100%; max-width: 100%;}*/
+     .loan_top .col-md-10 {width: 100%; padding-right: 0px; flex: 0 0 100%; max-width: 100%;}
+    .loan_top .cl_md_2 {width: 100%; padding-left: 0px; flex: 0 0 100%; max-width: 100%;}
     .lns_sub_blk li {width: 25%; float: left; outline: none!important; box-shadow: none!important;}
     .adm_bnk_dtl li {width: 50%; float: left; border-top: none; border-bottom: 1px solid #ddd;}
     .adm_bnk_dtl li:last-child {padding-bottom: 10px;}
     .adm_bnk_dtl {display: table; width: 100%;}
     .adm_bnk_dtl {margin-bottom: 10px;}
 }
+@media(max-width: 910px){
+    .usr_selt ul li, .adm_selt ul li {height: auto!important; min-height: 46px;}
+    }
 @media(max-width: 500px){
     .lns_sub_blk li {width: 50%;}
     .crTbtn {margin-top: 15px;}

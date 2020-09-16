@@ -129,7 +129,7 @@ class Trades_model extends CI_Model
 		
 		$this->db->group_by('trade.userid');
 		$data = $this->db->get()->result();
-       		
+       	//echo $this->db->last_query(); exit;
 		return json_encode(array('status'=>'success','data' => $data));
 	}
 

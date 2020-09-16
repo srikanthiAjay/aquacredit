@@ -18,8 +18,8 @@
 
 						<div class="col-md-4"> 
 							<div class="form-group">
-							<label class="control-label required"> Brand Name</label>
-							<input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Brand Name" >
+							<label class="control-label required"> Company Name</label>
+							<input type="text" class="form-control" id="brand_name" name="brand_name" placeholder="Company Name" >
 							</div> 
 						</div>
 
@@ -125,7 +125,7 @@
 						<div class="row">
 							<div class="col-md-3"> 
 								<div class="form-group">
-									<label class="control-label required"> Holder Name </label>
+									<label class="control-label required"> Account Holder Name </label>
 									<input type="text" class="form-control" id="holder_name" name="holder_name" required placeholder="Holder Name">
 								</div>
 							</div>

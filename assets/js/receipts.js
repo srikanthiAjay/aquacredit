@@ -478,7 +478,7 @@ $(document).ready(function() {
         if (err == 0) {
             $('#cnf_rec').modal();
         }
-	}); */
+    }); */
 
     $(".cnf_yes").click(function(e) {
         e.preventDefault();
@@ -702,7 +702,7 @@ function form_validation(err, err_msg, tagid) {
 
 function edit_receipt(rc_id) {
     $("#receiptfrm_edit")[0].reset();
-    // $("#hid_rc_id").val(rc_id);
+    $("#hid_rc_id").val(rc_id);
     $.ajax({
         url: url + "api/receipts/receipt_details/" + rc_id,
         data: {},

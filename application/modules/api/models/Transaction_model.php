@@ -237,6 +237,7 @@ class Transaction_model extends CI_Model
 		}
 		$this->db->where('settled_status','0');
 		$result = $this->db->get('trade t')->row();
+		//echo $this->db->last_query(); exit;
 		return $result;
 	}
 

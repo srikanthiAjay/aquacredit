@@ -15,7 +15,7 @@ class Users extends CI_Controller
 		$this->load->model('api/Loans_model');
 		$this->load->model('api/Trades_model');	
 		$this->load->model('api/Withdrawal_model');		
-		$this->load->model('api/Cash_model');	
+		$this->load->model('api/Cash_model');
 		$this->load->helper('form');
 		$this->load->helper('captcha');
 		$this->load->helper('url');
@@ -48,6 +48,14 @@ class Users extends CI_Controller
 		$response = $this->Curl_model->curlget($url);		
 		$final_res = json_decode($response,true);
 		if($final_res != "" ){	echo 1; }else{ echo 0;} */
+		exit;
+	}
+	
+	public function checkmobile_exists_tool_tip()
+	{
+		$mobnum=trim($_POST["mobnum"]);
+		$res=$this->Users_model->checkMobile($mobnum);		
+		if($res == 1 ){	echo 'false'; }else{ echo 'true';}
 		exit;
 	}
 	
@@ -365,7 +373,8 @@ class Users extends CI_Controller
 				}
 			}
 			/*update discount to sales table*/
-		}			
+		}
+			
 		
 		if($_POST['loanstep']==1)
 		{
@@ -528,7 +537,7 @@ class Users extends CI_Controller
 					}
 				}
 			}
-		}		
+		}
 		echo json_encode($act_res);
 	}
 	public function loandataupdate()
@@ -549,7 +558,7 @@ class Users extends CI_Controller
 			}
 		}
 		echo json_encode($act_res);
-	}	
+	}
 	public function getloandata()
 	{
 		$params['user_id'] = $_POST['userid'];
@@ -687,327 +696,20 @@ class Users extends CI_Controller
 			$crop_details = $this->Users_model->getCropLocation($params['crop_id']);
 			$crop_location= $crop_details->crop_location;
 			$crop_type = $crop_details->crop_type;
-		}			
+		}	
 
 		$lab = $this->Transaction_model->getUserLabAmount($params);
 		$expenses = $this->Transaction_model->getUserExpenses($params);
 		$loading = $this->Transaction_model->getUserLoadingAmount($params);
 		$transport = $this->Transaction_model->getUserTransportAmount($params);
 		$receipts = $this->Transaction_model->getUserReceiptsAmount($params);
-		$returns = $this->Transaction_model->getUserReturnAmount($params);
-		/*convert kgs to tons*/ 
+		$returns = $this->Transaction_model->getUserReturnAmount($params);	
+		/*convert kgs to tons*/
 
 		$data[] = array("transport"=>$transport,'lab'=>$lab,'expenses'=>$expenses,'loading'=>$loading,'receipt'=>$receipts,'returnamount'=>$returns,"crop_location"=>$crop_location,"crop_type"=>$crop_type);
 		echo json_encode($data);
 	}
 	
-	/* public function getproductsfeed()
-	{
-		$this->db->select('transactions.*, sale.id,sale.branchid as brnchid,sale_details.product_id,sale_details.brandid as brandid,products.cat_id,categories.cat_id as categoryid,categories.cat_name, sum(`transactions`.`amount`) as `totamt`');
-		$this->db->join('sale', 'sale.id = transactions.trans_id','left');
-		$this->db->join('sale_details', 'sale_details.s_id = sale.id','left');
-		$this->db->join('products', 'products.pid = sale_details.product_id','left');
-		$this->db->join('categories', 'categories.cat_id = products.cat_id','left');
-		$query = $this->db->get_where("transactions", ['transactions.trans_type' => 'SALE','transactions.user_id'=>$_POST['userid'],'transactions.crop_id'=>$_POST['crop_id'],'products.cat_id'=>1,'transactions.status'=>0]);
-		$dat1 = $query->result_array(); 
-		
-		foreach($dat1 as $daa)
-		{
-			$queryb = $this->db->query("select *from products where pid='".$daa['product_id']."' ");
-			$dataa = $queryb->row_array();
-
-			$data[] = array("product_name"=>$dataa['pname'],'totprice'=>$daa['total_saleprice'],'product_id'=>$daa['product_id']);
-		}
-
-		echo json_encode($data);
-	} */
-	// public function getproductsdata()
-	// {
-	// 			$this->db->select('transactions.*, sale.id,sale.id as sid,sale.branchid as brnchid,sale_details.product_id,sale_details.mrp,sale_details.quantity,sale_details.brandid as brandid,products.cat_id,categories.cat_id as categoryid,categories.cat_name');
-	// 			$this->db->join('sale', 'sale.id = transactions.trans_id','left');
-	// 			$this->db->join('sale_details', 'sale_details.s_id = sale.id','left');
-	// 			$this->db->join('products', 'products.pid = sale_details.product_id','left');
-	// 			$this->db->join('categories', 'categories.cat_id = products.cat_id','left');
-	// 			/*$query = $this->db->get_where("transactions", ['transactions.trans_type' => 'SALE','transactions.user_id'=>$_POST['userid'],'transactions.crop_id'=>$_POST['crop_id'],'products.cat_id'=>$_POST['category'],'sale_details.brandid'=>$_POST['branchid'],'transactions.status'=>0]);*/
-	// 			$this->db->group_by('product_id');
-				
-	// 			$query = $this->db->get_where("transactions", ['transactions.trans_type' => 'SALE','transactions.user_id'=>$_POST['userid'],'transactions.crop_id'=>$_POST['crop_id'],'products.cat_id'=>$_POST['category'],'sale_details.brandid'=>$_POST['branchid'],'transactions.status'=>0]);
-	// 			$dat1 = $query->result_array();
-
-	// 			//echo $this->db->last_query();
-	// 			foreach($dat1 as $daa)
-	// 			{
-	// 				$queryb = $this->db->query("select * from products where pid='".$daa['product_id']."' ");
-	// 				$dataa = $queryb->row_array();
-	// 				$qq = $dataa['pmrp'];
-
-	// 				/*data*/
-	// 				$qqa = $this->db->query("select *from transactions where trans_type='SALE' and user_id='".$_POST['userid']."' and crop_id='".$_POST['crop_id']."' and status=0 group by trans_id");
-	// 				$dat1a = $qqa->result_array();
-	// 				$totsub = 0;
-	// 				foreach($dat1a as $daaa1)
-	// 				{
-						
-	// 					$querybn = $this->db->query("select *from sale_details where s_id='".$daaa1['trans_id']."' and product_id='".$daa['product_id']."' ");
-	// 					$dataan = $querybn->row_array();
-						
-	// 					$totsub+= $dataan['quantity']*$dataan['mrp'];
-	// 				}
-
-	// 				/*data*/
-
-	// 				/*get saleids*/
-	// 				$this->db->select('transactions.*, sale.id,sale.branchid as brnchid,sale_details.product_id,sale_details.brandid as brandid,products.cat_id,categories.cat_id as categoryid,categories.cat_name');
-	// 				$this->db->join('sale', 'sale.id = transactions.trans_id','left');
-	// 				$this->db->join('sale_details', 'sale_details.s_id = sale.id','left');
-	// 				$this->db->join('products', 'products.pid = sale_details.product_id','left');
-	// 				$this->db->join('categories', 'categories.cat_id = products.cat_id','left');
-	// 				$querys1 = $this->db->get_where("transactions", ['transactions.trans_type' => 'SALE','transactions.trans' => 'GOODS','transactions.user_id'=>$_POST['userid'],'transactions.crop_id'=>$_POST['crop_id'],'products.cat_id'=>$daa['categoryid'],'transactions.status'=>0,'sale_details.brandid'=>$daa['brandid'],'sale_details.product_id'=>$daa['product_id']]);
-	// 				$dats1 = $querys1->result_array(); 
-	// 				$ids = '';
-	// 				//echo $this->db->last_query();
-	// 				foreach($dats1 as $daa1)
-	// 				{
-	// 					$ids = $daa1['trans_id'].'&&';
-	// 				}
-	// 				$sids = substr($ids,0,-1);
-
-	// 				/*get saleids*/
-					
-					
-	// 				$querybn1 = $this->db->query("select *from dummy_account_sale where userid='".$_POST['userid']."' and cropid='".$_POST['crop_id']."' and category_id='".$_POST['category']."' and brand_id='".$_POST['branchid']."' and product_id='".$daa['product_id']."' and settled_status=0");
-	// 					$dataan1 = $querybn1->row_array();
-
-	// 				//print_r($dataan1);
-
-	// 				$querybn1 = $this->db->query("select *from products where brand_id='".$_POST['branchid']."' and pid='".$daa['product_id']."' ");
-	// 				$dataann1 = $querybn1->row_array();
-
-	// 				$data[] = array("product_name"=>$dataa['pname'],'totprice'=>$totsub,'quantity'=>$daa['sqty'],'product_id'=>$daa['product_id'],'prodiscount'=>$dataan1['product_discount'],'productdiscount'=>$dataa["percentage"],'sids'=>$sids,'proamount'=>$qq,'purchaseamountval'=>$dataann1['purchase_amt']);
-	// 			}
-
-	// 			echo json_encode($data);
-
-	// }
-	
-	// public function getfeedproducts()
-	// {
-	// 	$this->db->select('transactions.*, sale.id as saleid,sale.branchid as brnchid,sale_details.product_id,sale_details.quantity,sale_details.s_id,sale_details.brandid as brandid,products.cat_id,products.qty,categories.cat_id as categoryid,categories.cat_name');
-	// 	$this->db->join('sale', 'sale.id = transactions.trans_id','left');
-	// 	$this->db->join('sale_details', 'sale_details.s_id = sale.id','left');
-	// 	$this->db->join('products', 'products.pid = sale_details.product_id','left');
-	// 	$this->db->join('categories', 'categories.cat_id = products.cat_id','left');
-	// 	$this->db->group_by('product_id');
-	// 	$query6 = $this->db->get_where("transactions", ['transactions.trans_type' => 'SALE','transactions.trans' => 'GOODS','transactions.user_id'=>$_POST['userid'],'transactions.crop_id'=>$_POST['crop_id']]);
-	// 	//$query6 = $this->db->get_where("transactions", ['transactions.trans_type' => 'SALE','transactions.user_id'=>$_POST['userid'],'transactions.crop_id'=>$_POST['crop_id'],'products.cat_id'=>1]);
-	// 	echo $this->db->last_query();
-	// 	$dat1 = $query6->result_array(); 
-				
-	// 	foreach($dat1 as $daa)
-	// 	{
-	// 			$queryb = $this->db->query("select *from products where pid='".$daa['product_id']."' ");
-	// 			$dataa = $queryb->row_array();
-
-	// 			$queryu = $this->db->query("select *from units where id='".$dataa['weightage']."' ");
-	// 			$units = $queryu->row_array();
-
-	// 			$queryu = $this->db->query("select *from packing_types where id='".$dataa['per_item']."' ");
-	// 			$packing_types = $queryu->row_array();
-
-	// 			$query1 = $this->db->query("select sum(quantity) as squantity from sale_details where s_id='".$daa['saleid']."' ");
-	// 			$qun = $query1->row_array();
-
-	// 			$feedd = $dataa['qty']*$qun['squantity'];
-
-	// 			$data[] = array("product_name"=>$dataa['pname'],'totprice'=>$daa['total_saleprice'],'product_id'=>$daa['product_id'],'units'=>$units['unit_name'],'packing_types'=>$packing_types['packing_type'],'qty'=>$dataa['qty'],'quantity'=>$qun['squantity'],'feedweight'=>$feedd);
-	// 	}
-
-	// 	echo json_encode($data);
-
-	// }
-
-	
-	// public function getsalesdata_b()
-	// {
-	// 	$params['user_id'] = $_POST['userid'];
-	// 	$params['crop_id'] = $_POST['crop_id'];
-
-	// 	$records=$this->Transaction_model->getRecordssale($params);
-		
-	// 	/* $ids = '';
-	// 	$recordids=$this->Transaction_model->getsaleids($params);
-	// 	foreach($recordids as $valueids)
-	// 	{
-	// 		$ids .= $valueids['trans_id'].',';
-	// 	}
-	// 	$subs = substr($ids, 0,-1); */
-
-	// 	$data = array();
-	// 	$amount = 0;
-	// 	if($records)
-	// 	{
-	// 		foreach($records as $value)
-	// 		{
-	// 			$this->db->select('transactions.*, sale.id,sale.branchid as brnchid,sale_details.product_id,sale_details.brandid as brandid,products.cat_id,categories.cat_id as categoryid,categories.cat_name, sum(`sale_details`.`total_price`) as `totamt`,sum(`sale_details`.`quantity`) as `sqty`');
-	// 			$this->db->join('sale', 'sale.id = transactions.trans_id','left');
-	// 			$this->db->join('sale_details', 'sale_details.s_id = sale.id','left');
-	// 			$this->db->join('products', 'products.pid = sale_details.product_id','left');
-	// 			$this->db->join('categories', 'categories.cat_id = products.cat_id','left');
-	// 			$this->db->group_by('brandid');
-	// 			$query = $this->db->get_where("transactions", ['transactions.trans_type' => 'SALE','transactions.trans' => 'GOODS','transactions.user_id'=>$params['user_id'],'transactions.crop_id'=>$params['crop_id'],'products.cat_id'=>$value['categoryid'],'transactions.status'=>0]);
-				
-	// 			//echo $this->db->last_query(); exit;
-	// 			$dat1 = $query->result_array(); 
-	// 			$branchid = '';
-	// 			$branchname = '';
-	// 			$bbid = '';
-	// 			$bamount = '';
-	// 			$sum = 0;
-	// 			$bds = '';
-	// 			$sidss = '';
-	// 			$pmrp = '';
-	// 			$disc_limit = '';
-
-	// 			foreach($dat1 as $daa)
-	// 			{
-	// 				$queryb = $this->db->query("select * from brands where brand_id='".$daa['brandid']."' ");
-	// 				$dataa = $queryb->row_array();
-
-	// 				/*product*/
-					
-	// 				$queryb1 = $this->db->query("select MIN(pmrp) as productmrp, MIN(percentage) AS max_discount from products where brand_id='".$daa['brandid']."' and cat_id='".$value['categoryid']."'");
-	// 				$dataa1 = $queryb1->row_array();
-					
-
-	// 				/*product*/
-
-	// 				$querybv = $this->db->query("select * from dummy_account_sale where userid='".$params['user_id']."' and cropid='".$params['crop_id']."' and category_id='".$value['categoryid']."' and brand_id='".$daa['brandid']."' and settled_status=0");
-	// 				$dataav = $querybv->row_array();
-
-	// 				/*get saleids*/
-	// 				$this->db->select('transactions.*, sale.id,sale.branchid as brnchid,sale_details.product_id,sale_details.brandid as brandid,products.cat_id,categories.cat_id as categoryid,categories.cat_name');
-	// 				$this->db->join('sale', 'sale.id = transactions.trans_id','left');
-	// 				$this->db->join('sale_details', 'sale_details.s_id = sale.id','left');
-	// 				$this->db->join('products', 'products.pid = sale_details.product_id','left');
-	// 				$this->db->join('categories', 'categories.cat_id = products.cat_id','left');
-	// 				$querys1 = $this->db->get_where("transactions", ['transactions.trans_type' => 'SALE','transactions.trans' => 'GOODS','transactions.user_id'=>$params['user_id'],'transactions.crop_id'=>$params['crop_id'],'products.cat_id'=>$value['categoryid'],'transactions.status'=>0,'sale_details.brandid'=>$daa['brandid']]);
-	// 				$dats1 = $querys1->result_array(); 
-	// 				$ids = '';
-	// 				foreach($dats1 as $daa1)
-	// 				{
-	// 					$ids = $daa1['trans_id'].'&&';
-	// 				}
-	// 				$sids = substr($ids,0,-1);
-
-	// 				/*get saleids*/
-
-	// 				$bbid++;
-	// 				$bamount .= $daa['totamt'].',';
-	// 				$branchid .= $daa['brandid'].',';
-	// 				$branchname .= $dataa['brand_name'].',';
-	// 				$sum+= $daa['totamt'];
-	// 				$bds .= $dataav['brand_discount'].',';
-	// 				$sidss .= $sids.',';
-	// 				$pmrp .= $dataa1['productmrp'].',';
-	// 				$disc_limit .= $dataa1['max_discount'].',';
-	// 			}
-
-	// 			$bid = substr($branchid,0,-1);
-	// 			$bname = substr($branchname,0,-1);
-	// 			$bdss = substr($bds,0,-1);
-	// 			$siddss = substr($sidss,0,-1);
-	// 			$ppmrp = substr($pmrp,0,-1);
-	// 			$disc_limit = substr($disc_limit,0,-1);
-
-	// 			$tdata = $this->db->query("select *from transactions where user_id='".$_POST['user_id']."' and crop_id='".$_POST['crop_id']."' order by id asc ");
-	// 			$tdates = $tdata->row_array();
-	// 			$bdate = date('d-M-Y',strtotime($tdates['created_on']));
-
-	// 			$data[] = array("category"=>$value['categoryid'],'categoryname'=>$value['cat_name'],'branchid'=>$bid,'branchname'=>$bname,'bcount'=>$bbid,'totamount'=>$bamount,'totalamount'=>$sum,'bdiscount'=>$bdss,'billdate'=>$bdate,'sids'=>$siddss,'productmrp'=>$ppmrp, 'disc_limit'=>$disc_limit);
-	// 		}
-	// 	}
-		
-	// 	//return json_encode($data);
-	// 	$response=[];
-	// 	echo json_encode($data);
-
-	// }
-
-	
-	/* public function getloandata1()
-	{
-		$params['user_id'] = $_POST['userid'];
-		$params['crop_id'] = $_POST['crop_id'];
-
-		$records=$this->Transaction_model->getRecordsloan($params);
-		$total_count = $records['count'];
-		$tansactions = $records['data'];
-		$data = array();
-		$amount = 0;
-		if($total_count)
-		{
-			foreach($tansactions as $key=>$value)
-			{
-				$ldata = $this->db->query("select * from loan_activity where loan_id='68' ");
-				$ltds = $ldata->row_array();
-
-				
-
-				if($value['loan_startdate']!='' && $value['loan_enddate']!='')
-				{
-					$sdate = date('d-M-Y',strtotime($value['loan_startdate']));
-					$edate = date('d-M-Y',strtotime($value['loan_enddate']));
-					
-				}
-				else if($ltds['start_date']!='' && $ltds['end_date']!='')
-				{
-					$sdate = date('d-M-Y',strtotime($ltds['start_date']));
-					$edate = date('d-M-Y',strtotime($ltds['end_date']));
-					
-				}
-				else
-				{
-					$sdate = date('d-M-Y',strtotime($value["created_on"]));
-					$edate = date('d-M-Y');
-					
-				}
-
-				if($value['interestval']!='' && $value['interestval']!=null && $value['interestval']!=0)
-				{
-					
-					$roi = $value['interestval'];
-				}
-				else if($ltds['rate_of_interest']!='' )
-				{
-					
-					$roi = $ltds['rate_of_interest'];
-				}
-				else
-				{
-					$roi = '';
-				}
-						
-
-
-				$diff = strtotime(date('d-M-Y')) - strtotime($value["created_on"]);
-				$dateDiff = abs(round($diff / 86400));
-
-				$date_diff = abs(strtotime(date('d-M-Y')) - strtotime($value["created_on"]));
-				
-				$years = floor($date_diff / (365*60*60*24));
-				$months = floor(($date_diff - $years * 365*60*60*24) / (30*60*60*24)); 
-
-				$tdata = $this->db->query("select *from transactions where user_id='".$params['user_id']."' and crop_id='".$_POST['crop_id']."' order by id asc ");
-				$tdates = $tdata->row_array();
-				$bdate = date('d-M-Y',strtotime($tdates['created_on'])).' to '.date('d-M-Y');
-
-				$data[] = array("trans_id"=>$value['trans_id'],"trans_code"=>$value['trans_code'],"amount"=>$value['amount'],"croploan"=>'Crop Loan',"startdate"=>$sdate,"enddate"=>$edate,'days'=>$dateDiff,'months'=>$months,'interestval'=>$roi,'interest_amount'=>$value['interest_amount'],'total_amount'=>$value['total_amount'],'id'=>$value['id'],'billdate'=>$bdate);
-
-			}
-		}
-		$response=[];
-		echo json_encode($data);
-	} */
 	public function unsettled_trans()
 	{
 		$draw = intval($this->input->post("draw"));
@@ -1051,10 +753,23 @@ class Users extends CI_Controller
 					$amount +=$value["amount"];
 					$amt = '<span class="grn_clr">'."₹".number_format($value['amount'],2).'<div class="arr_blk"> <img src="http://3.7.44.132/aquacredit/assets/images/grn_c_ar.png"> </div></span>';
 				}
+
+				$sllla = $this->db->query("select *from sale where id='".$value['trans_id']."' ");
+				$slla = $sllla->row_array();
+
+					if($slla['saletype']==0)
+					{
+						$transi = 'SCD'.$value['trans_id'];
+					}
+					else
+					{
+						$transi = 'SCH'.$value['trans_id'];
+					}
+
 				$trans = ($value['trans'] != null) ? "(".$value['trans'].")" : "";
 				$data[]=[
 								date("d-M-Y",strtotime($value['created_on'])),
-								'<a href="javascript:void(0);" class="expand_details" title="">'. $value["trans_type"].' '.$trans.' - '.$value["trans_code"].'</a>',
+								'<a href="javascript:void(0);" class="expand_details" title="">'. $value["trans_type"].' '.$trans.' - '.$transi.'</a>',
 								$amt,
 								$value["trans_type"],
 								$value['trans'],
@@ -1348,7 +1063,7 @@ class Users extends CI_Controller
 		echo ($count) ? 'false' : 'true';
 		exit;
 	}
-
+	
 	// by venu
 	public function withdrawals()
 	{
@@ -1509,6 +1224,266 @@ class Users extends CI_Controller
 	public function getWithdrawalDetails($wid)
 	{
 		echo $response = $this->Withdrawal_model->getWithdrawalDetails($wid);
+	}
+	
+	//14-sep-2020 by venu
+	public function check_accno_for_tooltip()
+	{		
+		$final_res = json_decode($this->Users_model->check_brand_accno($_POST["acc_no"]),true);
+		if($final_res["status"] == "exists" ){	echo 'false'; }else{ echo 'true';}
+		exit;
+	}
+	//Add User
+	public function createUser(){
+		
+		$action=$_POST['action']; $kyc_flag = 0;
+		//echo $_POST['fname'][0]; exit;
+		print_r($_POST);exit;
+		if(!empty($_POST['fname'][0]) && !empty($_POST['ac_number'][0]) && !empty($_POST['bc_name'][0]) && !empty($_POST['ifsc'][$b]) && !empty($_POST['branch_name'][0])){ $bank_flag = 1; }else{ $bank_flag = 0; }
+		if($_POST['optradio']=='sing_far' || $_POST['optradio']=='par_far'){ 
+			if(!empty(trim($_POST['aadhar_no'])) && !empty(trim($_POST['pan_no']))){ $kyc_flag = 1;}
+		}
+		//Users
+		$user=[
+				'firm_name'=>(!empty($_POST['firm_name']))?trim(ucwords($_POST['firm_name'])):"",
+				'user_name'=>(!empty($_POST['user_name']))?trim(ucwords($_POST['user_name'])):"",
+				'owner_name'=>(!empty($_POST['owner_name']))?trim(ucwords($_POST['owner_name'])):"",
+				'mobile'=>(!empty($_POST['mobile']))?trim($_POST['mobile']):"",
+				'email'=>(!empty($_POST['email']))?trim($_POST['email']):"",
+				'user_type'=>strtoupper($action),
+				'guarantor'=>(!empty($_POST['guarantor']))?trim(ucwords($_POST['guarantor'])):"",
+				'doj'=>date('Y-m-d H:i:s'),
+				'kyc_flag'=>$kyc_flag,
+				'bank_flag'=>$bank_flag
+			  ];
+		$user_id=$this->Users_model->addUser($user);
+
+		//user_additional_info
+		//$user_id=18;
+		$year=date('Y');
+		$user_id_str=($user_id>0 && $user_id<10)?'0'.$user_id.$year:$user_id.$year;
+		$add_info=[
+					'user_id'=>$user_id,
+					'aadhar_no'=>(!empty($_POST['aadhar_no']))?trim($_POST['aadhar_no']):"",
+					'pan_no'=>(!empty($_POST['pan_no']))?trim($_POST['pan_no']):"",
+					'gst'=>(!empty($_POST['gst']))?trim($_POST['gst']):"",
+					'notify_alert'=>(!empty($_POST['notify_alert']))?trim($_POST['notify_alert']):"",
+					'feed'=>(!empty($_POST['feed']))?trim($_POST['feed']):"",
+					'roi'=>(!empty($_POST['roi']))?trim($_POST['roi']):"",
+					'doc_rem'=>(!empty($_POST['doc_rem']))?trim($_POST['doc_rem']):"",
+					'doc_received_date'=>(!empty($_POST['recdate']))?trim($_POST['recdate']):"0000:00:00 00:00",
+					'doc_return_date'=>(!empty($_POST['retdate']))?trim($_POST['retdate']):"0000:00:00 00:00",
+					'credit_limit'=>(!empty($_POST['credit_limit']))?trim($_POST['credit_limit']):"",
+					'open_balance'=>(!empty($_POST['open_balance']))?trim($_POST['open_balance']):"",
+				  ];
+
+		//Medicines
+		/* if($action=='farmer' || $action=='dealer'){
+			$mindex=1;
+			for($m=0;$m<count($_POST['medicines']);$m++){
+				$add_info['medicines'.$mindex]=(!empty($_POST['medicines'][$m]))?trim($_POST['medicines'][$m]):0;
+				$add_info['medicines'.$mindex.'_brands']=(!empty($_POST['hidm'.$mindex]))?trim($_POST['hidm'.$mindex]):0;
+				$mindex++;
+			}
+		} */
+		$user_info_id=$this->Users_model->addUserInfo($add_info);
+		
+		//open balance transaction for dealers and non farmers
+		if(($action=='non_farmer' || $action=='dealer') && !empty($_POST['open_balance'])){
+			$data = array(
+				"trans_type" 	=> "OPEN BALANCE",
+				"trans" 		=> "USER",
+				"trans_id"		=> $user_id,
+				"trans_code"	=> 'OP'.$user_id,
+				"user_id"		=>  $user_id,
+				"user_type"		=>	$action,
+				"crop_id"		=> 	$insert_id,
+				"amount"		=>	(!empty($_POST['open_balance']))?trim($_POST['open_balance']):"0",
+				"amount_type"	=>	"IN",
+				"description"	=>	"Open balance",
+				"status"		=>	"0",
+				"created_by"	=>	$this->session->userdata('adminid'),
+			);
+			$this->Transaction_model->insert($data);
+		}
+
+		//Alert
+		if(!empty($_POST['notify_alert'])){
+			if(!empty($_POST['mobile']) && !empty($_POST['email'])){	
+				$mobile_arr=explode($_POST['hid_mob'], ",");
+				$alert_me=[];
+				if(count($mobile_arr)>1){
+					for($i=0;$i<count($mobile_arr);$i++){
+						if(!empty($mobile_arr[$i])){
+							$alert_me[]=['user_id'=>$user_id,'contact_type'=>'M','contact'=>trim($mobile_arr[$i])];
+						}
+					}
+				}else{
+					$alert_me[]=['user_id'=>$user_id,'contact_type'=>'M','contact'=>trim($_POST['hid_mob'])];
+				}
+
+				$email_arr=explode($_POST['hid_mail'], ",");
+				if(count($email_arr)>1){
+					for($j=0;$j<count($email_arr);$j++){
+						if(!empty($email_arr[$j])){
+							$alert_me[]=['user_id'=>$user_id,'contact_type'=>'E','contact'=>trim($email_arr[$j])];
+						}
+					}
+				}else{
+					$alert_me[]=['user_id'=>$user_id,'contact_type'=>'E','contact'=>trim($_POST['hid_mail'])];
+				}
+				$this->Users_model->addAlerts($alert_me);
+			}
+		}
+
+		//user_bank_accounts
+		//if(count($_POST['fname'])>0 && empty($_POST['bank_skip'])){
+		//if(count($_POST['fname'])>0){
+		if(!empty($_POST['fname'][0])){
+		
+			for($b=0;$b<count($_POST['fname']);$b++){
+				if(!empty($_POST['fname'][$b]) && !empty($_POST['ac_number'][$b]) && !empty($_POST['bc_name'][$b]) && !empty($_POST['ifsc'][$b]) && !empty($_POST['branch_name'][$b])){	
+					$user_bank_accounts[]=['user_id'=>$user_id,
+										'full_name'=>(!empty($_POST['fname'][$b]))?trim(ucwords($_POST['fname'][$b])):"",
+									   'account_no'=>(!empty($_POST['ac_number'][$b]))?trim($_POST['ac_number'][$b]):"",
+									   'bank_name'=>(!empty($_POST['bc_name'][$b]))?trim($_POST['bc_name'][$b]):"",
+									   'ifsc'=>(!empty($_POST['ifsc'][$b]))?trim($_POST['ifsc'][$b]):"",
+									   'branch_name'=>(!empty($_POST['branch_name'][$b]))?trim(ucwords($_POST['branch_name'][$b])):"",
+									   'created_on'=>date('Y-m-d H:i:s')];
+				}
+			}
+			$this->Users_model->addBankDetails($user_bank_accounts);
+		}
+
+		if($action=='farmer'){
+			//user_crop_details
+			if(count($_POST['crop_loc'])>0 && empty($_POST['crop_skip'])){
+				for($c=0;$c<count($_POST['crop_loc']);$c++){
+					$user_crop_details[]=[
+						'user_id'		=>$user_id,
+						'crop_location'	=>(!empty($_POST['crop_loc'][$c]))?trim(ucwords($_POST['crop_loc'][$c])):"",
+						'crop_type'		=>(!empty($_POST['crop_type'][$c]))?trim(ucwords($_POST['crop_type'][$c])):"",
+						'no_of_acres'	=>(!empty($_POST['acres'][$c]))?trim($_POST['acres'][$c]):"",
+						'transaction_balance'	=>(!empty($_POST['transaction_balance'][$c]))?trim($_POST['transaction_balance'][$c]):"",
+						'created_on'	=>date('Y-m-d H:i:s')];
+				}
+
+				$this->Users_model->addCropDetails($user_crop_details);
+				$insert_id = $this->db->insert_id();
+				$crop_count = count($_POST['crop_loc']);
+				for($c=0;$c<$crop_count;$c++){
+					//insert transaction
+					$data = array(
+						"trans_type" 	=> "OPEN BALANCE",
+						"trans" 		=> "USER",
+						"trans_id"		=> $insert_id,
+						"trans_code"	=> 'OP'.$insert_id,
+						"user_id"		=>  $user_id,
+						"user_type"		=>	'farmer',
+						"crop_id"		=> 	$insert_id,
+						"amount"		=>	(!empty($_POST['transaction_balance'][$c]))?trim($_POST['transaction_balance'][$c]):"0",
+						"amount_type"	=>	"IN",
+						"description"	=>	"Open balance",
+						"status"		=>	"0",
+						"created_by"	=>	$this->session->userdata('adminid'),
+					);
+					$this->Transaction_model->insert($data);
+					$insert_id++;
+				}
+			}
+		}
+
+		$partnership=0; 
+		switch($action) {
+			case "farmer":
+				$utype_code=($_POST['optradio']=='sing_far')?'FS'.$user_id_str:'FP'.$user_id_str;
+				//Parter Details
+				if($_POST['optradio']=='par_far'){
+					for($p=0;$p<count($_POST['pname']);$p++){
+						
+						if(!empty($_POST['pname'][$p]) && !empty($_POST['paadhar'][$p]) && !empty($_POST['pmobile'][$p])){ $partner_flag = 1;}else{ $partner_flag = 0;} 
+						$user_parter_details[]=['user_id'=>$user_id,
+											   'partner_name'=>(!empty($_POST['pname'][$p]))?trim(ucwords($_POST['pname'][$p])):"",
+											   'aadhar_no'=>(!empty($_POST['paadhar'][$p]))?trim($_POST['paadhar'][$p]):"",
+											   'mobile_no'=>(!empty($_POST['pmobile'][$p]))?trim($_POST['pmobile'][$p]):"",
+											   'created_on'=>date('Y-m-d H:i:s')];
+					}
+					$this->Users_model->addPartnerDetails($user_parter_details);
+					$partnership=1;
+				}
+			break;
+			case "dealer":
+				$utype_code='D'.$user_id_str;
+			break;
+			default:
+				$utype_code='NF'.$user_id_str;
+			break;
+		}
+
+		//Update User Code
+		$this->Users_model->updateUserCode($user_id,['user_code'=>$utype_code,'partnership'=>$partnership,'partner_flag'=>$partner_flag]);
+		$upload_dir=FCPATH.'assets'.DIRECTORY_SEPARATOR.'upload_docs'.DIRECTORY_SEPARATOR.$utype_code;
+		mkdir($upload_dir, 0777, true);
+
+		//uploades
+		if(isset($_FILES))
+		{
+			if(isset($_FILES["aadhar_upload"])){ 
+				$aadhar_files=$this->uploadImage($_FILES["aadhar_upload"],$utype_code,$user_id,'AADHAR');
+				$this->Users_model->uploadDoc($aadhar_files);
+			}
+
+			if(isset($_FILES["pan_upload"])){ 
+				$pan_files=$this->uploadImage($_FILES["pan_upload"],$utype_code,$user_id,'PAN');
+				$this->Users_model->uploadDoc($pan_files); 
+			}
+
+			if(isset($_FILES["check_upload"])){ 
+				$cheque_files = $this->uploadImage($_FILES["check_upload"],$utype_code,$user_id,'CHEQUE');
+				$this->Users_model->uploadDoc($cheque_files);
+			}
+
+			if(isset($_FILES["gst_upload"])){ 
+				$gst_files = $this->uploadImage($_FILES["gst_upload"],$utype_code,$user_id,'GST');
+				$this->Users_model->uploadDoc($gst_files);
+			}
+
+			if(isset($_FILES["partner_s"])){ 
+				$partner_files = $this->uploadImage($_FILES["partner_s"],$utype_code,$user_id,'PARTNER');
+				$this->Users_model->uploadDoc($partner_files);
+			}
+
+			if(isset($_FILES["promissory"])){ 
+				$promissory_files = $this->uploadImage($_FILES["promissory"],$utype_code,$user_id,'PROMISSORY');
+				$this->Users_model->uploadDoc($promissory_files);
+			}
+
+			if(isset($_FILES["gp_doc"])){ 
+				$gp_files = $this->uploadImage($_FILES["gp_doc"],$utype_code,$user_id,'GP');
+				$this->Users_model->uploadDoc($gp_files);
+			}
+
+			if(isset($_FILES["stamp"])){ 
+				$stamp_files = $this->uploadImage($_FILES["stamp"],$utype_code,$user_id,'STAMP');
+				$this->Users_model->uploadDoc($stamp_files);
+			}
+		}
+
+		//echo '<pre>';
+		//print_r($add_info);
+		//print_r($user_bank_accounts);
+		//print_r($user_crop_details);
+		//print_r($user_parter_details);
+		if($user_id>0){
+			$response['user_id']=$user_id;
+			$response['error']=false;
+			$response['message']='Success';
+		}else{
+			$response['user_id']='';
+			$response['error']=true;
+			$response['message']='Fail';
+		}
+		echo json_encode($response);
 	}
 }
 ?>

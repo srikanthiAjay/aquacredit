@@ -55,21 +55,39 @@
            <table id="prdt_lst_tbl" class="table table-striped table-bordered" style="width:100%">
            <thead>    
 							<tr>
+							<th> ID </th>
 							<th> Product Name </th>
 							<th> Brand 
 									<span class="sts_pp">
 									<i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
-								</span>
+								</span>								
 								<div class="sts_fil_blk lrg_flt">
-									<div class="trd_lst">
-										<?php foreach($brands as $brand){ ?>
-											<div class="form-check chek_bx">
+									<input class="form-control search-filter" type="search" placeholder="Serch Brand" />
+									<?php if(count($brands) > 0){ ?>
+									<div class="trd_lst" id="list">
+										
+										<?php foreach($brands as $brand){ 
+										
+											$string = $brand->brand_name;
+											if (strlen($string) > 10) {
+
+												// truncate string
+												$stringCut = substr($string, 0, 10);
+												$endPoint = strrpos($stringCut, ' ');
+
+												//if the string doesn't contain any space then it will cut without word basis.
+												$string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+												$string .= '...';
+											}
+											
+										?>
+											<div class="form-check chek_bx" >
 												<input class="form-check-input" type="checkbox" name="brands" value="<?php echo $brand->brand_id;?>" id="brand<?php echo $brand->brand_id;?>">
-												<label class="form-check-label" for="brand<?php echo $brand->brand_id;?>">
-													<?php echo $brand->brand_name;?>
+												<label class="form-check-label css-label" for="brand<?php echo $brand->brand_id;?>">
+													<?php echo $string;?>
 												</label>
 											</div>
-										<?php }?>										
+									<?php } }?>										
 									</div>
 								</div>	</th>
 							<th> Category 
@@ -77,7 +95,7 @@
 									<i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
 								</span>
 								<div class="sts_fil_blk">
-									<div class="trd_lst">
+									<div class="trd_lst">										
 										<?php foreach($categories as $category){ ?>
 											<div class="form-check chek_bx">
 												<input class="form-check-input" type="checkbox" name="category" value="<?php echo $category->cat_id;?>" id="category<?php echo $category->cat_id;?>">
@@ -90,8 +108,8 @@
 								</div>							
 							</th>
 							<th> MRP </th>
-							<th> Purchase Price </th>
-							<th> Discount </th>
+							<th> Purchase Amount </th>
+							<!-- <th> Purchase Discount </th> -->
 							<th> Status
 								<span class="sts_pp">
 									<i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
@@ -113,7 +131,7 @@
 									</div>
 								</div>
 							</th>
-							<th> Action </th>
+							<th class="act_ms"> Action </th>
 							</tr>
 						</thead>
 
@@ -156,6 +174,23 @@
 </div>
 <script type="text/javascript">
 var url = '<?php echo base_url()?>';
+//str.match(/geeks/gi)
+function listFilter(list, input) {
+    var $lbs = list.find('.css-label');
+	
+    function filter(){
+        var regex = new RegExp('\\b' + this.value);
+        var $els = $lbs.filter(function(){
+            return regex.test($(this).text().toLowerCase());
+        });
+        //$lbs.not($els).hide().prev().hide();
+		//$els.show().prev().show();
+		$lbs.not($els).parent().hide().prev().hide();
+		$els.parent().show().prev().show();
+    };
+
+    input.keyup(filter).change(filter)
+}
 function del_product(pid)
 {
 	$("#hid_pid").val(pid);
@@ -190,17 +225,34 @@ function getbrands()
 
 $(document).ready(function() {
 	
+	listFilter($('#list'), $('.search-filter'))
 	/* getbrands();
 	$('#fil1').multiselect();
 	$('#fil2').multiselect();
 	$('#fil3').multiselect(); */
+	/* $('#prdt_lst_tbl thead tr').clone(true).appendTo( '#prdt_lst_tbl thead' );
+    $('#prdt_lst_tbl thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( dataTable.column(i).search() !== this.value ) {
+                dataTable
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } ); */
 	var dataTable = $('#prdt_lst_tbl').DataTable({
+		'orderCellsTop': true,
+        'fixedHeader': true,
 		'ordering': false,
 		'processing': true,
 		'serverSide': true,
 		'serverMethod': 'post',	
 		"columnDefs": [
-			{ className: "act_ms", "targets": [ 6 ] }
+			{ className: "act_ms", "targets": [ 7 ] }
 		],		
 		 'language': {
         searchPlaceholder: "Search Products",

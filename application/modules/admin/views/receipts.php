@@ -56,7 +56,7 @@
 								<div class="col-md-5 usr_radio"> 
 									<ul class="assign_type">  
 										<li class="act_type usr_icn lnk_typ">      
-											<img src="http://3.7.44.132/aquacredit/assets/images/users_icn.png">
+											<img src="http://3.7.44.132/aquacredit/assets/images/farmer.png">
 											<input type="radio" name="user_type" value="user" checked />
 											<span> Users </span>
 										</li>
@@ -104,7 +104,7 @@
 											</div>
 										</li>
 										<li class="not_li bank_with note_blk"> 
-											<textarea style="display: inline-block;" placeholder="Note" class="note_txt mykey" name="rece_note" id="rece_note"></textarea>
+										<textarea style="display: inline-block;" placeholder="Note" class="note_txt mykey" name="rece_note" id="rece_note"></textarea>
 										</li>
 									</ul>
 								</div> 
@@ -221,10 +221,10 @@
 												<label class="form-check-label radio_blk utypes" for="utype_d">
 												<input class="form-check-input" type="radio" name="user_type_opt" value="dealer" id="utype_d">
 												Dealer/Sub-Dealer</label>
-
+										
 												<label class="form-check-label radio_blk utypes" for="utype_g">
 												<input class="form-check-input" type="radio" name="user_type_opt" value="guest" id="utype_g">
-												Guest</label>										
+												Guest</label>
 											
 												<label class="form-check-label radio_blk ttypes" for="ttype_a">
 												<input class="form-check-input" type="radio" name="user_type_opt" value="agent" id="ttype_a">
@@ -430,14 +430,14 @@
 							</div>
 						</div>
 					</div>
-					<div class="row_blk"> 					
-						<div class="row_left"> 
+					<div class="row_blk"> 
+					<div class="row_left"> 
 							<div class="cre_inp inp_ss inpt_fnt_blk">
 								<div class="sm_blk"> Admin Account </div>
 								<input type="text"  id="admin_bank_edit" name="admin_bank_edit"  class="form-control noalpha" value="">
 							</div>
-							<!-- <div class="check_wt_serc val_seld">								
-								<div class="show_va"> Select Admin Bank </div>
+							<!-- <div class="check_wt_serc val_seld">	
+							<div class="show_va"> Select Admin Bank </div>
 								<div class="selectVal admin_bank_val_edit"> Select Admin Bank </div>
 								<ul class="check_list" id="admin_bank_ul">
 									<li id="admin_bank_li_edit"> 
@@ -476,7 +476,7 @@
 
 <div id="popover-content" style="display: none">
 	<div class="custom-popover">
-		<input type="hidden" id="r_id">
+	<input type="hidden" id="r_id">
 		<ul class="list-group">
 			<li class="list-group-item edt">View</li>
 			<li class="list-group-item del">Delete</li>

@@ -1,0 +1,66 @@
+#snackbar {
+  visibility: hidden;
+  /*min-width: 300px;*/
+  margin-left: -150px;
+  background: #ef3356 url('http://3.7.44.132/aquacredit/assets/images/error_icn.svg') 15px 10px no-repeat;
+  color: #fff;
+  border-radius: 8px;
+  text-align: center;
+  border-radius: 2px;
+  padding: 10px 50px;
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 5px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* for success */
+#snackbar_succ {
+  visibility: hidden;
+  /*min-width: 300px;*/
+  margin-left: -150px;
+  background: green url('http://3.7.44.132/aquacredit/assets/images/done.svg') 15px 10px no-repeat;
+  color: #fff;
+  border-radius: 8px;
+  text-align: center;
+  border-radius: 2px;
+  padding: 10px 50px;
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 5px;
+  font-size: 17px;
+}
+
+#snackbar_succ.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;} 
+  to {top: 5px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 5px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {top: 5px; opacity: 1;} 
+  to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {top: 5px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}

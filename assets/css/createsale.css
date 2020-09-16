@@ -10,7 +10,17 @@
     margin-bottom: 12px;
     min-height: 994px;
 }
+#guestlink {border: none!important; width: auto!important;}
 .add_more {text-align: right; width: 100%; font-size: 13px; margin-top:20px; margin-bottom: 10px;}
+/*.ad_frm .per_dtls {padding: 0px!important;}*/
+.cat_blk_nn .hdg_bk {padding: 15px 20px; font-weight: normal;}
+.ad_frm .ord_comp_bl {padding-right: 0px!important;}
+.cr_st_usr {/*color: #fff!important;*/ font-size: 13px;
+margin-top: 30px;
+display: block;
+margin-left: 20px;
+text-decoration: underline;}
+.select2-container--default.select2-container--disabled .select2-selection--single {background: #fff!important;}
 .pp_clss {
     position: absolute;
     right: 20px;
@@ -20,8 +30,49 @@
     opacity: 0.5;
     transition: all linear 0.2s;
 }
+.bank_list {
+    position: relative;
+    height: 235px;
+    overflow: auto;
+    padding-left: 20px;
+}
+.crp_list {padding-left: 20px; overflow: auto; width: 100%; position: relative;}
+.bank_list_pos, .crp_list_pos {
+    position: absolute;
+    overflow: hidden;
+}
+.slc_usr {min-width: 116px;}
+.bank_dtl_blk, .crp_dtl_blk {
+    width: 400px;
+    position: relative;
+    float: left;
+    margin-right: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    background: #f8f8f8;
+}
 .pp_clss:hover {
     opacity: 1;
+}
+.crp_list {height: 182px;}
+.remove, .remove_conf, .crp_conf, .crp_remove img {
+    width: 20px;
+}
+.border-lable-flt label, .border-lable-flt > span {font-weight: normal!important;}
+#create_module .modal-dialog {max-width: 900px;}
+.remove, .remove_conf, .crp_conf, .crp_remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 999;
+    cursor: pointer;
+}
+.ord_comp_bl {
+    max-height: 450px;
+    width: 100%;
+    padding-right: 14px;
+    overflow: auto;
 }
 .pop_blk_prive, #invoice_preview_modal .panel-footer, #invoice_preview_modal .panel-heading {padding:0px 30px 30px 30px; width: 100%; box-sizing: border-box;}
 #invoice_preview_modal .panel-heading {padding-bottom: 0px; padding-top: 30px;}
@@ -65,6 +116,8 @@ margin-bottom: 15px;
     margin-bottom: 20px;
     display: table;
 }
+#create_module .cat_blk_nn .hdg_bk {padding: 0px 20px 0px 20px; margin-bottom: 15px; margin-top: 10px; border: none!important;}
+#create_module .cat_blk_nn {margin-bottom: 5px;}
 .assign_type li {
     width: 98px;
     cursor: pointer;
@@ -85,6 +138,7 @@ margin-bottom: 15px;
 }
 .check_wt_serc .check_list {height: auto;}
 .admin_bank_li .check_list {height: 200px;}
+.admin_bank_li {width: 200px;}
 .assign_type li img {
     margin-top: 8px;
 }
@@ -125,13 +179,14 @@ margin-bottom: 15px;
     border-top: 1px solid #e6e9ec;
     border-bottom: none;
     min-width: 620px;
+    border-right: 1px solid #e6e9ec;
 }
 .dele_th_td {width: 80px; text-align: center;}
 .sa_lst th, .sa_lst td {
     background: none;
     padding: 5px 15px;
     border-bottom: 1px solid #e6e9ec;
-    border-right: 1px solid #e6e9ec;
+    border-left: 1px solid #e6e9ec;
 }
 
 .sa_lst th {
@@ -206,6 +261,7 @@ margin-bottom: 15px;
 }
 .sale_rt .create_li {width: 100%; margin-right: 0px;}
 .mar_sale_ttl {margin-top: 20px; min-width: 400px; width: 400px; float: right;}
+#create_module .per_dtls {border: none!important;}
 @media (max-width: 1200px){
 	.sale_rt {width: 300px}
 	.sle_cr_r {width: calc(100% - 330px); margin-top: 0px;}

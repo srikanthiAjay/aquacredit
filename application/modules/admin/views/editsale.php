@@ -51,7 +51,7 @@
 										<li class="create_li slc_usr">
 												<div class="check_wt_serc"> 
 													<div class="show_va">Select  Transport</div>
-													<div class="selectVal tranval_type">  Transport Type </div>
+													<div class="selectVal tranval_type">  Transport Type <span style="color: red">*</span> </div>
 													<ul class="check_list mykey" id="trn1"> 
 														<li id="transport_opt_li">
 															<div class="form-check">
@@ -74,19 +74,19 @@
 
 												<li class="create_li">
 													<div class="cre_inp">
-													  <div class="sm_blk"> Driver Name </div>
-													    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="driver_name" id="driver_name">
+													  <div class="sm_blk"><span style="color: red">*</span> Driver Name </div>
+													    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="driver_name" id="driver_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)">
 													 </div>
 													</li>
 													 <li class="create_li ">
 													 	<div class="cre_inp">
-													  <div class="sm_blk"> Driver Mobile </div>
+													  <div class="sm_blk"><span style="color: red">*</span> Driver Mobile </div>
 													    <input type="text" onkeypress="return onlyNumberKey(event)" maxlength="10" class="form-control mykey" placeholder="" data-original-title="" title="" name="driver_mobile" id="driver_mobile">
 													</div>
 													 </li>
 													  <li class="create_li ">
 													 	<div class="cre_inp">
-													  <div class="sm_blk"> Vehicle Number </div>
+													  <div class="sm_blk"><span style="color: red">*</span> Vehicle Number </div>
 													    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="vehicle_number" id="vehicle_number">
 													</div>
 													 </li>
@@ -97,32 +97,32 @@
 		<ul class="create_ul"> 
 			<li class="create_li ">
 			 	<div class="cre_inp">
-			  		<div class="sm_blk"> Name</div>
-			    	<input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="s_name" id="s_name">
+			  		<div class="sm_blk"><span style="color: red">*</span> Name</div>
+			    	<input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="s_name" id="s_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)">
 				</div>
 			</li>
 	 		<li class="create_li ">
 	 			<div class="cre_inp">
-	  				<div class="sm_blk"> Mobile</div>
+	  				<div class="sm_blk"><span style="color: red">*</span> Mobile</div>
 	    			<input type="text" onkeypress="return onlyNumberKey(event)" maxlength="10" class="form-control mykey" placeholder="" data-original-title="" title="" name="s_mobile" id="s_mobile">
 				</div>
 	 		</li>
 			 <li class="create_li ">
 			 	<div class="cre_inp">
-			  		<div class="sm_blk"> Address</div>
+			  		<div class="sm_blk"><span style="color: red">*</span> Address</div>
 			    	<input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="s_address" id="s_address">
 				</div>
 			 </li>
 			<li class="create_li ">
 			 	<div class="cre_inp">
-			  		<div class="sm_blk"> State</div>
-			    	<input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="s_state" id="s_state">
+			  		<div class="sm_blk"><span style="color: red">*</span> State</div>
+			    	<input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="s_state" id="s_state" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)">
 				</div>
 			 </li>
 
 			<li class="create_li ">
 			 	<div class="cre_inp">
-			  		<div class="sm_blk"> Pin code</div>
+			  		<div class="sm_blk"><span style="color: red">*</span> Pin code</div>
 			    	<input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="s_pincode" id="s_pincode"  maxlength="6">
 				</div>
 			 </li>
@@ -130,47 +130,48 @@
 		</ul>
 		<div class="checkbox">
   			<label><input type="checkbox" value="" name="billadd" id="billadd"> Billing and shipping address are same</label>
+  			<input type="hidden" value="" name="addresstype" id="addresstype" >
 		</div>
 		<div class="bil_add">
 			<h2 class="create_hdg"> Billing Address </h2>
 			<ul class="create_ul"> 
 					<li class="create_li ">
 					 	<div class="cre_inp">
-					  <div class="sm_blk"> Name</div>
-					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_name" id="b_name">
+					  <div class="sm_blk"><span style="color: red">*</span> Name</div>
+					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_name" id="b_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)">
 					</div>
 					</li>
 					<li class="create_li ">
 					 	<div class="cre_inp">
-					  <div class="sm_blk"> Mobile</div>
+					  <div class="sm_blk"><span style="color: red">*</span> Mobile</div>
 					    <input type="text" onkeypress="return onlyNumberKey(event)" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_mobile" id="b_mobile">
 					</div>
 					</li>
 
 					<li class="create_li ">
 					 	<div class="cre_inp">
-					  <div class="sm_blk"> Address</div>
-					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_address" id="b_address">
+					  <div class="sm_blk"><span style="color: red">*</span> Address</div>
+					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_address" id="b_address" >
 					</div>
 					</li>
 
 					<li class="create_li ">
 					 	<div class="cre_inp">
-					  <div class="sm_blk"> State</div>
-					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_state" id="b_state">
+					  <div class="sm_blk"><span style="color: red">*</span> State</div>
+					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_state" id="b_state" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)">
 					</div>
 					</li>
 
 					<li class="create_li ">
 					 	<div class="cre_inp">
-					  <div class="sm_blk"> Pin code</div>
+					  <div class="sm_blk"><span style="color: red">*</span> Pin code</div>
 					    <input type="text" onkeypress="return onlyNumberKey(event)" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_pincode" id="b_pincode"  maxlength="6">
 					</div>
 					</li>
 
 					<li class="create_li ">
 					 	<div class="cre_inp">
-					  <div class="sm_blk"> GST</div>
+					  <div class="sm_blk"><span style="color: red">*</span> GST</div>
 					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="b_gst" id="b_gst">
 					</div>
 		 			</li>
@@ -183,7 +184,7 @@
 
 		<ul class="assign_type" id="saletype">  
 
-			<li class="act_type lnk_typ crd_sale" onclick="return ttype('credit');"> 
+			<!-- <li class="act_type lnk_typ crd_sale" onclick="return ttype('credit');"> 
 				<img src="http://3.7.44.132/aquacredit/assets/images/credit_icn.png">
 				<input type="radio" name="sale_types" id="sale1" value="credit" >
 				<span> Credit Sale </span>
@@ -192,16 +193,26 @@
 				<img src="http://3.7.44.132/aquacredit/assets/images/cash_icn.png">
 				<input type="radio" name="sale_types" id="sale2" value="cash"  >
 				<span> Cash Sale </span>
+			</li>-->
+			<li class="act_type  crd_sale" > 
+				<img src="http://3.7.44.132/aquacredit/assets/images/credit_icn.png">
+				<input type="radio" name="sale_types" id="sale1" value="credit" >
+				<span> Credit Sale </span>
 			</li>
-
+			<li class="cash_sale " > 
+				<img src="http://3.7.44.132/aquacredit/assets/images/cash_icn.png">
+				<input type="radio" name="sale_types" id="sale2" value="cash"  >
+				<span> Cash Sale </span>
+			</li>
 		</ul>
 
 		<ul class="create_ul"> 
 					<li class="create_li slc_usr">
 						<div class="check_wt_serc" id="branchlist"> 
-							<div class="show_va">Select  Branch</div>
+							<div class="show_va"><span style="color: red">*</span> Select  Branch</div>
 							<div class="selectVal crop_type_val" >  Select  Branch </div>
-							<ul class="check_list mykey" id="brn_l"> 
+							<input class="form-check-input" type="hidden" name="branchval" id="branch" value="">
+							<!-- <ul class="check_list mykey" id="brn_l"> 
 								<li id="crop_opt_li">
 									<div class="form-check">
 										<input class="form-check-input" type="radio" name="branchval" id="branch" value="">
@@ -210,13 +221,13 @@
 										</label>
 									</div>
 								</li>
-							</ul>												
+							</ul>	 -->											
 						</div>
 					</li>
 					<li class="create_li">
 					<div class="cre_inp">
-					  <div class="sm_blk"> Search User </div>
-					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="ukey" id="ukey">
+					  <div class="sm_blk"><span style="color: red">*</span> User Name/Mobile </div>
+					    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="ukey" id="ukey" readonly>
 					    <input type="hidden" class="form-control" placeholder=""  name="userid" id="userid">
 					    <input type="hidden" class="form-control" placeholder=""  name="usertype" id="usertype">
 					 </div>
@@ -225,7 +236,7 @@
 					<li class="create_li slc_usr" id="cropdis" style="display: none;">
 						<div class="check_wt_serc wth_225_sel" id="branchlist"> 
 							<div class="show_va">Crop location</div>
-							<div class="selectVal crop_type_val1"> Crop location </div>
+							<div class="selectVal crop_type_val1"><span style="color: red">*</span> Crop location </div>
 							<ul class="check_list mykey" id="crop_1"> 
                             <li id="crops_opt_li">
                               <div class="form-check">
@@ -240,8 +251,8 @@
 					</li>
 					<li class="create_li" style="display: none;" id="guestmobile">
 					 	<div class="cre_inp">
-					  		<div class="sm_blk"> Mobile </div>
-					    	<input type="text" onkeypress="return onlyNumberKey(event)" maxlength="10" class="form-control mykey" placeholder="" data-original-title="" title="" name="mobile" id="mobile">
+					  		<div class="sm_blk"><span style="color: red">*</span> Mobile </div>
+					    	<input type="text" onkeypress="return onlyNumberKey(event)" maxlength="10" class="form-control mykey" placeholder="" data-original-title="" title="" name="mobile" id="mobile" readonly>
 						</div>
 					</li>
 		</ul>
@@ -256,7 +267,7 @@
 					<th> Product Name </th>
 					<th class="qty txt_cnt"> Qty </th>
 					<th class="mrp txt_rt"> MRP </th>
-					<th class="disc txt_rt"> Discount </th>
+					<th class="disc txt_rt" id="prodiscdisplaytd"> Discount </th>
 					<th class="ttl_prc txt_rt"> Total Price </th>
 					<th style="color: red"> Delete </th>
 				</tr>
@@ -289,11 +300,11 @@
 			<table class="sa_lst mar_sale_ttl" cellpadding="0" cellspacing="" border="0">
 					<tr>
 						<td class="txt_rt"> Loading Charges </td>
-						<td class="txt_rt ttl_prc"> <input type="text" onkeypress="return onlyNumberKey(event)" value="0" name="load_charge" id="load_charge"> </td>
+						<td class="txt_rt ttl_prc"> <input type="text" onkeypress="return onlyNumberKey(event)" value="0" name="load_charge" id="load_charge" readonly> </td>
 					</tr>
 					<tr>
 						<td class="txt_rt"> Transport Charges </td>
-						<td class="txt_rt ttl_prc"> <input type="text" onkeypress="return onlyNumberKey(event)" value="0" name="transport_charge" id="transport_charge"> </td>
+						<td class="txt_rt ttl_prc"> <input type="text" onkeypress="return onlyNumberKey(event)" value="0" name="transport_charge" id="transport_charge" readonly> </td>
 					</tr>
 					<tr>
 						<td class="txt_rt"> <b> Grand Total </b> </td>
@@ -308,7 +319,7 @@
 				<span class="create_li">
 					<div class="cre_inp">
 				  		<div class="sm_blk"> Received Amount </div>
-				    	<input type="text" class="form-control" placeholder="" data-original-title="" title="" name="received_amount" id="received_amount" onkeypress="return onlyNumberKey(event)">
+				    	<input type="text" class="form-control" placeholder="" data-original-title="" title="" name="received_amount" id="received_amount" onkeypress="return validateFloatKeyPress(this,event);">
 
 				    	<input type="text"  name="received_amountval" id="received_amountval" >
 			 		</div>
@@ -331,13 +342,14 @@
 			        	<div class="ord_comp_bl">
 			        	<table class="actl_tbl table" cellspacing="0" cellpadding="0" border="0">
 			            <thead>
-			              <tr>  <th> Date </th>     
+			              <tr>  <th> Date </th>   
+			              <th>Type</th>  
 			                <th> Bank</th>
 			                <th> Account Number </th>
 			                <th> IFSC Code </th>
-			                <th> Reference Number </th>
+			                
 			                <th> Amount </th>
-			               
+			               <th> Reference Number </th>
 			              </tr>
 			            </thead>
 			            <tbody id="transactionlist">
@@ -353,20 +365,21 @@
 			    </div>
 			  </div>
 			<!-- popup end -->
+			<p id="textcash"> </p>
 			<div id="disamt" style="display: none;">
 				<ul class="assign_type"> 
-					<li class="act_type lnk_typ ban_trns"> 
+					<li class="act_type lnk_typ ban_trns" onclick="return getbanks('bank');"> 
 						<img src="http://3.7.44.132/aquacredit/assets/images/bank_tansfer.png">
 						<input type="radio" name="paymenttype" value="bank" checked id="pay1">
 						<span> Bank Transfer </span>
 					</li>
-					<li class="cash_trns lnk_typ"> 
+					<li class="cash_trns lnk_typ" onclick="return getbanks('cash');"> 
 						<img src="http://3.7.44.132/aquacredit/assets/images/cash_icn.png">
 						<input type="radio" name="paymenttype" value="cash" id="pay2">
 						<span> Cash </span>
 					</li>
 					<li class="txt_csh"> 
-						<p id="textcash"> </p>
+						
 					</li>
 				</ul>
 				<style type="text/css">
@@ -386,13 +399,13 @@
 					<li class="create_li date">
 						<div class="cre_inp">
 							<div class="sm_blk"> Date </div>
-						    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="payment_date" id="payment_date" onkeydown="return false;">
+						    <input type="text" class="form-control mykey" placeholder="" data-original-title="" title="" name="payment_date" id="payment_date" onkeydown="return false;" value="<?php echo date('d-M-Y'); ?>">
 						</div>
 					</li>
 					<li class="admin_bank_li" > 
 				 		<div class="check_wt_serc" id="bankslist"> 
-				            <div class="show_va"> Select Bank </div>
-				            <div class="selectVal bankval_chk">  Select Bank </div>
+				            <div class="show_va" d="bnkval"> Select Account </div>
+				            <div class="selectVal bankval_chk" id="bnkval1">  Select Account </div>
 							<ul class="check_list mykey" id="bnkl"> 
 							    <li id="bank_opt_li"> 
 								    <div class="form-check">
@@ -417,7 +430,7 @@
 		<div class="show_note">
 			<p id="textcredit"></p>
 			<div class="note_add"> <a href="#" title=""> Note </a> </div> 
-				<textarea placeholder="Note" name="note"></textarea>
+				<textarea placeholder="Note" name="note" id="note"></textarea>
 			</div>
 			<div class="po_ftr">
 				<!-- <button class="btn fr sb_btn btn-primary" data-toggle="modal" data-target="#view_order"> Create Order </button> -->
@@ -634,7 +647,7 @@
 </div>
 <script type="text/javascript">
 var url = '<?php echo base_url()?>';
-
+getbanks('bank');
 getsale();
 function getbranches(bid)
 { 
@@ -669,12 +682,26 @@ function getbranches(bid)
     }
   });
 }
-function getbanks(bid)
+function getbanks(bval)
 { 
+	if(bval=='cash')
+	{
+		$('#bnkval').text('Select Cash');
+		$('#bnkval1').text('Select Cash');
+		$('input[name="paymenttype"][value="cash"]').prop('checked', true);
+	}
+	else
+	{
+		$('#bnkval').text('Select Bank');
+		$('#bnkval1').text('Select Bank');
+		$('input[name="paymenttype"][value="bank"]').prop('checked', true);
+	}
+	var branch = $("#branch").val();
+	var mainsale_type = $("input[name='sale_types']:checked").val(); 
 
-  $.ajax({    
-    url: url+"api/sales/getbanks",
-    data: {},
+  	$.ajax({    
+    url: url+"api/Banks/getdata1",
+    data: {seltype:bval,branch:branch,mainsaletype:mainsale_type},
     type:'POST',    
     datatype:'json',
     success : function(response){
@@ -684,32 +711,20 @@ function getbanks(bid)
         var opt = "";
         if(res.data.length > 0)
         {
-            $.each(res.data, function(index, crop) {
+            $.each(res.data, function(index, bank) {
             	var bimg = '';
-            	if(crop.bank_name=='SBI')
-            	{
-            		bimg = '<img src="http://3.7.44.132/aquacredit/assets/images/sib_icn.png" alt="" title="">';
-            	}
-            	else if(crop.bank_name=='ICICI')
-            	{
-            		bimg = '<img src="http://3.7.44.132/aquacredit/assets/images/icici_icn.png" alt="" title="">';
-            	}
-            	else
-            	{
-            		bimg = '<img src="http://3.7.44.132/aquacredit/assets/images/hdfc_icn.png" alt="" title="">';
-            	}
+            		if (bank.account_name == "SBI") { bank_icn = 'sib_icn.png'; } else if (bank.account_name == "HDFC") { bank_icn = 'hdfc_icn.png'; } else if (bank.account_name == "ICICI") { bank_icn = 'icici_icn.png'; }else{ bank_icn = 'cash_account.png'; }
 
-            	   if(bid == crop.bank_id)
-                    { 
-                       sel = "checked"; 
-                       $(".bankval_chk").text(crop.account_no); 
-                    }
-                    else
-                    { 
-                      sel = "";
-                    }
+            	   if(bank.account_type=='BANK')
+					{
+						var amountval = bank.account_number;
+					}
+					else
+					{
+						var amountval = bank.account_name;
+					}
 
-            opt += '<div class="form-check"><input class="form-check-input" type="radio" onclick="hidecolor();" name="bankid" id="bnk'+index+'" value="'+crop.bank_id+'" '+sel+'><label class="form-check-label" for="bnk'+index+'"><div class="bank_logo">'+bimg+'</div><div class="bank_mny"><div class="bank_bal"> ₹ '+crop.avail_amount+' </div><div class="accont_numb">'+crop.account_no+'</div></div></label></div>';
+				opt += '<div class="form-check"><input class="form-check-input" type="radio" name="bankid" id="bnk'+bank.id+'" value="'+bank.id+'"><label class="form-check-label" for="bnk'+bank.id+'"><div class="bank_logo"><img src="http://3.7.44.132/aquacredit/assets/images/' + bank_icn + '" alt="" title=""></div><div class="bank_mny"><div class="bank_bal"> ₹ '+addCommas(bank.avail_amount)+'</div><div class="accont_numb">'+amountval+'</div></div></label></div>';
           });
         }
        
@@ -717,9 +732,33 @@ function getbanks(bid)
     }
   });
 }
+
 function hidecolor()
 {
 	$('.mykey').parent().css("border", "");
+
+	$("[id^='proid']").each(function() {
+        var id = $(this).attr('id');
+        id = id.replace("proid", '');
+        
+
+        var prodata = $('#proid'+id).val();
+        
+        if(prodata!='' && prodata!=0)
+		{
+			$('#proid'+id).val('');
+			$('#proname'+id).val('');
+			$('#proqty'+id).val('');
+			$('#promrpval'+id).val('');
+			$('#promrp'+id).val('');
+			$('#protot'+id).val('');
+			$('#prodisc'+id).val('');
+			$('#purchase_amt'+id).val('');
+			$('#inventoryid'+id).val('');
+			('#inventoryqty'+id).val('');
+		}     
+		calculateTotal();   
+    });
 }
 function ttype(val)
 {
@@ -812,7 +851,7 @@ function getusercrops(user_id,selval)
             	sel = "";
             }
             
-            opt += '<div class="form-check"><input class="form-check-input" type="radio" onclick="hidecolor();" name="crop_opt'+aeval+'" id="crp'+index+aeval+'" value="'+crop.cd_id+'" '+sel+' /><label class="form-check-label" for="crp'+index+aeval+'">'+crop.crop_location+'</label></div>';
+            opt += '<div class="form-check"><input class="form-check-input" type="radio"  name="crop_opt'+aeval+'" id="crp'+index+aeval+'" value="'+crop.cd_id+'" '+sel+' /><label class="form-check-label" for="crp'+index+aeval+'">'+crop.crop_location+'</label></div>';
           });
         }
       }else{
@@ -838,7 +877,7 @@ function getsale()
 			success : function(response2){
 				
 				res= JSON.parse(response2);				
-				//alert(res.data.status);
+				
 				if(res.data != "")
 				{
 					$('.cre_inp').addClass('inp_ss');
@@ -854,7 +893,7 @@ function getsale()
 						$("#sale2").val(res.data.saletype);
 						$("#sale2").prop( "checked", true );
 					}*/
-
+					
 					$("#ukey").val(res.data.user_name);	
 					$("#userid").val(res.data.userid);					
 					$("#mobile").val(res.data.mobile);					
@@ -871,10 +910,12 @@ function getsale()
 					}*/
 					if(res.data.addresstype==1)
 					{
+						$("#addresstype").val(1);
 						$('#billadd').prop('checked', true);
 					}
 					else
 					{
+						$("#addresstype").val(0);
 						$('#billadd').prop('checked', false);
 					}
 					if(res.data.saletype==0)
@@ -894,6 +935,7 @@ function getsale()
 					$("#saleordid").html(ord);
 
 					$('input[name="sale_types"][value="'+bcsh+'"]').prop('checked', true);
+					//alert(res.data.saletype);
 					if(res.data.saletype == 0)
 					{
 						$('.crd_sale').addClass('act_type');
@@ -902,7 +944,7 @@ function getsale()
 						$('.disckey').prop('readonly', true);
 
 						$('#textcredit').show();
-				        $('#textcash').html('Remaining amount will be added to user credit amount');
+				        $('#textcash').html('Remaining amount balance amount');
 				        $('#textcash').hide();
 
 					}
@@ -925,7 +967,7 @@ function getsale()
     						$('#textcredit').hide();
     						if(res.data.balance_receivedamount!=0)
     						{
-    							$('#textcash').html('<b class="blue_text">'+res.data.balance_receivedamount+'</b> Balance amount will be added in user credit </br> Total Paid Amount : <b class="blue_text">'+res.data.received_amount+ '</b>');
+    							$('#textcash').html('<b class="blue_text">'+res.data.balance_receivedamount+'</b> Balance amount  </br> Total Paid Amount : <b class="blue_text">'+res.data.received_amount+ '</b>');
     						}
     						else
     						{
@@ -941,7 +983,7 @@ function getsale()
 					
 					if(res.data.received_amount!='' && res.data.received_amount!=0)
 					{
-						$("#disamt").show();
+						$("#disamt").hide();
 					}
 					else
 					{
@@ -951,11 +993,11 @@ function getsale()
 					if(res.data.payment_date!='1970-01-01')
 					{
 						var a=$.datepicker.formatDate( "dd-M-yy", new Date(res.data.payment_date));
-          				$("#payment_date").val(a);
+          				//$("#payment_date").val(a);
 					}
 					
 					$("#received_amountval").val(res.data.received_amount);
-					$("#bank_reference").val(res.data.bank_reference);
+					//$("#bank_reference").val(res.data.bank_reference);
 					$("#driver_name").val(res.data.driver_name);	
 					$("#driver_mobile").val(res.data.driver_mobile);	
 					$("#vehicle_number").val(res.data.vehicle_number);
@@ -973,11 +1015,11 @@ function getsale()
 					$("#b_pincode").val(res.data.b_pincode);
 					$("#b_gst").val(res.data.b_gst);	
 
-					$("#totamt").html(res.data.total_saleprice);
+					$("#totamt").html(currency_format(res.data.total_saleprice,2));
 					//$("#totamt").html(addCommas(res.data.total_saleprice));
 					$("#totamtval").val(res.data.total_saleprice);
 					//$("#gtotamt").html(addCommas(res.data.grandtotal));
-					$("#gtotamt").html(res.data.grandtotal);
+					$("#gtotamt").html(currency_format(res.data.grandtotal,2));
 					$("#gtotamtval").val(res.data.grandtotal);	
 
 					$("#load_charge").val(res.data.load_charge);
@@ -986,10 +1028,10 @@ function getsale()
 					var branchid = res.data.branchid;
 					var bankid = res.data.bankid;
 					var transport_type = res.data.transport_type;
-					
+					$('#branch').val(branchid);
 					getusercrops(res.data.userid,res.data.crop_id);
 					getbranches(branchid);
-					getbanks(bankid);
+					//getbanks(bankid);
 					gettransport(transport_type);
 
 				}				
@@ -1006,8 +1048,9 @@ function getsale()
 			            success : function(response1){
 
 			              res1 = JSON.parse(response1);
-			              
+			              //alert(JSON.stringify(res1.data));
 			              htmlRows = "";
+			              
 			              $('#rowval').val(res1.data.length);
 			              if(res1.data.length>0)
 			              {
@@ -1016,13 +1059,46 @@ function getsale()
 			                	
 			                  var tcamtt = trades.mrp;
 			                  //var tfamtt = addCommas(trades.total_price);
-			                  var tfamtt = trades.total_price;
+			                  var tfamtt = currency_format(trades.total_price,2);
+			                  
+			                  if(trades.discount!=0 && trades.discount!=0.00)
+			                  {
+			                  	var pdiscount = trades.discount;
+			                  }
+			                  else
+			                  {
+			                  	var pdiscount = 0;
+			                  }
+			                  //alert(res.data.saletype);
+			                    /*var saletype = $("input[name='sale_types']:checked").val();
+			                    if(saletype==1)
+								{
+								    var sel = ''; 
+								   
+								}
+								else
+								{
+								    var sel = 'readonly';
+								   
+								}*/
+							  var sel ='';
 
-
-			                  htmlRows = '<tr id="rowNums'+trades.id+'"><td> <input type="hidden" class="mykey" placeholder="Product Name" name="proid[]" id="proid'+trades.id+'" value="'+trades.product_id+'" ><input type="text" class="mykey" placeholder="Product Name" autocomplete="off"  name="proname[]" id="proname'+trades.id+'" value="'+trades.pname+'"></td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty'+trades.id+'" value="'+trades.quantity+'"> </td><td class="mrp txt_rt"> <input type="text" class="mykey" placeholder="0" name="promrp[]" id="promrp'+trades.id+'" readonly value="'+tcamtt+'"><input type="hidden" class="mykey" placeholder="0" name="promrpval[]" id="promrpval'+trades.id+'" value="'+trades.mrp+'"> </td><td class="disc txt_rt"> <input type="text" class="mykey disckey" onkeypress="return onlyNumberKey(event)" placeholder="0" name="prodisc[]" id="prodisc'+trades.id+'" value="'+trades.discount+'"> </td><td class="ttl_prc txt_rt"> <input type="text" class="mykey" placeholder="0" name="protot[]" id="protot'+trades.id+'" readonly value="'+tfamtt+'"><input type="hidden" placeholder="0" name="prototval[]" id="prototval'+trades.id+'" value="'+trades.total_price+'"><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_'+trades.id+'" value="'+trades.id+'"></td><td class="dele_th_td" > <i class="fa fa-trash" onclick="removerow('+trades.id+','+pid+')" style="color:red"></i> </td></tr>';
+			                  htmlRows = '<tr id="rowNums'+trades.id+'"><td> <input type="hidden" class="mykey" placeholder="Product Name" name="proid[]" id="proid'+trades.id+'" value="'+trades.product_id+'" ><input type="hidden" name="inventoryid[]" id="inventoryid'+trades.id+'" value="'+trades.inventoryid+'"><input type="hidden" name="inventoryqty[]" id="inventoryqty'+trades.id+'" value="'+trades.inventoryqty+'"><input type="hidden" name="preqty[]" id="preqty'+trades.id+'" value="'+trades.quantity+'"><input type="text" class="mykey" placeholder="Product Name" autocomplete="off"  name="proname[]" id="proname'+trades.id+'" value="'+trades.pname+'"><input class="mykey" type="hidden" name="purchase_amt[]" id="purchase_amt'+trades.id+'" value="'+trades.purchase_amt+'"> </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty'+trades.id+'" value="'+trades.quantity+'"> </td><td class="mrp txt_rt"> <input type="text" class="mykey" placeholder="0" name="promrp[]" id="promrp'+trades.id+'" readonly value="'+tcamtt+'"><input type="hidden" class="mykey" placeholder="0" name="promrpval[]" id="promrpval'+trades.id+'" value="'+trades.mrp+'"> </td><td class="disc txt_rt prodiscdisplay"> <input type="text" class="mykey disckey" onkeypress="return validateFloatKeyPress(this,event);" maxlength="4" placeholder="0" name="prodisc[]" id="prodisc'+trades.id+'" value="'+pdiscount+'" '+sel+' > </td><td class="ttl_prc txt_rt"> <input type="text" class="mykey" placeholder="0" name="protot[]" id="protot'+trades.id+'" readonly value="'+tfamtt+'"><input type="hidden" placeholder="0" name="prototval[]" id="prototval'+trades.id+'" value="'+trades.total_price+'"><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_'+trades.id+'" value="'+trades.id+'"></td><td class="dele_th_td" > <i class="fa fa-trash" onclick="removerow('+trades.id+','+pid+')" style="color:red"></i> </td></tr>';
 
 			                  $('#invoiceItem').append(htmlRows);
-
+			                  var saletype = $("input[name='sale_types']:checked").val();
+			                  //alert(saletype);
+			                    if(saletype=='cash')
+								{
+								    $('.prodiscdisplay').show();
+	    							$('#prodiscdisplaytd').show();
+								}
+								else
+								{
+								   
+								    $('.prodiscdisplay').hide();
+	    							$('#prodiscdisplaytd').hide();
+								}
 			                  
 			                   /* if(res.data.status==1)
 			          			{
@@ -1050,18 +1126,32 @@ function getsale()
 			              else
 			              {
 
-			                  htmlRows = '<tr id="rowNums0" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid0" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname0" autocomplete="off" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty0"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp0"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval0"> </td><td class="disc txt_rt"> <input type="text" class="mykey disckey" placeholder="0" name="prodisc[]" onkeypress="return onlyNumberKey(event)" id="prodisc0"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot0"><input type="hidden" placeholder="0" name="prototval[]" id="prototval0"><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_0" value="0"></td><td class="dele_th_td"> <i class="fa fa-trash" onclick="removerow(0,0)" style="color:red"></i> </td></tr>';
+			                  htmlRows = '<tr id="rowNums0" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid0" value="0"><input type="hidden" name="inventoryid[]" id="inventoryid0" value="0"><input type="hidden" name="inventoryqty[]" id="inventoryqty0" value="0"><input type="hidden" name="preqty[]" id="preqty0" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname0" autocomplete="off" ><input class="mykey" type="hidden" name="purchase_amt[]" id="purchase_amt0" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty0"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp0"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval0"> </td><td class="disc txt_rt prodiscdisplay"> <input type="text" class="mykey disckey" placeholder="0" name="prodisc[]" onkeypress="return validateFloatKeyPress(this,event);" maxlength="4" id="prodisc0"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot0"><input type="hidden" placeholder="0" name="prototval[]" id="prototval0"><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_0" value="0"></td><td class="dele_th_td"> <i class="fa fa-trash" onclick="removerow(0,0)" style="color:red"></i> </td></tr>';
 			        
 			                  $('#invoiceItem').append(htmlRows);
-
+			                   var saletype = $("input[name='sale_types']:checked").val();
+			                  if(saletype==1)
+								{
+								    var sel = ''; 
+								    $('.prodiscdisplay').show();
+	    							$('#prodiscdisplaytd').show();
+								}
+								else
+								{
+								    var sel = 'readonly';
+								    $('.prodiscdisplay').hide();
+	    							$('#prodiscdisplaytd').hide();
+								}
 			              }
 
 
 			             
 			              
 			            }
+
 		            });
 		/*edit product details*/
+		 //calculateTotal();
 		/*get transaction details*/
 				$.ajax({
 		            	url: url+"api/sales/gettransdetails/"+pid,
@@ -1079,9 +1169,22 @@ function getsale()
 			              
 			                $.each(res1_t.data, function(index, transaction) {
 
-			                	var aa = $.datepicker.formatDate( "dd-M-yy", new Date(transaction.transaction_date));	
+			                	var aa = $.datepicker.formatDate( "dd-M-yy", new Date(transaction.transaction_date));
+
+			                	if(transaction.bank_ifsc!='' && transaction.bank_ifsc!=null)
+			                	{
+			                		var bifsc = transaction.bank_ifsc;
+			                		var acntype = 'Bank';
+			                		var acnt = transaction.account_no; 
+			                	}
+			                	else
+			                	{
+			                		var bifsc = '--';
+			                		var acntype = 'Cash';
+			                		var acnt = '--';
+			                	}
 			                	
-			                  htmlRows = '<tr ><td>'+aa+'</td><td>'+transaction.bank_name+'</td><td>'+transaction.account_no+'</td><td>'+transaction.bank_ifsc+'</td><td>'+transaction.amount+'</td><td>'+transaction.reference_number+'</td></tr>';
+			                  htmlRows = '<tr ><td>'+aa+'</td><td>'+acntype+'</td><td>'+transaction.bank_name+'</td><td>'+acnt+'</td><td>'+bifsc+'</td><td>'+transaction.amount+'</td><td>'+transaction.reference_number+'</td></tr>';
 
 			                  $('#transactionlist').append(htmlRows);
 
@@ -1105,7 +1208,8 @@ $(document).ready(function(){
 	    changeMonth: true,
 	    changeYear: true,
 	    /*minDate: dateToday,*/
-	    numberOfMonths: 1
+	    numberOfMonths: 1,
+	    maxDate : 0
 	  });
 
 	$('.lnk_typ.ban_trns').click(function(){
@@ -1141,6 +1245,7 @@ $(document).ready(function(){
     $('#billadd').click(function(){
     	
     		if($(this).prop("checked") == true){
+    			$("#addresstype").val(1);
                 var s_name = $("#s_name").val();
 			    var s_mobile = $("#s_mobile").val();
 			    var s_address = $("#s_address").val();
@@ -1166,6 +1271,7 @@ $(document).ready(function(){
 
             }
             else if($(this).prop("checked") == false){
+            	$("#addresstype").val(0);
                 $("#b_name").val('');
 			    $("#b_mobile").val('');
 			    $("#b_address").val('');
@@ -1214,7 +1320,7 @@ $(document).ready(function(){
     }else{
       var opt = '<option value="">-- Select Crop --</option>';
       $("#crop_opt").html(opt); $("#crop_opt").val('');   
-       
+       $(".crop_type_val1").text('Crop location');
       //document.getElementById("crop_opt").fstdropdown.rebind();
       //document.getElementById("bank_opt").fstdropdown.rebind();
       
@@ -1223,15 +1329,45 @@ $(document).ready(function(){
 
 });
 
-$(document).on('keypress', "[id^=received_amount]", function() {
+$(document).on('keyup', "[id^=received_amount]", function() {
 	var gtotamtval = $('#gtotamtval').val();
 	var rmval = $('#received_amountval').val();
-	if(rmval>=gtotamtval)
+	var rcmt = $('#received_amount').val();
+	var rr = parseFloat(rmval)+parseFloat(rcmt);
+	
+	
+	
+
+	if(parseFloat(rmval)>=parseFloat(gtotamtval))
 	{
 		$('#received_amount').val('');
+		$('#disamt').hide();
 		err = 1; err_msg = "Total amount paid "; tagid = "";
         return form_validation(err,err_msg,tagid);
 	}
+	else
+	{
+		$('#disamt').show();
+	}
+
+	if(parseFloat(rr)>parseFloat(gtotamtval))
+    {
+          $('#received_amount').val('');
+          $('#disamt').hide();
+          if(parseFloat(rr)>parseFloat(gtotamtval)){ err = 1; err_msg = "Received amount is less than grand total!"; tagid = "#received_amount"; 
+          return form_validation(err,err_msg,tagid); }
+          return false;
+    }
+	else
+	{
+		$('#disamt').show();
+	}
+
+	if(rcmt=='')
+	{
+		$('#disamt').hide();
+	}
+
 });
 
 $(document).on('blur', "[id^=proname]", function() {
@@ -1267,7 +1403,40 @@ $(document).on('blur', "[id^=prodisc]", function() {
     calculateTotal();
 }); 
 $(document).on('blur', "[id^=proqty]", function() {
-    calculateTotal();
+    	var id = $(this).attr('id');
+    	id = id.replace("proqty", '');
+
+    	var proqty = $('#proqty'+id).val();
+    	var inventoryqty = $('#inventoryqty'+id).val();
+    	var preqty = $('#preqty'+id).val();
+
+    	if(proqty>inventoryqty)
+    	{
+    		
+    		
+    		if(inventoryqty==0)
+    		{
+    			$('#proqty'+id).val(preqty);
+    			calculateTotal();
+    			err = 1; err_msg = "Quantity is not available "; tagid = "#proqty"; 
+          		return form_validation(err,err_msg,tagid); 
+          		return false;
+    		}
+    		else
+    		{
+    			$('#proqty'+id).val(inventoryqty);
+    			calculateTotal();
+    			err = 1; err_msg = "Available quantity is "+inventoryqty; tagid = "#proqty"; 
+          		return form_validation(err,err_msg,tagid); 
+          		return false;
+    		}
+
+    		
+    	}
+    	else
+    	{
+    		calculateTotal();
+    	}
 }); 
 $(document).on('blur', "[id^=load_charge]", function() {
     calculateTotal();
@@ -1280,7 +1449,7 @@ $(document).on('keypress', "[id^=proname]", function() {
     var id = $(this).attr('id');
     id = id.replace("proname", '');
 
-    var branch = $("input[name='branchval']:checked").val();
+    var branch = $("#branch").val();
     var proids = $("input[name='proid[]']").map(function(){return $(this).val();}).get();
 
     if(branch==undefined || branch=='')
@@ -1294,6 +1463,9 @@ $(document).on('keypress', "[id^=proname]", function() {
 	    $('#promrpval'+id).val(0);
 	    $('#promrp'+id).val(0);
 	    $('#proqty'+id).val(0);
+	    $('#preqty'+id).val(0);
+	    $('#inventoryqty'+id).val(0);
+	    $('#inventoryid'+id).val(0);
 	    $('#protot'+id).val(0);
 	    $('#prototval'+id).val(0);
 	    calculateTotal();
@@ -1327,7 +1499,11 @@ $(document).on('keypress', "[id^=proname]", function() {
 			      pro_id: result.pid,
 			      promrp : result.pmrp,
 			      packing: result.packing,
-			      units : result.units
+			      units : result.units,
+			      purchase_amt : result.purchase_amt,
+			      inventoryid: result.inventoryid,
+			      inventoryqty: result.inventoryqty,
+			      protag: result.protag
 		    }  
 	      }));  
 
@@ -1342,6 +1518,9 @@ $(document).on('keypress', "[id^=proname]", function() {
 	     	$('#promrpval'+id).val(ui.item.promrp);
 	     	$('#promrp'+id).val(addCommas(ui.item.promrp));
 	     	$('#proqty'+id).val(1);
+	     	$('#purchase_amt'+id).val(ui.item.purchase_amt);
+	     	$('#inventoryid'+id).val(ui.item.inventoryid);
+	     	$('#inventoryqty'+id).val(ui.item.inventoryqty);
 
 	     	calculateTotal();
 
@@ -1355,21 +1534,33 @@ $(document).on('keypress', "[id^=proname]", function() {
 	     	{
 	     		$('#rowval').val(rrv);
 
-	     	htmlRows = '<tr id="rowNums'+rowNum+'" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid'+rowNum+'" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname'+rowNum+'" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty'+rowNum+'"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp'+rowNum+'"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval'+rowNum+'"> </td><td class="disc txt_rt"> <input type="text" class="mykey disckey" placeholder="0" name="prodisc[]" id="prodisc'+rowNum+'"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot'+rowNum+'"><input type="hidden" placeholder="0" name="prototval[]" id="prototval'+rowNum+'" > <input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_0" value="0"></td><td class="dele_th_td"> <i class="fa fa-trash" onclick="removerow('+rowNum+',0)" style="color:red"></i> </td></tr>';
+	     	htmlRows = '<tr id="rowNums'+rowNum+'" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid'+rowNum+'" value="0"><input type="hidden" name="inventoryid[]" id="inventoryid'+rowNum+'" value="0"><input type="hidden" name="inventoryqty[]" id="inventoryqty'+rowNum+'" value="0"><input type="hidden" name="preqty[]" id="preqty'+rowNum+'" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname'+rowNum+'" ><input class="mykey" type="hidden" name="purchase_amt[]" id="purchase_amt'+rowNum+'" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty'+rowNum+'"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp'+rowNum+'"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval'+rowNum+'"> </td><td class="disc txt_rt prodiscdisplay"> <input type="text" class="mykey disckey" placeholder="0" name="prodisc[]" id="prodisc'+rowNum+'"> </td><td class="ttl_prc txt_rt" onkeypress="return validateFloatKeyPress(this,event);" maxlength="4" > <input type="text" placeholder="0" readonly name="protot[]" id="protot'+rowNum+'"><input type="hidden" placeholder="0" name="prototval[]" id="prototval'+rowNum+'" > <input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_0" value="0"></td><td class="dele_th_td"> <i class="fa fa-trash" onclick="removerow('+rowNum+',0)" style="color:red"></i> </td></tr>';
 
 	     	$('#invoiceItem').append(htmlRows);
+
+	     	var sale_type = $("input[name='sale_types']:checked").val();
+	     	if(sale_type=='cash')
+	    	{
+		     	$('.prodiscdisplay').show();
+		    	$('#prodiscdisplaytd').show();
+		    }
+		    else{
+		    	$('.prodiscdisplay').hide();
+		    	$('#prodiscdisplaytd').hide();
+		    } 	
 	     }
 	     	
 	    }
 	    
 	    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) { 
 	     	
-	    	
+	    	if(item.protag=='New'){ var ptag = 'style="color:white;background:green;border-radius:5px"'; }else{ var ptag = 'style="color:white;background:red;border-radius:5px"'; }
+
 	           return $( "<li></li>" )  
 
 	               .data( "item.autocomplete", item )  
 
-	               .append( "<a>" + item.label+ " "+item.units+"/"+item.packing+"</a>" )  
+	                .append( "<a>" + item.label+ " "+item.units+"/"+item.packing+" <span "+ptag+">"+item.protag+"</span> - "+item.promrp+"</a>" )  
 
 	               .appendTo( ul );  
 
@@ -1387,7 +1578,7 @@ $("#salefrm").submit(function(e) {
 	var sallen = $(':radio[name="sale_types"]:checked').length;
 	var bralen = $(':radio[name="branchval"]:checked').length;
 	var saletype = $("input[name='sale_types']:checked").val();
-	var branchval = $("input[name='branchval']:checked").val();
+	var branchval = $("#branch").val();
     
     var ukey = $("#ukey").val();
     var userid = $("#userid").val();   
@@ -1413,10 +1604,10 @@ $("#salefrm").submit(function(e) {
     
   	if(sallen == 0 ){ err = 1; err_msg = "Please select sale type!"; tagid = "#saletype";
               return form_validation(err,err_msg,tagid);}
-    if(bralen == 0 ){ err = 1; err_msg = "Please select branch!"; tagid = "#brn_l";
-              return form_validation(err,err_msg,tagid);}   
+    /*if(bralen == 0 ){ err = 1; err_msg = "Please select branch!"; tagid = "#brn_l";
+              return form_validation(err,err_msg,tagid);}  */ 
     
-    if(ukey == ""){ err = 1; err_msg = "Please search user!"; tagid = "#ukey";
+    if(ukey == ""){ err = 1; err_msg = "Please User Name/Mobile!"; tagid = "#ukey";
         return form_validation(err,err_msg,tagid);}  
                      
     if(saletype == "cash")
@@ -1440,12 +1631,22 @@ $("#salefrm").submit(function(e) {
         }     
     } 
    var plength = $('input[name="proname[]"]').length;
+   
+
+    var values = $("input[name='proname[]']").map(function() { return $(this).val(); }).get();
+    var newArray = values.filter(function(v) { return v !== '' });  
+
+    if (newArray.length == 0) {
+            err = 1;
+            return form_validation(err, "Must have at least one product!", "");
+    }
+
         //alert(plength);
 		/*return false;*/
 
 
-    if(proname0 == 0){ err = 1; err_msg = "Please select product!"; tagid = "#proname0";
-        return form_validation(err,err_msg,tagid);}
+    /*if(proname0 == 0){ err = 1; err_msg = "Must have at least one product!"; tagid = "#proname0";
+        return form_validation(err,err_msg,tagid);}*/
     /*if(proqty0 == 0){ err = 1; err_msg = "Please enter quantity!"; tagid = "#proqty0";
         return form_validation(err,err_msg,tagid);}*/
 
@@ -1670,7 +1871,7 @@ function calculateTotal() {
     var qty = 0;
     var totamt = 0;
     var grandTotal = 0;
- var ddisc =0;
+ 	var ddisc =0;
     
 
     $("[id^='proqty']").each(function() {
@@ -1679,6 +1880,10 @@ function calculateTotal() {
         var proqty = $("#proqty" + id).val();
         var promrpval = $('#promrpval' + id).val();
         var prodisc = $('#prodisc' + id).val();
+
+        var purchaseamt = $('#purchase_amt' + id).val();
+       //alert(prodisc);
+        
        
         $('#promrp' + id).val(promrpval);
 
@@ -1687,14 +1892,39 @@ function calculateTotal() {
         var ds = prodisc/100;
         var dsc = ds*total;
         var tot1 = total-dsc;
+        var ppamt = purchaseamt * proqty;
 
-        var ftot = tot1.toFixed(2);
-        /*$('#protot' + id).val(addCommas(ftot));*/
-        $('#protot' + id).val(ftot);
-        $('#prototval' + id).val(ftot);
+
+        if(tot1!=0)
+        {
+        	//alert(prodisc);
+        	//alert(tot1);
+        	//alert(purchaseamt);
+
+	        if ((parseFloat(tot1) < parseFloat(ppamt)) && prodisc!='' && prodisc!=0) {
+	        	
+	            alert('Discount should be lessthan purchase amount, purchase amount is ' + ppamt);
+	            $('#prodisc' + id).val('');
+	            var tot1 = promrpval*proqty;
+	            var ftot = currency_format(tot1,2);
+	            $('#protot' + id).val(ftot);
+	        	$('#prototval' + id).val(tot1);
+	        	
+	        	//return false;
+	        }
+	        else
+	        {
+	        	
+	        	var ftot = currency_format(tot1,2);
+        		/*$('#protot' + id).val(addCommas(ftot));*/
+        		$('#protot' + id).val(ftot);
+        		$('#prototval' + id).val(tot1);
+        		var tot1 = total-dsc;
+	        }
+	    }    
 
         grandTotal += tot1;
-         ddisc += prodisc; 
+        ddisc += prodisc; 
     });
 
     var loadc = $('#load_charge').val();
@@ -1721,28 +1951,30 @@ function calculateTotal() {
     var GrandTot = parseFloat(grandTotal) + parseInt(loadc) + parseInt(transportc);
     //$('#totamt').html(addCommas(grandTotal));
     //$('#gtotamt').html(addCommas(GrandTot));
-     $('#totamt').html(grandTotal.toFixed(2));
-    $('#gtotamt').html(GrandTot.toFixed(2));
+    if(grandTotal!=0)
+   {
+    $('#totamt').html(currency_format(grandTotal,2));
+    $('#gtotamt').html(currency_format(GrandTot,2));
     $('#totdiscount').val(ddisc);
-    $('#totamtval').val(grandTotal.toFixed(2));
-    $('#gtotamtval').val(GrandTot.toFixed(2));
+    $('#totamtval').val(grandTotal);
+    $('#gtotamtval').val(GrandTot);
 
     var saletype = $("input[name='sale_types']:checked").val();
     if(saletype=='cash')
     {
     	var rcv = $('#received_amountval').val();
 
-    	if(parseFloat(GrandTot)>parseInt(rcv))
+    	if(parseFloat(GrandTot)>parseFloat(rcv))
     	{
-    		var rcvf = parseFloat(GrandTot)-parseInt(rcv);
-    		$('#textcash').html(' Due amount : '+rcvf.toFixed(2)+'</br> Paid amount : '+rcv);
+    		var rcvf = parseFloat(GrandTot)-parseFloat(rcv);
+    		$('#textcash').html(' Due amount : '+currency_format(rcvf,2)+'</br> Paid amount : '+rcv);
     	}
     	else
     	{
-    		var rcvf = parseInt(rcv)-parseFloat(GrandTot);
+    		var rcvf = parseFloat(rcv)-parseFloat(GrandTot);
     		if(rcvf!=0)
     		{
-    			$('#textcash').html(rcvf.toFixed(2) +' Balance amount will be added in user credit </br> Total Paid Amount : '+rcv);
+    			$('#textcash').html(currency_format(rcvf,2) +' Balance amount  </br> Total Paid Amount : '+rcv);
     		}   
     		else
     		{
@@ -1753,7 +1985,7 @@ function calculateTotal() {
     	$('#textcredit').hide();
     	
     	$('#textcash').show();
-    	$('#disamt').show();
+    	//$('#disamt').show();
     }else
     {
     	$('#disamt').hide();
@@ -1761,6 +1993,7 @@ function calculateTotal() {
     	$('#textcash').html('Remaining amount will be added to user credit amount');
     	$('#textcash').hide();
     }
+	}
 }
 function onlyNumberKey(evt) { 
           
@@ -1774,6 +2007,7 @@ function removerow(id,sid)
 {
 	
 	var thid = $('#hid_acivity_id_' + id).val();
+	
 	if(thid!='' && thid!=0 && thid!=undefined)
 	{
 		if (confirm('Are you sure you want to remove')) {
@@ -1792,6 +2026,8 @@ function removerow(id,sid)
 				rr --;
 	        	$('#rowval').val(rr);
 	        	$('#rowNums'+id).remove();
+
+
 	        }
 			else if(rr==0)
 			{
@@ -1800,9 +2036,12 @@ function removerow(id,sid)
 				$('#promrpval'+id).val('');
 				$('#promrp'+id).html('');
 				$('#prodisc'+id).val('');
+				$('#preqty'+id).val('');
+	    		$('#inventoryqty'+id).val('');
+	    		$('#inventoryid'+id).val('');
 				calculateTotal();
 
-				htmlRows = '<tr id="rowNums0" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid0" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname0" autocomplete="off" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty0"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp0"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval0"> </td><td class="disc txt_rt"> <input type="text" class="mykey disckey" placeholder="0" name="prodisc[]" onkeypress="return onlyNumberKey(event)" id="prodisc0"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot0"><input type="hidden" placeholder="0" name="prototval[]" id="prototval0"><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_0" value="0"></td><td class="dele_th_td"> <i class="fa fa-trash" onclick="removerow(0,0)" style="color:red"></i> </td></tr>';
+				htmlRows = '<tr id="rowNums0" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid0" value="0"><input type="hidden" name="inventoryid[]" id="inventoryid0" value="0"><input type="hidden" name="inventoryqty[]" id="inventoryqty0" value="0"><input type="hidden" name="preqty[]" id="preqty0" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname0" autocomplete="off" ><input class="mykey" type="hidden" name="purchase_amt[]" id="purchase_amt0" > </td><td class="qty txt_cnt"> </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty0"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp0"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval0"> </td><td class="disc txt_rt prodiscdisplay"> <input type="text" class="mykey disckey" placeholder="0" name="prodisc[]"  id="prodisc0" onkeypress="return validateFloatKeyPress(this,event);" maxlength="4"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot0"><input type="hidden" placeholder="0" name="prototval[]" id="prototval0"><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_0" value="0"></td><td class="dele_th_td"> <i class="fa fa-trash" onclick="removerow(0,0)" style="color:red"></i> </td></tr>';
 			        
 			    $('#invoiceItem').append(htmlRows);
 
@@ -1810,11 +2049,25 @@ function removerow(id,sid)
 				$('#rowval').val(rr);
 				$('#rowNums'+id).remove();
 
+				var saletype = $("input[name='sale_types']:checked").val();
+		    	if(saletype=='cash')
+		    	{
+			     	$('.disckey').prop('readonly', true);
+			     	$('.prodiscdisplay').show();
+			    	$('#prodiscdisplaytd').show();
+			    }
+			    else{
+			    	$('.disckey').prop('readonly', true);
+			    	$('.prodiscdisplay').hide();
+			    	$('#prodiscdisplaytd').hide();
+			    }
+
 			}
     	} 
 	}
 	else
 	{
+		
 		var rr = $('#rowval').val();
 		if(rr!=0)
 		{
@@ -1830,15 +2083,30 @@ function removerow(id,sid)
 			$('#promrpval'+id).val('');
 			$('#promrp'+id).html('');
 			$('#prodisc'+id).val('');
+			$('#preqty'+id).val('');
+	    	$('#inventoryqty'+id).val('');
+	    	$('#inventoryid'+id).val('');
 			calculateTotal();
 			$('#rowval').val(rr);
 			$('#rowNums'+id).remove();
 
-			htmlRows = '<tr id="rowNums0" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid0" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname0" autocomplete="off" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty0"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp0"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval0"> </td><td class="disc txt_rt"> <input type="text" class="mykey disckey" placeholder="0" name="prodisc[]" onkeypress="return onlyNumberKey(event)" id="prodisc0"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot0"><input type="hidden" placeholder="0" name="prototval[]" id="prototval0"><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_0" value="0"></td><td class="dele_th_td"> <i class="fa fa-trash" onclick="removerow(0,0)" style="color:red"></i> </td></tr>';
+			htmlRows = '<tr id="rowNums0" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid0" value="0"><input type="hidden" name="inventoryid[]" id="inventoryid0" value="0"><input type="hidden" name="inventoryqty[]" id="inventoryqty0" value="0"><input type="hidden" name="preqty[]" id="preqty0" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname0" autocomplete="off" ><input class="mykey" type="hidden" name="purchase_amt[]" id="purchase_amt0" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty0"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp0"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval0"> </td><td class="disc txt_rt prodiscdisplay"> <input type="text" class="mykey disckey" placeholder="0" name="prodisc[]" onkeypress="return validateFloatKeyPress(this,event);" maxlength="4" id="prodisc0"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot0"><input type="hidden" placeholder="0" name="prototval[]" id="prototval0"><input type="hidden" class="form-control noalpha mykey" placeholder="" readonly name="hid_acivity_id[]" id="hid_acivity_id_0" value="0"></td><td class="dele_th_td"> <i class="fa fa-trash" onclick="removerow(0,0)" style="color:red"></i> </td></tr>';
 			        
 			$('#invoiceItem').append(htmlRows);
 			
 			//rr --;
+			var saletype = $("input[name='sale_types']:checked").val();
+	    	if(saletype=='cash')
+	    	{
+		     	$('.disckey').prop('readonly', true);
+		     	$('.prodiscdisplay').show();
+		    	$('#prodiscdisplaytd').show();
+		    }
+		    else{
+		    	$('.disckey').prop('readonly', true);
+		    	$('.prodiscdisplay').hide();
+		    	$('#prodiscdisplaytd').hide();
+		    }
 			
 		}
 	}
@@ -1847,20 +2115,72 @@ function removerow(id,sid)
 }
 function addmorerows()
 {
-	var rr = $('#rowval').val();
+	var sale_type = $("input[name='sale_types']:checked").val();
 
+	if(sale_type=='cash')
+	{
+	    var sel = ''; 
+	}
+	else
+	{
+	    var sel = 'readonly';
+	}
+
+	var rr = $('#rowval').val();
+	
 			var rowNum = rr;
 	     	rowNum ++;
 	     	var rrv = rowNum;
 	     	$('#rowval').val(rrv);
 	     	
-	     	htmlRows = '<tr id="rowNums'+rowNum+'" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid'+rowNum+'" value="0" ><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname'+rowNum+'" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty'+rowNum+'"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp'+rowNum+'"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval'+rowNum+'"> </td><td class="disc txt_rt"> <input type="text" class="mykey" placeholder="0" name="prodisc[]" id="prodisc'+rowNum+'"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot'+rowNum+'"><input type="hidden" placeholder="0" name="prototval[]" id="prototval'+rowNum+'" > </td><td class="dele_th_td"><i class="fa fa-trash" onclick="removerow('+rowNum+')" style="color:red" ></i></td></tr>';
+	     	htmlRows = '<tr id="rowNums'+rowNum+'" ><td><input type="hidden" placeholder="Product Name" name="proid[]" id="proid'+rowNum+'" value="0" ><input type="hidden" name="inventoryid[]" id="inventoryid'+rowNum+'" value="0"><input type="hidden" name="inventoryqty[]" id="inventoryqty'+rowNum+'" value="0"><input type="hidden" name="preqty[]" id="preqty'+rowNum+'" value="0"><input class="mykey" type="text" placeholder="Product Name" name="proname[]" id="proname'+rowNum+'" ><input class="mykey" type="hidden" name="purchase_amt[]" id="purchase_amt'+rowNum+'" > </td><td class="qty txt_cnt"> <input type="text" class="mykey" placeholder="0" onkeypress="return onlyNumberKey(event)" name="proqty[]" id="proqty'+rowNum+'"></td><td class="mrp txt_rt"> <input type="text" class="mykey" readonly placeholder="0" name="promrp[]" id="promrp'+rowNum+'"><input type="hidden" placeholder="0" name="promrpval[]" id="promrpval'+rowNum+'"> </td><td class="disc txt_rt prodiscdisplay"> <input type="text" class="mykey" placeholder="0" name="prodisc[]" id="prodisc'+rowNum+'" onkeypress="return validateFloatKeyPress(this,event);" maxlength="4"> </td><td class="ttl_prc txt_rt"> <input type="text" placeholder="0" readonly name="protot[]" id="protot'+rowNum+'"><input type="hidden" placeholder="0" name="prototval[]" id="prototval'+rowNum+'" > </td><td class="dele_th_td"><i class="fa fa-trash" onclick="removerow('+rowNum+')" style="color:red" ></i></td></tr>';
 
 	     	$('#invoiceItem').append(htmlRows);
+
+	     						if(sale_type=='cash')
+								{
+								    $('.prodiscdisplay').show();
+	    							$('#prodiscdisplaytd').show();
+								}
+								else
+								{
+								    $('.prodiscdisplay').hide();
+	    							$('#prodiscdisplaytd').hide();
+								}
 }
 function viewpopup()
 {
 	$('#edt_user_id').show();
+}
+function validateFloatKeyPress(el, evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    var number = el.value.split('.');
+    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    //just one dot
+    if (number.length > 1 && charCode == 46) {
+        return false;
+    }
+    //get the carat position
+    var caratPos = getSelectionStart(el);
+    var dotPos = el.value.indexOf(".");
+    if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
+        return false;
+    }
+    return true;
+}
+function alphaOnly(event) {
+  return (event.charCode > 64 && 
+	event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)
+}
+function getSelectionStart(o) {
+    if (o.createTextRange) {
+        var r = document.selection.createRange().duplicate()
+        r.moveEnd('character', o.value.length)
+        if (r.text == '') return o.value.length
+        return o.value.lastIndexOf(r.text)
+    } else return o.selectionStart
 }
 </script>
 <?php require_once 'footer.php' ; ?>

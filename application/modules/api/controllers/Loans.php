@@ -317,15 +317,15 @@ class Loans extends CI_Controller
 			}
 				
 			$activity_posts = array('loan_id' => $loan_id,
-				'start_date' => $start_date,
-				'end_date' => $end_date,
-				'admin_bank' => $admin_bank,
-				'admin_bank_details' => $res_bank_details,
-				'loan_type' => $_POST["loan_type"],
-				'rate_of_interest' => $_POST["roi"],
-				//'withdrawal_amt' => $_POST["loan_amt_edit"],
-				'narration' => $_POST["rema_narr"],
-				'ref_no' => $_POST["ref_no"]		
+			'start_date' => $start_date,
+			'end_date' => $end_date,
+			'admin_bank' => $admin_bank,
+			'admin_bank_details' => $res_bank_details,
+			'loan_type' => $_POST["loan_type"],
+			'rate_of_interest' => $_POST["roi"],
+			//'withdrawal_amt' => $_POST["loan_amt_edit"],
+			'narration' => $_POST["rema_narr"],
+			'ref_no' => $_POST["ref_no"]		
 			);
 			
 			if($_POST["hid_acivity_id"] > 0)
@@ -452,7 +452,7 @@ class Loans extends CI_Controller
 		echo $response = $this->Loans_model->deleteLoan($bid);
 		
 	}
-
+	
 	public function update_single_field()
 	{
 		if($_POST["column"]=="start_date" || $_POST["column"]=="end_date")

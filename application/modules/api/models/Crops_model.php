@@ -35,5 +35,12 @@ class Crops_model extends CI_Model
 		return json_encode(array('status'=>'success','data' => $data));
 	}
 	
+	//Crop Types
+	function getCropTypes()
+	{		
+		//$data = $this->db->get("crop_types")->result();
+		$data = $this->db->get_where("crop_types", ['status' => 1])->result();
+		return json_encode(array('status'=>'success','data' => $data));
+	}
 }
 ?>

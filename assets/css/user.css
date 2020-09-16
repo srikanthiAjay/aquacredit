@@ -50,7 +50,7 @@ input {font-size: 14px!important; height: 40px!important;}
 .btn-group {width: 100%;}
 .dropdown-toggle::after {float: right; margin-top:11px; }
 .new_blk {position: relative;}
-.new_blk_add {position: absolute; top: 35px; right: 15px; cursor: pointer;}
+.new_blk_add {position: absolute; top: 9px; right: 15px; cursor: pointer;}
 .new_mob_em_blk {list-style: none; overflow: hidden; padding: 0px; margin: 0px; margin-top: 10px;}
 /*.new_mob_em_blk li {float: left; margin-right: 10px; margin-bottom: 10px; font-size: 14px;}*/
 .new_mob_em_blk li {/*float: left;*/ margin-right: 10px; margin-bottom: 10px; margin-top:20px;font-size: 14px;}
@@ -144,3 +144,4 @@ p {margin-bottom: 5px;}
 .clr {clear: both;}
 .alert_txt {float: left; padding-top: 5px; padding-right: 10px;}
 .pos_neg {font-size: 13px; margin-left: 10px; padding: 5px; border-radius:2px; border:1px solid #ccc; outline: none;}
+.bank_list_pos .dropdown-menu input {display:none;}

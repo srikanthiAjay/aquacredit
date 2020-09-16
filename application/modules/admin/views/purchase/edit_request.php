@@ -50,7 +50,7 @@
             <!-- <div class="pp_note"> 
               <textarea rows="4" placeholder="Add Note"></textarea>
             </div> --> 
-            <p style="color: red;" id="bconfirm_note" style="display: none;">Note : Please update product mrp and purchase amount in products</p>
+            <p style="color: red;" id="bconfirm_note" style="display: none;">Note : Please update product mrp and purchase amount in products before confirming the order</p>
             <table class="ord_lst" cellspacing="0" cellpadding="0" border="0">
                 <thead>
                     <tr>

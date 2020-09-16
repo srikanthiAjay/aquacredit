@@ -23,6 +23,11 @@ var formsteps = {
     received: false,
     complete: false
 };
+
+//Wallet Info
+var wallet_bal = 0;
+var wallet_info = {};
+
 (function($) {
     Purchase = {
         init: function() {
@@ -41,18 +46,24 @@ var formsteps = {
                     { className: "id_td", "targets": 0 },
                     { className: "app_date", "targets": 1 },
                     { className: "company", "targets": 2 },
-                    { className: "amt", "targets": 3 },
-                    { className: "stat_blk", "targets": 4 },
-                    { className: "act_ms", "targets": 5 }
+                    //{ className: "amt", "targets": 3 },
+                    { className: "stat_blk", "targets": 3 },
+                    { className: "act_ms", "targets": 4 }
                 ],
                 ajax: {
                     url: API_URL + 'branchplist',
                     data: function(data) {
-                        //Date Filter
-                        //var dateopt=$("input[name='dateopt']:checked").val();
-                        //data.dateopt=dateopt;
-
                         //Status Filter
+                        var multi_status = [];
+                        $.each($("input[name='optradio']:checked"), function() {
+                            multi_status.push($(this).val());
+                        });
+
+                        data.optradio = multi_status;
+
+                        //Date Filter
+                        var reportrange = $('#date_val').val();
+                        data.reportrange = reportrange;
 
                         //Tab
                         var hid_tabval = $('#hid_tabval').val();
@@ -77,23 +88,28 @@ var formsteps = {
             $('#pur_lst_tbl_new_wrapper .dataTables_length').html('<ul class="tabs_tbl"><li class="act_tab drft_cl"><span>Pending Requests</span></li><li class="comp_cl"><span>Completed Requests</span></li></ul> <span class="tbl_btn"></span>');
 
             $('.drft_cl').click(function() {
+                $('#status_icon').show();
                 $("#hid_tabval").val(0);
                 $('.tabs_tbl').removeClass('cmp_ul');
                 $(this).addClass('act_tab');
                 $('.comp_cl').removeClass('act_tab');
-                pur_lst_tbl.columns([0, 1, 2, 3, 4, 5]).visible(true, true, true, true);
+                //pur_lst_tbl.columns( [ 0,1,2,3,4,5 ] ).visible( true, true, true, true);
+                pur_lst_tbl.columns([0, 1, 2, 3, 4]).visible(true, true, true, true);
                 pur_lst_tbl.columns.adjust().draw(false);
                 //pur_lst_tbl.ajax.reload();
             });
 
             $('.comp_cl').click(function() {
+                $('#status_icon').hide();
                 $("#hid_tabval").val(1);
                 $('.tabs_tbl').addClass('cmp_ul');
                 $(this).addClass('act_tab');
                 $('.drft_cl').removeClass('act_tab');
 
-                pur_lst_tbl.columns([5]).visible(false);
-                pur_lst_tbl.columns([0, 1, 2, 3, 4]).visible(true, true, true, true);
+                //pur_lst_tbl.columns( [ 5 ] ).visible( false);
+                pur_lst_tbl.columns([4]).visible(false);
+                //pur_lst_tbl.columns( [ 0,1,2,3,4 ] ).visible( true, true, true, true); 
+                pur_lst_tbl.columns([0, 1, 2, 3]).visible(true, true, true, true);
                 pur_lst_tbl.columns.adjust().draw(false);
                 //pur_lst_tbl.ajax.reload();
 
@@ -111,7 +127,7 @@ var formsteps = {
 
             });
 
-            $(document).on("click", "#pedit", function() {
+            $(document).on("click", "#epedit,#pedit", function() {
                 Purchase.editRequest();
             });
 
@@ -127,6 +143,58 @@ var formsteps = {
                     $('[data-toggle="popover"]').popover('hide');
                 }
             });
+
+            //Filters
+            $("input[name='optradio']").on('click', function() {
+                pur_lst_tbl.draw();
+            });
+
+            $('#reportrange').daterangepicker({
+                opens: 'right',
+                drops: 'down',
+                showDropdowns: true,
+                locale: {
+                    format: 'D-MMM-YYYY',
+                    customRangeLabel: 'Date Range'
+                },
+                parentEl: '.dateEle',
+                ranges: {
+                    'Till Date': [],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    'Last 6 Months': [moment().subtract(5, 'month').startOf('month'), moment().endOf('month')],
+                    "Last Year": [moment().subtract(1, "y").startOf("year"), moment().subtract(1, "y").endOf("year")]
+                }
+            }, Purchase.cb);
+
+            $(document).on('click', '.ranges ul li', function() {
+                $(this).parent().children().removeClass('active');
+                $(this).addClass('active');
+                $('.drp-selected').css('font-weight', 'bold');
+                if ($(this).text() == "Till Date") {
+                    $("#date_val").val('Till Date');
+                }
+
+                if ($(this).text() != "Date Range") {
+                    pur_lst_tbl.draw();
+                }
+            });
+
+            $(document).on('click', '.applyBtn', function() {
+                pur_lst_tbl.draw();
+            });
+
+            $("input[name='month_opt']").on('click', function() {
+                pur_lst_tbl.draw();
+            });
+        },
+        cb: function(start, end) {
+            $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+            if ($('#date_val').val() == "Invalid date - Invalid date") {
+                $('#date_val').val('');
+            } else {
+                $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+            }
         },
         addCommasinamt: function(x) {
             if (x == '' || x == null || typeof x == 'undefined') {
@@ -173,6 +241,11 @@ var formsteps = {
             $('#bselectVal').text("Brands");
             $('#reqbtn').show();
             $('#addproducts').empty();
+
+            //Reset Search
+            $('#bsearch').val('');
+            Purchase.searchElements();
+
             prod_list += '<tr>';
             prod_list += '<td colspan="3">Please select Brand</td>';
             prod_list += '</tr>';
@@ -422,10 +495,18 @@ var formsteps = {
             ebrand_id = brand_id;
             //console.log('####');
 
+            var brand = $('#req_' + bpid).attr("data-brand");
+            var pbr = $('#req_' + bpid).attr("data-pbr");
+            var status = $('#req_' + bpid).attr("data-status");
+
             $('#req_' + bpid).popover({
                 html: true,
                 content: function() {
-                    return $('#popover-contents').html();
+                    if (status == 'Approved' || status == 'Payment') {
+                        return $('#popover-contents-edit').html();
+                    } else {
+                        return $('#popover-contents-all').html();
+                    }
                 },
                 trigger: 'click'
             });
@@ -462,20 +543,22 @@ var formsteps = {
                         var products = result.bpurchase_details;
                         var is_disabled = result.is_disabled;
                         var upd_invoice_chrg = result.upd_invoice_chrg;
-                        var wallet_bal = parseInt(result.wallet_amt);
+                        wallet_bal = parseInt(result.wallet_amt);
+                        wallet_info = result.wallet_info;
                         ap_id = purchase_info.ap_id;
 
                         //P-pending,C-confirm,PM-payment,BC-branch confirm,CE-Complete
                         if (purchase_info.status == 'P') {
-                            $('#uploading').hide();
+                            $('#uploading,#invoice_up,#paymentbtn').hide();
+                            $('#updatebtn').show();
                             var req_status_msg = "Request Pending - PBR";
                             formsteps.pending = true;
                             $('#bconfirm_note').hide();
                         } else if (purchase_info.status == 'C') {
                             formsteps.confirm = true;
                             //$('#invoice_up,#paymentbtn,#uploading').show();
-                            $('#uploading').hide();
-                            $('#updatebtn').show();
+                            $('#uploading,#invoice_up,#paymentbtn,#updatebtn').hide();
+                            //$('#updatebtn').hide();
                             $('#bconfirm_note').hide();
                             var req_status_msg = "Request Approved - PBR";
                         } else if (purchase_info.status == 'PM') {
@@ -484,6 +567,16 @@ var formsteps = {
                             $('#updatebtn').hide();
                             var req_status_msg = "Confirm Request - PBR";
                             $('#bconfirm_note').show();
+
+                            $('#unloading_charges').val(0);
+                            $('#transport_charges').val(0);
+                            $('#error').empty();
+                            $("#invoice_file").text('');
+                            $('#fine_inv').val('');
+                            $('#bwallet_remain').hide();
+                            $('#branch_pay_by').prop('checked', true);
+                            $('#admin_pay_by').prop('checked', false);
+                            $('#pay_by').val('branch');
                         } else if (purchase_info.status == 'CE') {
                             formsteps.complete = true;
                             $('#updatebtn,#invoice_up,#paymentbtn,#uploading').hide();
@@ -501,8 +594,10 @@ var formsteps = {
                             prod_list += '<tr id="pindex_' + i + '">';
                             prod_list += '<td>' + products[i].pname + '</td>';
 
-                            //purchase_info.status=='PM' || purchase_info.status=='C' || 
-                            if (purchase_info.status == 'CE') {
+                            //purchase_info.status=='PM' || purchase_info.status=='C' ||
+                            //if(purchase_info.status=='CE'){
+
+                            if (purchase_info.status == 'CE' || purchase_info.status == 'C') {
                                 prod_list += '<td class="txt_cnt qty_pp">' + products[i].uqty + '</td>';
                                 prod_list += '<td class="red_clr act_pp txt_cnt">--</td>';
                             } else {
@@ -739,6 +834,22 @@ var formsteps = {
                 error += '<p style="color:red;">Invoice is required</p>';
             }
 
+            //console.log(wallet_bal);
+            //console.log(wallet_info);
+
+            if (unloading_charges > wallet_bal) {
+                error += '<p style="color:red;">Invoice is required</p>';
+            }
+
+            if (unloading_charges > wallet_bal) {
+                error += '<p style="color:red;">Don\'t have a sufficient balance (Remaining Balance ' + wallet_bal + ')</p>';
+            }
+
+            /*var unloading_transport=(unloading_charges+transport_charges);
+            if(unloading_transport>wallet_bal){
+            	error+='<p style="color:red;">Don\'t have a sufficient balance (Remaining Balance '+wallet_bal+')</p>';
+            }*/
+
             var pay_by = $('#pay_by').val();
             if (pay_by == 'admin') {
                 if (!$('#admin_pay_by').is(":checked")) {
@@ -821,9 +932,11 @@ var formsteps = {
         confirmDelRequest: function() {
             $('#brand_name').empty();
             var brand = $('#req_' + bpid).attr("data-brand");
+            var pbr = $('#req_' + bpid).attr("data-pbr");
+            var status = $('#req_' + bpid).attr("data-status");
             //var result=$.parseJSON(JSON.stringify(res));
             //console.log(brand);
-            $('#brand_name').html('<b>' + brand + '</b>')
+            $('#brand_name').html('<b>' + pbr + ' - ' + brand + '</b>')
             $('#delete_req').modal('show');
         },
         deleteReq: function() {
@@ -849,8 +962,10 @@ var formsteps = {
             $('#vbds_list_id').css('pointer-events', 'none');
             jQuery.post(API_URL + '/getpbrreq_products', { brand_id: brand_id, bp_id: bid })
                 .done(function(data) {
-                    $('#viewproducts').empty();
+                    $('#viewproducts,#viewdetails').empty();
+
                     var prod_list = '';
+                    var pr_details = '';
                     var result = $.parseJSON(data);
                     if (result.error == false) {
                         var purchase_info = result.bpurchase_info;
@@ -863,6 +978,18 @@ var formsteps = {
                             prod_list += '<td>' + products[i].purchase_amt + '</td>';
                             prod_list += '</tr>';
                         }
+
+                        var paid_by = '';
+                        if (purchase_info.admin_pay_req == 1) {
+                            paid_by = 'Admin';
+                        } else {
+                            paid_by = 'Self';
+                        }
+                        pr_details += '<tr><td>Unloading charges</td><td>' + purchase_info.unloading_charges + '</td></tr>';
+                        pr_details += '<tr><td>Transport charges</td><td>' + purchase_info.unloading_charges + '</td></tr>';
+                        pr_details += '<tr><td>Paid By</td><td>' + paid_by + '</td></tr>';
+                        pr_details += '<tr><td>Invoice</td><td><a href="' + url + 'assets/invoice/' + purchase_info.upload_invoice + '" target="_blank">View</a></td></tr>';
+
                     } else {
                         prod_list += '<tr>';
                         prod_list += '<td colspan="3">No Products Found</td>';
@@ -870,8 +997,30 @@ var formsteps = {
                     }
 
                     $('#viewproducts').append(prod_list);
+                    $('#viewdetails').append(pr_details);
                     $('#view_overlay_id').hide();
                 });
+        },
+        searchElements: function() {
+            // Declare variables
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById('bsearch');
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("brandslist");
+            li = ul.getElementsByTagName('div');
+
+            // Loop through all list items, and hide those who don't match the search query
+            for (i = 0; i < li.length; i++) {
+                //a = li[i].getElementsByTagName("a")[0];
+                a = li[i].getElementsByTagName("label")[0];
+                txtValue = a.textContent || a.innerText;
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
         }
     };
     $(document).ready(function($) {

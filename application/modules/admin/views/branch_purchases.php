@@ -18,6 +18,24 @@
     text-align: center;
     color: #555;
 }
+#delete_req .modal-content{
+    padding:0px;
+    min-height:0px;
+}
+#delete_req .modal-body {
+    text-align: center;
+}
+
+#delete_req .modal-content h1 {
+    font-size: 16px;
+    color: #000;
+    font-weight: normal;
+    margin-bottom: 15px;
+}
+
+#delete_req .modal-body p {
+    margin: 0px!important;
+}
 </style>
 <?php require_once 'sidebar.php' ; ?>		
 <div class="right_blk">
@@ -72,66 +90,35 @@
                                 <th class="id_td">Id</th>
                                 <th class="app_date">
                                     Date
-                                    <span class="sts_pp">
-                                        <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
-                                    </span>
-                                    <div class="sts_fil_blk">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="dateopt" value="thismonth" id="this_mnt" />
-                                            <label class="form-check-label" for="this_mnt">
-                                                This Month
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="dateopt" value="last3months" id="last_3mont" />
-                                            <label class="form-check-label" for="last_3mont">
-                                                Last 3 Months
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="dateopt" value="last6months" id="last_6mon" />
-                                            <label class="form-check-label" for="last_6mon">
-                                                Last 6 Months
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="dateopt" value="lastyear" id="one_year" />
-                                            <label class="form-check-label" for="one_year">
-                                                1 Year
-                                            </label>
-                                        </div>
-
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="dateopt" value="choose_date" id="choos_date" />
-                                            <label class="form-check-label" for="choos_date">
-                                                Choose Date
-                                            </label>
-                                        </div>
-                                    </div>
+                                    <span class="pull-right" id="reportrange">
+                                        <i class="fa fa-filter"  aria-hidden="true" style="font-size: 9px;"></i> 
+                                        <span></span>
+                                    </span> 
+                                    <input type="hidden" id="date_val" name="date_val" />
                                 </th>
                                 <th>Company Name</th>
-                                <th class="">Amount</th>
+                                <!-- <th class="">Amount</th> -->
                                 <th class="stat_blk">
                                     Status
-                                    <span class="sts_pp">
+                                    <span class="sts_pp" id="status_icon">
                                         <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
                                     </span>
                                     <div class="sts_fil_blk">
                                         <div class="trd_lst">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta1" />
+                                            <div class="form-check chek_bx">
+                                                <input class="form-check-input" type="checkbox" name="optradio" value="P" id="sta1" />
                                                 <label class="form-check-label" for="sta1">
                                                     Pending
                                                 </label>
                                             </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta2" />
+                                            <div class="form-check chek_bx">
+                                                <input class="form-check-input" type="checkbox" name="optradio" value="PM" id="sta2" />
                                                 <label class="form-check-label" for="sta2">
                                                     Payment
                                                 </label>
                                             </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta3" />
+                                            <div class="form-check chek_bx">
+                                                <input class="form-check-input" type="checkbox" name="optradio" value="C" id="sta3" />
                                                 <label class="form-check-label" for="sta3">
                                                     Approved
                                                 </label>
@@ -142,204 +129,6 @@
                                 <th class="act_ms">Actions</th>
                             </thead>
                         </table>
-                        
-                       <!--  <table id="pur_lst_tbl" class="table table-striped table-bordered" style="width: 100%;">
-                            <thead>
-                                <th class="id_td">Id</th>
-                                <th class="app_date">
-                                    Date
-                                    <span class="sts_pp">
-                                        <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
-                                    </span>
-                                    <div class="sts_fil_blk">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="this_mnt" />
-                                            <label class="form-check-label" for="this_mnt">
-                                                This Month
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="last_3mont" />
-                                            <label class="form-check-label" for="last_3mont">
-                                                Last 3 Months
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="last_6mon" />
-                                            <label class="form-check-label" for="last_6mon">
-                                                Last 6 Months
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="one_year" />
-                                            <label class="form-check-label" for="one_year">
-                                                1 Year
-                                            </label>
-                                        </div>
-
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="optradio" value="" id="choos_date" />
-                                            <label class="form-check-label" for="choos_date">
-                                                Choose Date
-                                            </label>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th>Company Name</th>
-                                <th class="">Amount</th>
-                                <th class="stat_blk">
-                                    Status
-                                    <span class="sts_pp">
-                                        <i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
-                                    </span>
-                                    <div class="sts_fil_blk">
-                                        <div class="trd_lst">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta1" />
-                                                <label class="form-check-label" for="sta1">
-                                                    Pending
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta2" />
-                                                <label class="form-check-label" for="sta2">
-                                                    Payment
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="optradio" value="" id="sta3" />
-                                                <label class="form-check-label" for="sta3">
-                                                    Approved
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="act_ms">Actions</th>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="id_td">
-                                        <a href="#" title=""> 65852 </a>
-                                    </td>
-                                    <td class="app_date">12-May-2020</td>
-                                    <td>Branch Name</td>
-                                    <td>5,0000</td>
-                                    <td class="pen_stat stat_blk">Pending</td>
-                                    <td class="act_ms">
-                                        <i class="fa fa-ellipsis-v act_icns" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="focus" data-toggle="popover" aria-hidden="true"></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table> -->
                         <input type="hidden" name="hid_tabval" id="hid_tabval" value="0">
                     </div>
                 </div>
@@ -348,13 +137,20 @@
     </div>
 </div>
 <!--Actions-->
- <div id="popover-contents" style="display: none">
+ <div id="popover-contents-all" style="display: none">
   <div class="custom-popover">
-  <ul class="list-group">
-    <li class="list-group-item edt green_txt" id="pedit">Edit</li>
-    <li class="list-group-item  reject_loan del" id="pdel">Delete</li>
-  </ul>
+      <ul class="list-group">
+        <li class="list-group-item edt green_txt" id="pedit">Edit</li>
+        <li class="list-group-item  reject_loan del" id="pdel">Delete</li>
+      </ul>
+  </div>
 </div>
+<div id="popover-contents-edit" style="display: none">
+    <div class="custom-popover">
+      <ul class="list-group">
+        <li class="list-group-item edt green_txt" id="epedit">Edit</li>
+      </ul>
+    </div>
 </div>
 <!--Actions End-->
 <!--Delete Request-->
@@ -362,11 +158,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                  <h1> Are You Sure ! </h1>
-                  <p> You want Delete this request <span id="brand_name"></span> ? </p>
+                <h1> Are You Sure ! </h1>
+                <p> You want Delete this request <span id="brand_name"></span> ? </p>
             </div>
             <div class="modal_footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="Purchase.deleteReq();">Yes</button>
+                <button type="button" class="btn btn-primary del_yes" data-dismiss="modal" onclick="Purchase.deleteReq();">Yes</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
             </div>
         </div>

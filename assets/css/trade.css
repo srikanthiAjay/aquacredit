@@ -851,12 +851,14 @@ div.dataTables_wrapper div.dataTables_filter label input {
 }
 
 #edt_user_id {
-    width: 1020px;
+    /*width: 1020px;*/
+    width: 80%;
     /*padding:20px 0px;*/
     background: #fff;
     position: fixed;
-    left: 50%;
-    margin-left: -510px;
+    /*left: 50%;*/
+    left: 10%;
+    /*margin-left: -510px;*/
     top: 30px;
     display: none;
     z-index: 9999;
@@ -933,8 +935,10 @@ div.dataTables_wrapper div.dataTables_filter label input {
 }
 
 #edt_user_id {
-    max-height: 600px;
+    /*max-height: 600px;*/
     overflow: auto;
+    height: 80%;
+    top: 10%;
 }
 
 #edt_user_id table {
@@ -1135,6 +1139,21 @@ td.com_bg {
     width: 100%;
     box-sizing: border-box;
     /*background: #f8f8f8;*/
+    height: 90%;
+}
+
+.tr_exp_dtl .over_x_hdn {
+    height: 100%;
+    overflow: hidden;
+}
+
+
+/* .over_x_hdn {
+    overflow: hidden
+} */
+
+.tr_exp_dtl .pop_min_h_div {
+    min-height: 100%;
 }
 
 

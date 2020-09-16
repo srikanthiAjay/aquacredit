@@ -173,17 +173,17 @@
                 <div class="ord_comp_bl" id="do_payment">
                     <ul class="assign_type">
 
-                        <li class="act_type lnk_typ ban_trns" onclick="Purchase.payType('bank');">
+                        <li id="bk" class="act_type lnk_typ ban_trns" onclick="Purchase.payType('bank');">
                             <img src="http://3.7.44.132/aquacredit/assets/images/bank_tansfer.png" />
                             <input type="radio" id="ptype_bank" name="act_pay_types" value="bank" checked/>
                             <span> Bank Transfer </span>
                         </li>
-                        <li class="cash_trns lnk_typ" onclick="Purchase.payType('cash');">
+                        <li id="ch" class="cash_trns lnk_typ" onclick="Purchase.payType('cash');">
                             <img src="http://3.7.44.132/aquacredit/assets/images/cash_icn.png" />
                             <input type="radio" id="ptype_cash" name="act_pay_types" value="cash" />
                             <span> Cash </span>
                         </li>
-                        <li class="credit_trns lnk_typ" onclick="Purchase.payType('credit');">
+                        <li id="cc" class="credit_trns lnk_typ" onclick="Purchase.payType('credit');">
                             <img src="http://3.7.44.132/aquacredit/assets/images/credit_icn.png" />
                             <input type="radio" id="ptype_credit" name="act_pay_types" value="credit"/>
                             <span> Credit </span>
@@ -199,7 +199,7 @@
                         <div class="blk_disb"></div>
                         <ul class="trans_inf">
                             <li class="date_inp bktr">
-                                <div class="cre_inp">
+                                <div class="cre_inp" id="paydatetxt_p">
                                     <div class="sm_blk" id="paydatetxt">Date</div>
                                     <input type="text" class="form-control" value="" id="paydate" name="paydate" />
                                 </div>
@@ -219,9 +219,9 @@
                                 </div>
                             </li>
                             <li>
-                                <div class="cre_inp">
+                                <div class="cre_inp" id="refno_txt">
                                     <div class="sm_blk">Ref.Number</div>
-                                    <input type="text" id="refno" name="refno" class="form-control" value=""/>
+                                    <input type="text" id="refno" name="refno" class="form-control allownumericwithoutdecimal" value=""/>
                                 </div>
                             </li>
                             <li><a href="javascript:void(0);" class="ad_nt"> Add note </a></li>

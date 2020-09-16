@@ -79,10 +79,16 @@ class Purchases extends CI_Controller
 		$hid_tabval=intval($this->input->post("hid_tabval"));
 
 		if($hid_tabval==0){
-		 $params['status']=["P","C","PM","BC"];
+		 $status=$_POST['optradio'];
+		 if(count($status)>0){
+		 	$params['status']=$status;
+		 }else{
+		 	$params['status']=["P","C","PM","BC"];
+		 }
 		}else{
 		 $params['status']=["CE"];
 		}
+
 
 		$params['branch_id']=$branch_id;
 		$params['adminid']=$adminid;
@@ -91,6 +97,10 @@ class Purchases extends CI_Controller
 		$start = intval($this->input->post("start"));
 		$limit = intval($this->input->post("length"));
 
+		## Custom Field value					
+		$reportRange=$_POST['reportrange'];
+		$params['reportRange']=$reportRange;
+		
 		$params['order']=$_POST['order'][0]['column']; // Column index
 		$params['columnName']=$_POST['columns'][$order]['data']; // Column name
 		$params['dir']=$_POST['order'][0]['dir']; // asc or desc
@@ -124,9 +134,9 @@ class Purchases extends CI_Controller
 				$pbr,
 				date('d-M-Y',strtotime($value['created_on'])),
 				$value['brand_name'],
-				"₹ ".$this->IND_money_format($value['total_price']),
+				//"₹ ".$this->IND_money_format($value['total_price']),
 				$status,
-				'<a href="javascript:void(0);" tabindex="0" role="button" data-toggle="popover" id="req_'.$value['id'].'" data-brand="'.$value['brand_name'].'"><i class="fa fa-ellipsis-v act_icns" onclick="Purchase.purchaseact('.$value['id'].','.$value['company_id'].');"></i></a>'
+				'<a href="javascript:void(0);" tabindex="0" role="button" data-toggle="popover" id="req_'.$value['id'].'" data-brand="'.$value['brand_name'].'" data-pbr="PBR'.$value['id'].'" data-status="'.$status.'"><i class="fa fa-ellipsis-v act_icns" onclick="Purchase.purchaseact('.$value['id'].','.$value['company_id'].');"></i></a>'
 			];
 
 		}
@@ -142,7 +152,12 @@ class Purchases extends CI_Controller
 
 	//Save Branch Request
 	public function saverequest(){
-		$branch_id=$this->session->userdata('branch_id');
+		if($this->session->userdata('adminrole')=='SA'){
+			$branch_id=trim($_POST['branch_id']);
+		}else{
+			$branch_id=$this->session->userdata('branch_id');
+		}
+		
 		$adminid=$this->session->userdata('adminid');
 		$brand_id=trim($_POST['brand_id']);
 		$response=[];
@@ -150,12 +165,14 @@ class Purchases extends CI_Controller
 		//print_r($_POST);
 		//Check with brand
 		//Case 2
-		if(!empty($_POST['ap_id'])){
+
+		/*if(!empty($_POST['ap_id'])){
 			$brand=$this->Purchases_model->checkBranchBrand($branch_id,$_POST['ap_id'],$brand_id);
 		}else{
 			$brand=$this->Purchases_model->checkBrand($brand_id);
-		}
-	
+		}*/
+		
+		$brand=$this->Purchases_model->checkBrand($brand_id);
 		if(!empty($brand['ap_id'])){
 		   //Case 3
 		   //Update
@@ -172,7 +189,7 @@ class Purchases extends CI_Controller
 			   for($i=0;$i<count($_POST['userproducts']);$i++){
 			   		 //print_r($_POST['userproducts'][$i]);
 				   	 if(!empty($_POST['userproducts'][$i]['bpd_id'])){
-				   	 	 $total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['price']);
+				   	 	 $total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['purchase_amt']);
 				   	 	 $bpd_id=$_POST['userproducts'][$i]['bpd_id'];
 				   		 $purchase_details=[
 				   	 						'quantity'=>$_POST['userproducts'][$i]['qty'],
@@ -182,7 +199,7 @@ class Purchases extends CI_Controller
 				   	 	 $this->Purchases_model->updateBPDeatils($bpd_id,$purchase_details);
 				   	 	 $update_pids[]=$_POST['userproducts'][$i]['pid'];
 				   	 }else{
-				   	 	$total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['price']);
+				   	 	$total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['purchase_amt']);
 				   	 	//Add New Product
 			   			$purchase_details=[
 			   	 						'bp_id'=>$bp_id,
@@ -190,7 +207,7 @@ class Purchases extends CI_Controller
 			   	 						'ap_id'=>$params['ap_id'],
 			   	 						'product_id'=>$_POST['userproducts'][$i]['pid'],
 			   	 						'quantity'=>$_POST['userproducts'][$i]['qty'],
-			   	 						'price'=>$_POST['userproducts'][$i]['price'],
+			   	 						'price'=>$_POST['userproducts'][$i]['purchase_amt'],
 			   	 						'total_price'=>$total_price,
 			   	 						'discount'=>0
 			   	 					   ];
@@ -276,7 +293,8 @@ class Purchases extends CI_Controller
 		   		$overall_tot_price=0;
 		   		$update_pids=[];
 		   		for($i=0;$i<count($_POST['userproducts']);$i++){
-		   			$total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['pmrp']);
+		   			//$total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['pmrp']);
+		   			$total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['purchase_amt']);
 		   			$overall_tot_price=$overall_tot_price+$total_price;
 
 		   			$purchase_details[]=[
@@ -285,7 +303,7 @@ class Purchases extends CI_Controller
 		   	 						'ap_id'=>$ap_id,
 		   	 						'product_id'=>$_POST['userproducts'][$i]['pid'],
 		   	 						'quantity'=>$_POST['userproducts'][$i]['qty'],
-		   	 						'price'=>$_POST['userproducts'][$i]['pmrp'],
+		   	 						'price'=>$_POST['userproducts'][$i]['purchase_amt'],
 		   	 						'total_price'=>$total_price,
 		   	 						'discount'=>0
 		   	 					   ];
@@ -300,7 +318,7 @@ class Purchases extends CI_Controller
 		   	 						'ap_id'=>$ap_id,
 		   	 						'product_id'=>$_POST['userproducts'][$i]['pid'],
 		   	 						'quantity'=>$_POST['userproducts'][$i]['qty'],
-		   	 						'price'=>$_POST['userproducts'][$i]['pmrp'],
+		   	 						'price'=>$_POST['userproducts'][$i]['purchase_amt'],
 		   	 						'total_price'=>$total_price,
 		   	 						'discount'=>0,
 		   	 						'branch_ids'=>$branch_id
@@ -365,13 +383,13 @@ class Purchases extends CI_Controller
 		   $bp_ids=[];
 		   for($i=0;$i<count($_POST['userproducts']);$i++){
 		   	 $bp_ids[]=$_POST['userproducts'][$i]['pid'];
-		   	 $total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['pmrp']);
+		   	 $total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['purchase_amt']);
 		   	 $overall_tot_price=$overall_tot_price+$total_price;
 		   	 $ad_purchase_details[]=[
 		   	 						'ap_id'=>$ap_id,
 		   	 						'product_id'=>$_POST['userproducts'][$i]['pid'],
 		   	 						'quantity'=>$_POST['userproducts'][$i]['qty'],
-		   	 						'price'=>$_POST['userproducts'][$i]['pmrp'],
+		   	 						'price'=>$_POST['userproducts'][$i]['purchase_amt'],
 		   	 						'total_price'=>$total_price,
 		   	 						'discount'=>0,
 		   	 						'branch_ids'=>$branch_id
@@ -403,14 +421,15 @@ class Purchases extends CI_Controller
 		   		//df_branch_purchase_details
 		   	   //bp_id,product_id,quantity,price,total_price
 		   		for($i=0;$i<count($_POST['userproducts']);$i++){
-		   			$total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['pmrp']);
+		   			//$total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['pmrp']);
+		   			$total_price=($_POST['userproducts'][$i]['qty']*$_POST['userproducts'][$i]['purchase_amt']);
 		   			$purchase_details[]=[
 		   	 						'bp_id'=>$bp_id,
 		   	 						'branch_id'=>$branch_id,
 		   	 						'ap_id'=>$ap_id,
 		   	 						'product_id'=>$_POST['userproducts'][$i]['pid'],
 		   	 						'quantity'=>$_POST['userproducts'][$i]['qty'],
-		   	 						'price'=>$_POST['userproducts'][$i]['pmrp'],
+		   	 						'price'=>$_POST['userproducts'][$i]['purchase_amt'],
 		   	 						'total_price'=>$total_price,
 		   	 						'discount'=>0
 		   	 					   ];
@@ -524,12 +543,14 @@ class Purchases extends CI_Controller
 			$aprod=$this->Purchases_model->getAPDProduct($params['pid'],$params['ap_id']);
 			$new_branch_ids=[];
 			$branch_ids=explode(",",$aprod['branch_ids']);
+
 			if(count($branch_ids)>1){
 				//Reset amount
 				$branchpinfo=$this->Purchases_model->branchPurchaseInfo($params);
 				$remaing_bal=$branchpinfo['total_price']-$bprod['total_price'];
 				$purchase=['total_price'=>$remaing_bal];
 				$this->Purchases_model->updateBP($params['bp_id'],$purchase);
+
 				//Delete
 				$this->Purchases_model->delProduct($delprod['bpd_id']);
 				for($i=0;$i<count($branch_ids);$i++){
@@ -552,6 +573,12 @@ class Purchases extends CI_Controller
 				//$params['update_pids']=$update_pids;
 				//$this->updateAdminPD($params);
 			}else{
+				//Reset amount
+				$branchpinfo=$this->Purchases_model->branchPurchaseInfo($params);
+				$remaing_bal=$branchpinfo['total_price']-$bprod['total_price'];
+				$purchase=['total_price'=>$remaing_bal];
+				$this->Purchases_model->updateBP($params['bp_id'],$purchase);
+				
 				//Delete Product from admin product details
 				//Delete
 				$this->Purchases_model->delProduct($delprod['bpd_id']);
@@ -696,6 +723,41 @@ class Purchases extends CI_Controller
 		echo json_encode($response);
 	}
 
+	//Delete Admin Request
+	public function deleteadminreq(){
+		$branch_id=$this->session->userdata('branch_id');
+		$adminid=$this->session->userdata('adminid');
+		$params['branch_id']=$branch_id;
+		$params['ap_id']=$_POST['ap_id'];
+		$params['brand_id']=$_POST['brand_id'];
+
+		$delreq=false;
+		//Del Admin Purchase
+		$bpreq=$this->Purchases_model->delBranchPurchaseRequest($params['ap_id']);
+		if($bpreq){
+			$bpreqd=$this->Purchases_model->delBranchPurchaseRequestDetails($params['ap_id']);
+			if($bpreqd){
+				$apreqd=$this->Purchases_model->delAdminPurchaseDetails($params['ap_id']);
+				if($apreqd){
+					$apreq=$this->Purchases_model->delAP($params['ap_id']);
+					$delreq=$apreq;
+				}
+			}
+		}
+
+		if($delreq){
+			$response['delreq']=$delreq;
+			$response['error']=false;
+			$response['message']='Success';
+		}else{
+			$response['delreq']=$delreq;
+			$response['error']=true;
+			$response['message']='Fail';
+		}
+		
+		echo $response;
+	}
+
 	//Get request products
 	public function getreq_products(){
 		$branch_id=$this->session->userdata('branch_id');
@@ -703,12 +765,16 @@ class Purchases extends CI_Controller
 		$params['brand_id']=$_POST['brand_id'];
 		$params['bp_id']=$_POST['bp_id'];
 
+		//Get Branch Wallet Info
+		$wallet_info=$this->Purchases_model->getBranchWalletInfo($branch_id);
+		$wallet_amt=$wallet_info['avail_amount'];
+
 		$branch_info=$this->Purchases_model->getBranchDetails($branch_id);
-		$wallet_amt=$branch_info['amount'];
 		$bpurchase_info=$this->Purchases_model->getBranchPurchaseInfo($params);
 		$bpurchase_details=$this->Purchases_model->getBranchPurchaseDetails($params);
 		$is_disabled=false;
 		$upd_invoice_chrg=false;
+
 		/*if(in_array($bpurchase_info['status'],['C','PM','BC','CE'])){
 			$is_disabled=true;
 			$upd_invoice_chrg=true;
@@ -728,6 +794,7 @@ class Purchases extends CI_Controller
 		$response=[];
 		if(count($bpurchase_details)>0){
 			$response['wallet_amt']=$wallet_amt;
+			$response['wallet_info']=$wallet_info;
 			$response['is_disabled']=$is_disabled;
 			$response['upd_invoice_chrg']=$upd_invoice_chrg;
 			$response['bpurchase_info']=$bpurchase_info;
@@ -843,6 +910,10 @@ class Purchases extends CI_Controller
     	$invoice_file="invoice_".$params['bp_id']."_".$time.".".$ext;
     	$uploadPath = $upload_dir . $invoice_file;
 
+    	//Get Branch Wallet Info
+		$wallet_info=$this->Purchases_model->getBranchWalletInfo($branch_id);
+		$wallet_amt=$wallet_info['avail_amount'];
+
     	$bpurchase_info=$this->Purchases_model->getBranchPurchaseInfo($params);
 		$bpurchase_details=$this->Purchases_model->getBranchPurchaseDetails($params);
 		$branch_info=$this->Purchases_model->getBranchDetails($params['branch_id']);
@@ -852,13 +923,14 @@ class Purchases extends CI_Controller
     	//$params['transport_charges']=43000;
     	$branch_pay=false;
     	$admin_pay_req=0;
-    	$response['wallet_bal']=$branch_info["amount"];
+    	$response['wallet_bal']=$wallet_amt;
     	$upl_trsp=($params['unloading_charges']+$params['transport_charges']);
+
     	//$upl_trsp=43000;
-    	if($branch_info["amount"]>=$upl_trsp){
+    	if($wallet_amt>=$upl_trsp){
     		//Wallets
 			//unloading charges
-			$bwallet_amt=$branch_info['amount'];
+			$bwallet_amt=$wallet_amt;
 			$rem_bwallet_amt=($bwallet_amt-$params['unloading_charges']);
 
     		//Pay By branch
@@ -967,7 +1039,7 @@ class Purchases extends CI_Controller
 
     		//Wallets
 			//unloading charges
-			$bwallet_amt=$branch_info['amount'];
+			$bwallet_amt=$wallet_amt;
 			$rem_bwallet_amt=($bwallet_amt-$params['unloading_charges']);
 
 			//Update Transaction (unloading charges)
@@ -987,6 +1059,7 @@ class Purchases extends CI_Controller
 			 ];
     		 
     		 $unloading_tid=$this->Purchases_model->doPurchaseTransaction($utrans);
+    		 //Need add cash book
 
     		//Add in wallet
 			$uwallet=[
@@ -1022,6 +1095,8 @@ class Purchases extends CI_Controller
 
 				$transport_tid=$this->Purchases_model->doPurchaseTransaction($ttrans);
 
+				//Need to add cash book
+
 				//Add in wallet
 				$twallet=[
 						  'tr_id'=>$transport_tid,
@@ -1036,7 +1111,7 @@ class Purchases extends CI_Controller
 			}
 
 			//Update Branch Amount
-			$branch_amt=['amount'=>$rem_bwallet_amt];
+			$branch_amt=['avail_amount'=>$rem_bwallet_amt];
 			$this->Purchases_model->updateBranchAmount($branch_id,$branch_amt);
 
 			//Confirm Branch
@@ -1119,6 +1194,8 @@ class Purchases extends CI_Controller
 					$ctid=$this->Purchases_model->doPurchaseTransaction($company);
 					//Company end
 
+					//Need to add cash book
+
 					//Update Company Goods Transaction ID
 					$ctid_update=['ctid'=>$ctid];
 					$this->Purchases_model->updateAdminPurchase($params['ap_id'],$ctid_update);
@@ -1131,131 +1208,6 @@ class Purchases extends CI_Controller
     		echo json_encode($response);
     	}
 
-		/*if(move_uploaded_file($tempPath,$uploadPath)){
-    		  //Branch Inventory
-			  for($i=0;$i<count($bpurchase_details);$i++){
-			  	//print_r($bpurchase_details[$i]);
-			  	$pid=$bpurchase_details[$i]['pid'];
-
-			  	//Check Branch Product
-			  	$check_product=$this->Purchases_model->checkBranchProduct($pid,$branch_id);
-			  	$qty=0;
-			  	if(!empty($check_product['bin_id'])){
-			  		//Update Product
-			  		$qty=($check_product['qty']+$bpurchase_details[$i]['quantity']);
-			  		$upd_prod=['pmrp'=>$bpurchase_details[$i]['price'],'purchase_amt'=>$bpurchase_details[$i]['purchase_amt'],'qty'=>$qty,'percentage'=>$bpurchase_details[$i]['percentage']];
-			  		$where_cond=["pid"=>$pid,"branch_id"=>$branch_id];
-			  		$upd_result=$this->Purchases_model->updateProductInInventory($upd_prod,$where_cond);
-			  		if($upd_result){
-			  			$cnt++;
-			  		}
-			  	}else{
-			  		//Add Product
-			  		$add_prod=['branch_id'=>$branch_id,'pid'=>$pid,'pmrp'=>$bpurchase_details[$i]['price'],'purchase_amt'=>$bpurchase_details[$i]['purchase_amt'],'qty'=>$bpurchase_details[$i]['quantity'],'percentage'=>$bpurchase_details[$i]['percentage']];
-			  		$add_result=$this->Purchases_model->addProductInInventory($add_prod);
-			  		if($add_result>0){
-			  			$cnt++;
-			  		}
-			  	}
-
-			  }	
-		}
-
-
-		if($cnt>0){
-			//Wallets
-			//unloading charges
-			$bwallet_amt=$branch_info['amount'];
-			$rem_bwallet_amt=($bwallet_amt-$params['unloading_charges']);
-
-			//Update Transaction (unloading charges)
-			$utrans=[
-				'user_id'=>$adminid,
-				'user_type'=>'U',
-				'trans_type'=>'OTHER',
-				'trans'=>'UNLOADING',
-				'trans_id'=>$params['ap_id'],
-				'trans_code'=>'TR'.$params['ap_id'],
-				'amount_type'=>'OUT',
-				'amount'=>$params['unloading_charges'],
-				'total_amount'=>$params['unloading_charges'],
-				'due'=>0,
-				'extra_amt'=>0,
-				'description'=>'Unloading charges paid by '.$branch_info['branch_name']
-			 ];
-
-			$unloading_tid=$this->Purchases_model->doPurchaseTransaction($utrans);
-
-			//Add in wallet
-			$uwallet=[
-					  'tr_id'=>$unloading_tid,
-					  'trtype'=>'OTH',
-					  'uid'=>$adminid,
-					  'utype'=>'U',
-					  'amount'=>$params['unloading_charges'],
-					  'payment_type'=>'CH',
-					  'entry_status'=>'OUT'
-					];
-			$this->Purchases_model->addInWallet($uwallet);
-
-			//transport charges
-			$rem_bwallet_amt=($rem_bwallet_amt-$params['transport_charges']);
-
-			//Update Transaction (transport charges)
-			$ttrans=[
-				'user_id'=>$adminid,
-				'user_type'=>'U',
-				'trans_type'=>'OTHER',
-				'trans'=>'TRANSPORT',
-				'trans_id'=>$params['ap_id'],
-				'trans_code'=>'TR'.$params['ap_id'],
-				'amount_type'=>'OUT',
-				'amount'=>$params['unloading_charges'],
-				'total_amount'=>$params['transport_charges'],
-				'due'=>0,
-				'extra_amt'=>0,
-				'description'=>'Transport charges paid by '.$branch_info['branch_name']
-			 ];
-
-			$transport_tid=$this->Purchases_model->doPurchaseTransaction($ttrans);
-
-			//Add in wallet
-			$twallet=[
-					  'tr_id'=>$transport_tid,
-					  'trtype'=>'OTH',
-					  'uid'=>$adminid,
-					  'utype'=>'U',
-					  'amount'=>$params['transport_charges'],
-					  'payment_type'=>'CH',
-					  'entry_status'=>'OUT'
-					];
-			$this->Purchases_model->addInWallet($twallet);
-
-			//Update Branch Amount
-			$branch_amt=['amount'=>$rem_bwallet_amt];
-			$this->Purchases_model->updateBranchAmount($branch_id,$branch_amt);
-
-			//Confirm Branch
-			$cnf=['status'=>'CE','unloading_charges'=>$params['unloading_charges'],'transport_charges'=>$params['transport_charges'],'upload_invoice'=>$invoice_file,'tr_charges_paidby'=>'A'];
-			$confirm_status=$this->Purchases_model->updateBPConfirm($params['ap_id'],$branch_id,$cnf);
-
-			$response['confirm_status']=$confirm_status;
-			if($confirm_status){
-				//Admin Purchase
-				$admin_purchase=$this->Purchases_model->purchaseInfo($params['ap_id']);
-				$branch_ids=explode(",", $admin_purchase['branch_ids']);
-				$check_all_bcnf=$this->Purchases_model->checkAllBConfirmation($params['ap_id'],$branch_ids);
-				if(count($check_all_bcnf)>0){
-					$upd_purchase=['status'=>'CE'];
-		 			$upd_status=$this->Purchases_model->updateAP($params['ap_id'],$upd_purchase);
-				}
-			}
-
-		}else{
-			$response['confirm_status']=false;
-		}
-
-		echo json_encode($response);*/
 	}
 	
 	//Admin Start
@@ -1755,7 +1707,12 @@ class Purchases extends CI_Controller
 		$hid_tabval=intval($this->input->post("hid_tabval"));
 
 		if($hid_tabval==0){
-		 $params['status']=["P","C","PM","BC"];
+		 $status=$_POST['optradio'];
+		 if(count($status)>0){
+		 	$params['status']=(count($status)>0)?$status:[];
+		 }else{
+		 	$params['status']=["P","C","PM","BC"];
+		 }
 		}else{
 		 $params['status']=["CE"];
 		}
@@ -1766,6 +1723,11 @@ class Purchases extends CI_Controller
 		$draw = intval($this->input->post("draw"));
 		$start = intval($this->input->post("start"));
 		$limit = intval($this->input->post("length"));
+
+		## Custom Field value					
+		$reportRange=$_POST['reportrange'];
+		$params['reportRange']=$reportRange;
+
 
 		$params['order']=$_POST['order'][0]['column']; // Column index
 		$params['columnName']=$_POST['columns'][$order]['data']; // Column name
@@ -1803,7 +1765,7 @@ class Purchases extends CI_Controller
 				$value['brand_name'],
 				"₹ ".$this->IND_money_format($value['total_price']),
 				$status,
-				'<a href="javascript:void(0);" tabindex="0" role="button" data-toggle="popover" id="req_'.$value['id'].'"><i class="fa fa-ellipsis-v act_icns" onclick="Purchase.purchaseact('.$value['id'].','.$value['company_id'].');"></i></a>'
+				'<a href="javascript:void(0);" tabindex="0" role="button" data-toggle="popover" id="req_'.$value['id'].'" data-brand="'.$value['brand_name'].'" data-pbr="PBR'.$value['id'].'" data-status="'.$status.'"><i class="fa fa-ellipsis-v act_icns" onclick="Purchase.purchaseact('.$value['id'].','.$value['company_id'].');"></i></a>'
 			];
 		}
 		$response=[];
@@ -1839,7 +1801,7 @@ class Purchases extends CI_Controller
 		  	$purchase_info['admin_acc_name']=$ad_bank['bank_name'];
 
 		  	//Get Brand Bank Acc
-		  	$co_bank=$this->Purchases_model->getBrandBankInfo($purchase_info['bank_id']);
+		  	$co_bank=$this->Purchases_model->getBrandBankInfo($purchase_info['company_bankid']);
 		  	$purchase_info['co_acc']=$co_bank['account_no'];
 		  	$purchase_info['co_acc_name']=$co_bank['bank_name'];
 		  }else if($purchase_info['payment_type']=='CH'){
@@ -1853,6 +1815,7 @@ class Purchases extends CI_Controller
 		  $purchase_info['trasaction_info']=$this->Purchases_model->getTransactionInfo($purchase_info['tid']);
 		}
 
+		$purchase_info['payment_date']=date('Y-m-d',strtotime($purchase_info['payment_date']));
 		$response['purchase_info']=$purchase_info;
 
 		$products=$this->Purchases_model->getAdminPDList($params['ap_id']);
@@ -1870,6 +1833,10 @@ class Purchases extends CI_Controller
 			$bpurchase_info=$this->Purchases_model->branchPurchaseInfo($bparams);
 			$branch['purchase_info']=$bpurchase_info;
 			$bproducts=$this->Purchases_model->getBranchProducts($bparams);
+			
+			//Branch Wallet Info
+			$branch['branch_wallet']=$this->Purchases_model->getBranchWalletInfo($bparams['branch_id']);
+
 			$bpids=[];
 			for($b=0;$b<count($bproducts);$b++){
 				$bproducts[$b]['is_checked']=true;

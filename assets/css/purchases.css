@@ -220,7 +220,7 @@
 .paid_amont_bb {position: absolute; font-size: 12px; /*background: #fff;*/ background: none!important; top: 15px!important; display: none; color: #15992e; width: 100px; top: -2px; left: 70px;}
 .brnchs_list {margin: 0px; margin-top: 20px; padding: 0px; list-style: none;}
 .brnchs_list li {display: inline-block; height: 45px; min-width: 200px;}
-.cnt{width: 54px; font-size: 11px; padding: 2px 5px; float: right; border:1px solid #ced4da; border-radius: 4px;}
+.cnt{width: 44px; font-size: 11px; margin-right: 0px!important; padding: 2px 5px; float: right; border:1px solid #ced4da; border-radius: 4px;}
 .paid_icn {position: relative; top: -1px;}
 .brnchs_list .form-check {margin-bottom: 10px;}
 .act_tb .tb_hdg:after, .act_tb .tb_hdg:before {
@@ -371,13 +371,14 @@
 .accont_numb {font-size: 12px; color: #7d888e;}
 .bank_mny {width: calc(100% - 30px); float:left; padding-left: 20px;}
 .us_bn_ls .form-check input, .admin_bank_li .form-check input {display: none;}
+.admin_bank_li, .us_bn_ls  {min-width: 200px;}
 .admin_bank_li .bank_logo {bottom: -5px;}
 .admin_bank_li .form-check, .us_bn_ls .form-check {padding-left: 0px;}
 .date_inp {width: 120px;}
 .purchase_modal .trans_inf.ll_inp {padding-bottom:20px!important;}
 .pur_pr span, .pur_pr input {width:auto!important; display:inline-block!important;} 
  .brnchs_list .val_seld li{height: 30px!important}
-.brnchs_list .check_wt_serc .check_list {padding: 10px 20px 10px 30px!important;}
+.brnchs_list .check_wt_serc .check_list {padding: 10px 15px 10px 15px!important; height: auto; max-height: 200px;}
 .pur_list{width:180px;}
 @media (min-width: 576px) {
 #edt_module .modal-dialog, #create_module .modal-dialog {

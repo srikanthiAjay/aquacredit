@@ -11,8 +11,8 @@ class Sales extends CI_Controller
 		$this->load->model('api/Sales_model');
 		$this->load->model('api/Transaction_model');
 		$this->load->model('api/Cash_model');
-		$this->load->model('api/Banks_model');		
-		
+		$this->load->model('api/Banks_model');
+
 		setlocale(LC_MONETARY, 'en_IN');		
 		
 		header('Access-Control-Allow-Origin: *');
@@ -35,6 +35,12 @@ class Sales extends CI_Controller
 	public function getbanks()
 	{	
 		echo $response = $this->Sales_model->getbanks($_POST['seltype']);
+	}
+	public function checkguestmobile_for_tooltip()
+	{		
+		$final_res = json_decode($this->Sales_model->check_guest_mobile($_POST["guest_mobile"]),true);
+		if($final_res["status"] == "exists" ){	echo 'false'; }else{ echo 'true';}
+		exit;
 	}
 	public function users()
 	{	
@@ -62,7 +68,101 @@ class Sales extends CI_Controller
 		echo $response = $this->Sales_model->getSearchProducts(urldecode($search),$branch,$proid);		
 		exit;
 	}
+	public function check_accno_for_tooltip()
+	{		
+		$final_res = json_decode($this->Sales_model->check_bank_accno($_POST["acc_no"]),true);
+		if($final_res["status"] == "exists" ){	echo 'false'; }else{ echo 'true';}
+		exit;
+	}
+	public function addguestuser()
+	{
+		$posts = array(
+					'firm_name' => urldecode($_POST["guest_name"]),
+					'user_name' => urldecode($_POST["guest_name"]),
+					'mobile' => urldecode($_POST["guest_mobile"]),
+					'doj' => date('Y-m-d H:i:s'),
+					'typeofuser' => 1			
+				);
+					
+		$respo = $this->Sales_model->userinsert($posts);
+		$final_res = json_decode($respo,true);
+		
+		if($final_res["status"] == "success")
+		{
+			$insert_id = $final_res["insert_id"];
+			$gid = 'GU'.$insert_id.date('m').date('y');
 
+			$this->db->set('user_code', $gid);
+			$this->db->where('user_id', $insert_id);
+			$query = $this->db->update('users');
+			
+			
+			if(count($_POST["holder_name"]) > 0)
+			{
+				for($i=0; $i < count($_POST["holder_name"]); $i++)
+				{
+					if($_POST["holder_name"][$i]!='' && $_POST["acc_no"][$i]!='' && $_POST["bank_name"][$i]!='' && $_POST["ifsc_code"][$i]!='' && $_POST["branch_name"][$i]!='')
+					{
+							if($i==0){ $status = 1;}else{ $status = 0;}
+							$brand_acc_posts = array('user_id' => $insert_id,
+							'full_name' => urldecode(ucwords($_POST["holder_name"][$i])),
+							'account_no' => $_POST["acc_no"][$i],
+							'bank_name' => $_POST["bank_name"][$i],
+							'ifsc' => $_POST["ifsc_code"][$i],
+							'branch_name' => ucwords($_POST["branch_name"][$i]),	
+							'status' => $status,		
+							'created_on' => date('Y-m-d H:i:s')		
+							);	
+							$brand_acc = $this->Sales_model->guest_account_insert($brand_acc_posts);
+					}
+				}
+			}
+			
+
+			if(count($_POST["crop_loc"]) > 0)
+			{
+				for($i=0; $i < count($_POST["crop_loc"]); $i++)
+				{
+					if($_POST["crop_loc"][$i]!='')
+					{
+						$acc_posts = array('user_id' => $insert_id,
+						'crop_location' => $_POST["crop_loc"][$i],
+						'crop_type' => $_POST["crop_type"][$i],
+						'no_of_acres' => $_POST["acres"][$i],
+						'transaction_balance' => $_POST["transaction_balance"][$i],
+						'created_on' => date('Y-m-d H:i:s')		
+						);	
+						$brand_acc = $this->Sales_model->adduser_cropdetails($acc_posts);
+						$insertcid = $this->db->insert_id();
+
+						if($_POST["transaction_balance"][$i]>0 && $_POST["transaction_balance"][$i]!='')
+						{
+						$data = array(
+						"trans_type" 	=> "OPEN BALANCE",
+						"trans" 		=> "USER",
+						"trans_id"		=> $insertcid,
+						"trans_code"	=> 'OP'.$insertcid,
+						"user_id"		=>  $insert_id,
+						"user_type"		=>	'guest',
+						"crop_id"		=> 	$insertcid,
+						"amount"		=>	(!empty($_POST['transaction_balance'][$i]))?trim($_POST['transaction_balance'][$i]):"0",
+						"amount_type"	=>	"IN",
+						"description"	=>	"Open balance",
+						"status"		=>	"0",
+						"created_by"	=>	$this->session->userdata('adminid'),
+						);
+						$this->Transaction_model->insert($data);
+						$insertcid++;
+						}
+					}
+				}
+			}
+
+		}
+		echo $respo;
+
+
+	}
 	public function searchtrader()
 	{
 		$search = $_POST['search'];
@@ -71,7 +171,7 @@ class Sales extends CI_Controller
 	}
 	
 	public function add()
-	{
+	{		
 		if($_POST["sale_types"]=='cash')
 		{
 			$typ = '1';
@@ -144,7 +244,7 @@ class Sales extends CI_Controller
 			'bank_reference'=>$_POST['bank_reference'],
 			'crop_id'=>$_POST['crop_opt'],
 			'status' => 0,
-			'addresstype' => 0			
+			'addresstype' => 0	
 			);
 		$response = $this->Sales_model->insert($posts);
 		$saleid = $response;
@@ -153,32 +253,50 @@ class Sales extends CI_Controller
 		{
 			if($_POST["sale_types"]=='cash')
 			{
-				$query1 = $this->db->get_where("accounts", ['id' => $_POST['bankid']])->row_array();
+					$query1 = $this->db->get_where("accounts", ['id' => $_POST['bankid']])->row_array();
 					$bal_receive = 0;
 					if($_POST['received_amount']==$_POST['gtotamtval'])
-					{
+					{	
 						/*payment transactions*/
 						$balancetype = 'positive';
 						$pay_tran = array('sale_id' => $saleid,
-										'bank_name' => $query1['account_name'],
-										'account_no' => $query1['account_number'],
-										'bank_ifsc' => $query1['ifsc_code'],
+									    'bank_name' => $query1['account_name'],
+									    'account_no' => $query1['account_number'],
+									    'bank_ifsc' => $query1['ifsc_code'],
 										'amount'=> $_POST['received_amount'],
 										'reference_number'=>$_POST['bank_reference'],
 										'transaction_date'=> date('Y-m-d h:i:s'));
 
 						$response = $this->Sales_model->paymenttran_insert($pay_tran);
 						/*payment transactions*/
-
+						
 						/*cashbook*/
-						$admin_bank_details = json_decode($this->Banks_model->getCashAccounts($_POST['bankid']),true);
+						$admin_bank_details = json_decode($this->Banks_model->getBanksdataall($_POST['bankid']),true);
 
+						/*if($_POST["transport_charge"]!='' && $_POST["load_charge"]!='')
+						{
+							$ltamt = $_POST["transport_charge"]+$_POST["load_charge"];
+						}
+						else if($_POST["transport_charge"]!='' && $_POST["load_charge"]=='')
+						{
+							$ltamt = $_POST["transport_charge"];
+						}
+						else if($_POST["transport_charge"]=='' && $_POST["load_charge"]!='')
+						{
+							$ltamt = $_POST["load_charge"];
+						}
+						else
+						{
+							$ltamt = 0;
+						}
+						$famount = $_POST["received_amount"] - $ltamt;*/
+						//echo $famount.'---'.$admin_bank_details["data"]["avail_amount"];
 						$this->db->set('avail_amount', 'avail_amount + '.$_POST["received_amount"].'',false);
 						$this->db->set('updated_on', date('Y-m-d H:i:s'));
 						$this->db->where('id', $_POST['bankid']);
 						$query = $this->db->update('accounts');
 						$cash = array(
-							"trans_type" 	=> "Sale(RECEIPT)",
+							"trans_type" 	=> "SALE (RECEIPT)",
 							"trans_id"		=> $saleid,
 							"amount"		=>	$_POST["received_amount"],
 							"amount_type"	=>	"IN",
@@ -201,15 +319,35 @@ class Sales extends CI_Controller
 
 						/*payment transactions*/
 						$pay_tran = array('sale_id' => $saleid,
-										'bank_name' => $query1['account_name'],
-										'account_no' => $query1['account_number'],
-										'bank_ifsc' => $query1['ifsc_code'],
+									    'bank_name' => $query1['account_name'],
+									    'account_no' => $query1['account_number'],
+									    'bank_ifsc' => $query1['ifsc_code'],
 										'amount'=> $_POST['received_amount'],
 										'reference_number'=>$_POST['bank_reference'],
 										'transaction_date'=> date('Y-m-d h:i:s'));
 
 						$response = $this->Sales_model->paymenttran_insert($pay_tran);
 						/*payment transactions*/
+						/*if($_POST["transport_charge"]!='' && $_POST["load_charge"]!='')
+						{
+							$ltamt = $_POST["transport_charge"]+$_POST["load_charge"];
+						}
+						else if($_POST["transport_charge"]!='' && $_POST["load_charge"]=='')
+						{
+							$ltamt = $_POST["transport_charge"];
+						}
+						else if($_POST["transport_charge"]=='' && $_POST["load_charge"]!='')
+						{
+							$ltamt = $_POST["load_charge"];
+						}
+						else
+						{
+							$ltamt = 0;
+						}
+						$famount = $_POST["received_amount"] - $ltamt;*/
+
+						//echo $famount;
+						//exit;
 						/*cashbook*/
 						$this->db->set('avail_amount', 'avail_amount + '.$_POST["received_amount"].'',false);
 						$this->db->set('updated_on', date('Y-m-d H:i:s'));
@@ -220,7 +358,7 @@ class Sales extends CI_Controller
 						$admin_bank_details = json_decode($this->Banks_model->getBanksdataall($_POST['bankid']),true);
 
 						$cash = array(
-							"trans_type" 	=> "Sale(RECEIPT)",
+							"trans_type" 	=> "SALE (RECEIPT)",
 							"trans_id"		=> $saleid,
 							"amount"		=>	$_POST["received_amount"],
 							"amount_type"	=>	"IN",
@@ -237,45 +375,47 @@ class Sales extends CI_Controller
 						$bal_receive = $_POST['gtotamtval'];
 					}
 
+					$lllab = $this->db->query("select *from accounts where branch_id='".$_POST["branchval"]."' ");
+					$llab = $lllab->row_array();
 					/*out recoreds*/
-					if($_POST["transport_charge"]!='' && $_POST["transport_charge"]!=0)
-					{
-						$cash = array(
-						"trans_type" 	=> "Sale(TRANSPORT)",
-						"trans_id"		=> $saleid,
-						"amount"		=>	 $_POST["transport_charge"],
-						"amount_type"	=>	"OUT",
-						"account_type"	=>	$_POST["sale_types"],
-						"account_id"	=> $_POST['bankid'],
-						"avl_bal"		=> $admin_bank_details["data"]["avail_amount"],
-						"admin_id"	=>	$this->session->userdata('adminid'),
-						);
-						$this->Cash_model->insert($cash);
-					}
-					
-					if($_POST["load_charge"]!='' && $_POST["load_charge"]!=0)
-					{
-						$cash = array(
-						"trans_type" 	=> "Sale(LOADING)",
-						"trans_id"		=> $saleid,
-						"amount"		=>	 $_POST["load_charge"],
-						"amount_type"	=>	"OUT",
-						"account_type"	=>	$_POST["sale_types"],
-						"account_id"	=> $_POST['bankid'],
-						"avl_bal"		=> $admin_bank_details["data"]["avail_amount"],
-						"admin_id"	=>	$this->session->userdata('adminid'),
-						);
-						$this->Cash_model->insert($cash);
-					}
+						if($_POST["transport_charge"]!='' && $_POST["transport_charge"]!=0)
+						{
+							$cash = array(
+							"trans_type" 	=> "SALE (TRANSPORT)",
+							"trans_id"		=> $saleid,
+							"amount"		=>	 $_POST["transport_charge"],
+							"amount_type"	=>	"OUT",
+							"account_type"	=>	$_POST["sale_types"],
+							"account_id"	=> $llab['id'],
+							"avl_bal"		=> $admin_bank_details["data"]["avail_amount"],
+							"admin_id"	=>	$this->session->userdata('adminid'),
+							);
+							$this->Cash_model->insert($cash);
+						}
+						
+						if($_POST["load_charge"]!='' && $_POST["load_charge"]!=0)
+						{
+							$cash = array(
+							"trans_type" 	=> "SALE (LOADING)",
+							"trans_id"		=> $saleid,
+							"amount"		=>	 $_POST["load_charge"],
+							"amount_type"	=>	"OUT",
+							"account_type"	=>	$_POST["sale_types"],
+							"account_id"	=> $llab['id'],
+							"avl_bal"		=> $admin_bank_details["data"]["avail_amount"],
+							"admin_id"	=>	$this->session->userdata('adminid'),
+							);
+							$this->Cash_model->insert($cash);
+						}
 
-					$amt = $_POST["load_charge"]+$_POST["transport_charge"];
+						$amt = $_POST["load_charge"]+$_POST["transport_charge"];
 
-					$this->db->set('avail_amount', 'avail_amount - '.$amt.'',false);
-					$this->db->set('updated_on', date('Y-m-d H:i:s'));
-					$this->db->where('id', $admin_bank_details["data"]["id"]);
-					$query = $this->db->update('accounts');
-				/*out records*/
-					
+						$this->db->set('avail_amount', 'avail_amount - '.$amt.'',false);
+						$this->db->set('updated_on', date('Y-m-d H:i:s'));
+						$this->db->where('id', $llab['id']);
+						$query = $this->db->update('accounts');
+					/*out records*/
+
 					$rbala = array('balance_receivedamount'=>$bal_receive,'balance_type'=>$balancetype);
 					$response1 = $this->Sales_model->updateSale($saleid,$rbala);
 					/*echo $this->last_query();
@@ -283,12 +423,12 @@ class Sales extends CI_Controller
 			}
 			else
 			{
-				$admin_bank_details = json_decode($this->Banks_model->getCashAccounts($_POST['branchval']),true);
+				$admin_bank_details = json_decode($this->Banks_model->getBanksdataallbranch($_POST['branchval']),true);
 
 				if($_POST['load_charge']!='' && $_POST['load_charge']!=0)
 				{
 					$cash = array(
-							"trans_type" 	=> "Sale(LOADING)",
+							"trans_type" 	=> "SALE (LOADING)",
 							"trans_id"		=> $saleid,
 							"amount"		=>	$_POST["load_charge"],
 							"amount_type"	=>	"OUT",
@@ -303,7 +443,7 @@ class Sales extends CI_Controller
 				if($_POST['transport_charge']!='' && $_POST['transport_charge']!=0)
 				{
 					$cash = array(
-							"trans_type" 	=> "Sale(TRANSPORT)",
+							"trans_type" 	=> "SALE (TRANSPORT)",
 							"trans_id"		=> $saleid,
 							"amount"		=>	$_POST["transport_charge"],
 							"amount_type"	=>	"OUT",
@@ -335,8 +475,14 @@ class Sales extends CI_Controller
 
 			if(!empty($_POST['proid'][$i]) && !empty($_POST['proname'][$i]) && !empty($_POST['proqty'][$i]) && !empty($_POST['promrp'][$i]) &&  !empty($_POST['protot'][$i]))
 			{
+				$this->db->set('qty', 'qty - '.$_POST['proqty'][$i].'',false);
+				$this->db->where('bin_id', $_POST['inventoryid'][$i]);
+				$query = $this->db->update('branch_inventory');
+
+
 				$activity_posts = array('s_id' => $saleid,
 					'product_id' => $_POST['proid'][$i],
+					'brandid'=> $prds['brand_id'],
 					'quantity' => $_POST['proqty'][$i],
 					'mrp' => $_POST['promrpval'][$i],
 					'saleprice' => $_POST["promrpval"][$i],
@@ -344,7 +490,8 @@ class Sales extends CI_Controller
 					'discount' => $_POST["prodisc"][$i],
 					'tax'=> $prds['tax'],
 					'hsncode'=> $prds['hsn'],
-					'total_price' => $_POST["prototval"][$i]
+					'total_price' => $_POST["prototval"][$i],
+					'inventory_id' => $_POST['inventoryid'][$i]
 				);
 				
 				$act_res = $this->Sales_model->insertsale($saleid,$activity_posts);
@@ -371,23 +518,26 @@ class Sales extends CI_Controller
 			);
 			$this->Transaction_model->insert($data);
 
-			$data = array(
-				"trans_type" 	=> "SALE", 
-				"trans"			=> "AMOUNT",
-				"trans_id"		=> $saleid,
-				"trans_code"	=> 'SCH'.$saleid,
-				"user_id"		=> $respo,
-				//"user_type"		=>	$this->input->post("userid"),
-				"crop_id"		=> 	'0',
-				//"amount"		=>	$this->input->post("totamtval"),
-				"amount"        => $this->input->post("received_amount"),
-				"amount_type"	=>	"IN",
-				"description"	=>	"Sale amount received",
-				"status"		=>	"0",
-				"created_by"	=>	$this->session->userdata('adminid'),
-			);
-			$this->Transaction_model->insert($data);
-
+			if($_POST["received_amount"]!='' && $_POST["received_amount"]!=0)
+			{
+				$data = array(
+						"trans_type" 	=> "SALE", 
+						"trans"			=> "RECEIPT",
+						"trans_id"		=> $saleid,
+						"trans_code"	=> 'SCH'.$saleid,
+						"user_id"		=> $respo,
+						//"user_type"		=>	$this->input->post("userid"),
+						"crop_id"		=> 	'0',
+						//"amount"		=>	$this->input->post("totamtval"),
+						"amount"        => $_POST["received_amount"],
+						"amount_type"	=>	"IN",
+						"description"	=>	"Sale amount received",
+						"status"		=>	"0",
+						"created_by"	=>	$this->session->userdata('adminid'),
+				);
+				$this->Transaction_model->insert($data);
+			}
+					
 			
 		}
 		else
@@ -408,39 +558,43 @@ class Sales extends CI_Controller
 			);
 			$this->Transaction_model->insert($data);
 		}
-		
-		$data = array(
-			"trans_type" 	=> "SALE", //
-			"trans"			=> "LOADING",
-			"trans_id"		=> $saleid,//
-			"trans_code"	=> 'SCH'.$saleid,//
-			"user_id"		=>  $respo,//
-			//"user_type"		=>	$this->input->post("userid"),
-			"crop_id"		=> 	($this->input->post("crop_opt")) ? $this->input->post("crop_opt") : '0',//
-			"amount"		=>	$this->input->post("load_charge"),//
-			"amount_type"	=>	"OUT",//
-			"description"	=>	"Loading Charges",//
-			"status"		=>	"0",//
-			"created_by"	=>	$this->session->userdata('adminid'),//
-		);
-		$this->Transaction_model->insert($data);
+		if($_POST["load_charge"]!='' && $_POST["load_charge"]!=0)
+		{
+				$data = array(
+					"trans_type" 	=> "SALE", //
+					"trans"			=> "LOADING",
+					"trans_id"		=> $saleid,//
+					"trans_code"	=> 'SCH'.$saleid,//
+					"user_id"		=>  $respo,//
+					//"user_type"		=>	$this->input->post("userid"),
+					"crop_id"		=> 	($this->input->post("crop_opt")) ? $this->input->post("crop_opt") : '0',//
+					"amount"		=>	$this->input->post("load_charge"),//
+					"amount_type"	=>	"OUT",//
+					"description"	=>	"Loading Charges",//
+					"status"		=>	"0",//
+					"created_by"	=>	$this->session->userdata('adminid'),//
+				);
+				$this->Transaction_model->insert($data);
+		}
 
-		$data = array(
-			"trans_type" 	=> "SALE", //
-			"trans"			=> "TRANSPORT",
-			"trans_id"		=> $saleid,//
-			"trans_code"	=> 'SCH'.$saleid,//
-			"user_id"		=>  $respo,//
-			//"user_type"		=>	$this->input->post("userid"),
-			"crop_id"		=> 	($this->input->post("crop_opt")) ? $this->input->post("crop_opt") : '0',//
-			"amount"		=>	$this->input->post("transport_charge"),//
-			"amount_type"	=>	"OUT",//
-			"description"	=>	"Transport Charges",//
-			"status"		=>	"0",//
-			"created_by"	=>	$this->session->userdata('adminid'),//
-		);
-		$this->Transaction_model->insert($data);
-		
+		if($_POST["transport_charge"]!='' && $_POST["transport_charge"]!=0)
+		{
+			$data = array(
+				"trans_type" 	=> "SALE", //
+				"trans"			=> "TRANSPORT",
+				"trans_id"		=> $saleid,//
+				"trans_code"	=> 'SCH'.$saleid,//
+				"user_id"		=>  $respo,//
+				//"user_type"		=>	$this->input->post("userid"),
+				"crop_id"		=> 	($this->input->post("crop_opt")) ? $this->input->post("crop_opt") : '0',//
+				"amount"		=>	$this->input->post("transport_charge"),//
+				"amount_type"	=>	"OUT",//
+				"description"	=>	"Transport Charges",//
+				"status"		=>	"0",//
+				"created_by"	=>	$this->session->userdata('adminid'),//
+			);
+			$this->Transaction_model->insert($data);
+		}
 		echo json_encode(array('status' => 'success','insert_id' => $saleid));
 		
 	}
@@ -459,29 +613,65 @@ class Sales extends CI_Controller
 
 			if(!empty($_POST['proid'][$i]) && !empty($_POST['proqty'][$i]) && !empty($_POST['promrp'][$i]) && !empty($_POST['protot'][$i]) )
 			{
-				if($_POST['brandid'][$i]=='')
+				/*if($_POST['brandid'][$i]=='')
 				{
 					$_POST['brandid'][$i] = 0;
-				}
+				}*/
 				$activity_posts = array(
 					's_id' =>  $saleid,
 					'product_id' => $_POST['proid'][$i],
-					'brandid' => $_POST['brandid'][$i],
+					'brandid' => $prds['brand_id'],
 					'quantity' => $_POST['proqty'][$i],
 					'discount' => $_POST['prodisc'][$i],
 					'total_price' => $_POST["prototval"][$i],
 					'tax'=> $prds['tax'],
 					'hsncode'=> $prds['hsn'],
-					'mrp' => $_POST["promrpval"][$i]
+					'mrp' => $_POST["promrpval"][$i],
+					'inventory_id' => $_POST['inventoryid'][$i]
 				);
 
 				
 				if($_POST['hid_acivity_id'][$i]==0)
 				{
+					$this->db->set('qty', 'qty - '.$_POST['proqty'][$i].'',false);
+					$this->db->where('bin_id', $_POST['inventoryid'][$i]);
+					$query = $this->db->update('branch_inventory');
+
 					$act_res = $this->Sales_model->insertsale($saleid,$activity_posts);
 				}
 				else if($_POST["hid_acivity_id"][$i] > 0)
 				{
+					$actqty = $_POST['preqty'][$i]-$_POST['proqty'][$i];
+					if($_POST['preqty'][$i]==$_POST['proqty'][$i])
+					{
+						$actqty = $_POST['preqty'][$i];
+					}
+					else if($_POST['preqty'][$i]<$_POST['proqty'][$i])
+					{
+						$actqty = $_POST['proqty'][$i]-$_POST['preqty'][$i];
+
+						$this->db->set('qty', 'qty - '.$actqty.'',false);
+						$this->db->where('bin_id', $_POST['inventoryid'][$i]);
+						$query = $this->db->update('branch_inventory');
+					}
+					else if($_POST['preqty'][$i]>$_POST['proqty'][$i])
+					{
+						
+						$actqty = $_POST['preqty'][$i]-$_POST['proqty'][$i];
+
+						$this->db->set('qty', 'qty + '.$actqty.'',false);
+						$this->db->where('bin_id', $_POST['inventoryid'][$i]);
+						$query = $this->db->update('branch_inventory');
+
+						//echo $this->db->last_query();
+					    //exit;
+					}
+
+					
+
+					//echo $this->db->last_query();
+					//exit;
+  
 					$trade_act_id = $_POST["hid_acivity_id"][$i];
 					$act_res = $this->Sales_model->updateSaleActivity($trade_act_id,$activity_posts);
 				}
@@ -539,38 +729,92 @@ class Sales extends CI_Controller
 					$bal_receive = 0;
 
 					$pay_tran = array('sale_id' => $saleid,
-									'bank_name' => $query1['account_name'],
-									'account_no' => $query1['account_number'],
-									'bank_ifsc' => $query1['ifsc_code'],
+									  'bank_name' => $query1['account_name'],
+									  'account_no' => $query1['account_number'],
+									  'bank_ifsc' => $query1['ifsc_code'],
 									  'reference_number'=>$_POST['bank_reference'],
 									  'amount'=> $_POST['received_amount'],
 									  'transaction_date'=> date('Y-m-d h:i:s'));
 
 					$response = $this->Sales_model->paymenttran_insert($pay_tran);
 					/*cashbook*/
-					$this->db->set('avail_amount', 'avail_amount + '.$_POST["received_amount"].'',false);
-					$this->db->set('updated_on', date('Y-m-d H:i:s'));
-					$this->db->where('id', $_POST['bankid']);
-					$query = $this->db->update('accounts');
+						$this->db->set('avail_amount', 'avail_amount + '.$_POST["received_amount"].'',false);
+						$this->db->set('updated_on', date('Y-m-d H:i:s'));
+						$this->db->where('id', $_POST['bankid']);
+						$query = $this->db->update('accounts');
 
-					
-					$admin_bank_details = json_decode($this->Banks_model->getBanksdataall($_POST['bankid']),true);
+						
+						$admin_bank_details = json_decode($this->Banks_model->getBanksdataall($_POST['bankid']),true);
 
-					$cash = array(
-						"trans_type" 	=> "Sale(RECEIPT)",
+						$cash = array(
+							"trans_type" 	=> "SALE (RECEIPT)",
+							"trans_id"		=> $saleid,
+							"amount"		=>	$_POST["received_amount"],
+							"amount_type"	=>	"IN",
+							"account_type"	=>	$_POST["sale_types"],
+							"account_id"	=> $_POST['bankid'],
+							"avl_bal"		=> $admin_bank_details["data"]["avail_amount"],
+							"admin_id"	=>	$this->session->userdata('adminid'),
+						);
+						$this->Cash_model->insert($cash);
+					/*cashbook*/
+
+					/*transaction records*/
+					$data = array(
+						"trans_type" 	=> "SALE", 
+						"trans"			=> "RECEIPT",
 						"trans_id"		=> $saleid,
-						"amount"		=>	$_POST["received_amount"],
+						"trans_code"	=> 'SCH'.$saleid,
+						"user_id"		=> $respo,
+						//"user_type"		=>	$this->input->post("userid"),
+						"crop_id"		=> 	'0',
+						//"amount"		=>	$this->input->post("totamtval"),
+						"amount"        => $_POST["received_amount"],
 						"amount_type"	=>	"IN",
-						"account_type"	=>	$_POST["sale_types"],
-						"account_id"	=> $_POST['bankid'],
-						"avl_bal"		=> $admin_bank_details["data"]["avail_amount"],
-						"admin_id"	=>	$this->session->userdata('adminid'),
+						"description"	=>	"Sale amount received",
+						"status"		=>	"0",
+						"created_by"	=>	$this->session->userdata('adminid'),
 					);
-					$this->Cash_model->insert($cash);
-				/*cashbook*/
+					$this->Transaction_model->insert($data);
+				}
+				else if($_POST['gtotamtval'] > $fbal_receive)
+				{
+					$balancetype = 'negative';
+					$bal_receive = $_POST['gtotamtval']-$fbal_receive;
 
-				/*transaction records*/
-				$data = array(
+					$pay_tran = array('sale_id' => $saleid,
+									  'bank_name' => $query1['account_name'],
+									  'account_no' => $query1['account_number'],
+									  'bank_ifsc' => $query1['ifsc_code'],
+									  'reference_number'=>$_POST['bank_reference'],
+									  'amount'=> $_POST['received_amount'],
+									  'transaction_date'=> date('Y-m-d h:i:s'));
+
+					$response = $this->Sales_model->paymenttran_insert($pay_tran);
+					/*cashbook*/
+						$this->db->set('avail_amount', 'avail_amount + '.$_POST["received_amount"].'',false);
+						$this->db->set('updated_on', date('Y-m-d H:i:s'));
+						$this->db->where('id', $_POST['bankid']);
+						$query = $this->db->update('accounts');
+
+						
+						$admin_bank_details = json_decode($this->Banks_model->getBanksdataall($_POST['bankid']),true);
+
+						$cash = array(
+							"trans_type" 	=> "SALE (RECEIPT)",
+							"trans_id"		=> $saleid,
+							"amount"		=>	$_POST["received_amount"],
+							"amount_type"	=>	"IN",
+							"account_type"	=>	$_POST["sale_types"],
+							"account_id"	=> $_POST['bankid'],
+							"avl_bal"		=> $admin_bank_details["data"]["avail_amount"],
+							"admin_id"	=>	$this->session->userdata('adminid'),
+						);
+						$this->Cash_model->insert($cash);
+					/*cashbook*/
+
+					/*TRANSACTIONS*/
+					$data = array(
 					"trans_type" 	=> "SALE", 
 					"trans"			=> "RECEIPT",
 					"trans_id"		=> $saleid,
@@ -587,69 +831,15 @@ class Sales extends CI_Controller
 				);
 				$this->Transaction_model->insert($data);
 				}
-				else if($_POST['gtotamtval'] > $fbal_receive)
-				{
-					$balancetype = 'negative';
-					$bal_receive = $_POST['gtotamtval']-$fbal_receive;
-
-					$pay_tran = array('sale_id' => $saleid,
-										'bank_name' => $query1['account_name'],
-										'account_no' => $query1['account_number'],
-										'bank_ifsc' => $query1['ifsc_code'],
-									  'reference_number'=>$_POST['bank_reference'],
-									  'amount'=> $_POST['received_amount'],
-									  'transaction_date'=> date('Y-m-d h:i:s'));
-
-					$response = $this->Sales_model->paymenttran_insert($pay_tran);
-					/*cashbook*/
-					$this->db->set('avail_amount', 'avail_amount + '.$_POST["received_amount"].'',false);
-					$this->db->set('updated_on', date('Y-m-d H:i:s'));
-					$this->db->where('id', $_POST['bankid']);
-					$query = $this->db->update('accounts');
-
-					
-					$admin_bank_details = json_decode($this->Banks_model->getBanksdataall($_POST['bankid']),true);
-
-					$cash = array(
-						"trans_type" 	=> "Sale(RECEIPT)",
-						"trans_id"		=> $saleid,
-						"amount"		=>	$_POST["received_amount"],
-						"amount_type"	=>	"IN",
-						"account_type"	=>	$_POST["sale_types"],
-						"account_id"	=> $_POST['bankid'],
-						"avl_bal"		=> $admin_bank_details["data"]["avail_amount"],
-						"admin_id"	=>	$this->session->userdata('adminid'),
-					);
-					$this->Cash_model->insert($cash);
-				/*cashbook*/
-
-				/*TRANSACTIONS*/
-				$data = array(
-				"trans_type" 	=> "SALE", 
-				"trans"			=> "RECEIPT",
-				"trans_id"		=> $saleid,
-				"trans_code"	=> 'SCH'.$saleid,
-				"user_id"		=> $respo,
-				//"user_type"		=>	$this->input->post("userid"),
-				"crop_id"		=> 	'0',
-				//"amount"		=>	$this->input->post("totamtval"),
-				"amount"        => $_POST["received_amount"],
-				"amount_type"	=>	"IN",
-				"description"	=>	"Sale amount received",
-				"status"		=>	"0",
-				"created_by"	=>	$this->session->userdata('adminid'),
-			);
-			$this->Transaction_model->insert($data);
-				}
 				else if($_POST['gtotamtval'] < $fbal_receive)
 				{
 					$balancetype = 'positive';
 					$bal_receive = $fbal_receive - $_POST['gtotamtval'];
 
 					$pay_tran = array('sale_id' => $saleid,
-										'bank_name' => $query1['account_name'],
-										'account_no' => $query1['account_number'],
-										'bank_ifsc' => $query1['ifsc_code'],
+									  'bank_name' => $query1['account_name'],
+									  'account_no' => $query1['account_number'],
+									  'bank_ifsc' => $query1['ifsc_code'],
 									  'reference_number'=>$_POST['bank_reference'],
 									  'amount'=> $_POST['received_amount'],
 									  'transaction_date'=> date('Y-m-d h:i:s'));
@@ -708,7 +898,7 @@ class Sales extends CI_Controller
 			'bankid' => $_POST['bankid'],
 			'bank_name'=>$query1['account_name'],
 			'account_no'=>$query1['account_number'],
-			'bank_ifsc'=>$query1['ifsc_code'],			
+			'bank_ifsc'=>$query1['ifsc_code'],
 			'paymenttype' => $_POST['paymenttype'],
 			'payment_date' => date('Y-m-d',strtotime($_POST["payment_date"])),
 			'usertype' => $utype,
@@ -739,7 +929,7 @@ class Sales extends CI_Controller
 				"status"		=>	"0",
 				"updated_by"	=>	$this->session->userdata('adminid'),
 			);
-			$this->Transaction_model->update($data,array('trans_type' => 'SALE', 'trans' => 'RECEIPT', 'trans_id' => $saleid)); */
+			$this->Transaction_model->update($data,array('trans_type' => 'SALE', 'trans' => 'RECEIPT', 'trans_id' => $saleid));*/
 
 			
 		}
@@ -755,7 +945,7 @@ class Sales extends CI_Controller
 			$this->Transaction_model->update($data,array('trans_type' => 'SALE', 'trans' => 'GOODS', 'trans_id' => $saleid));
 		}
 		
-		$data = array(
+		/*$data = array(
 			"amount"		=>	$this->input->post("load_charge"),//
 			"description"	=>	"Loading Charges updated",//
 			"status"		=>	"0",//
@@ -764,12 +954,12 @@ class Sales extends CI_Controller
 		$this->Transaction_model->update($data,array('trans_type' => 'SALE', 'trans' => 'LOADING', 'trans_id' => $saleid));
 
 		$data = array(
-			"amount"		=>	$this->input->post("transport_charge"),//
+			"amount"		=>	$this->input->post("transport_charge"),//			
 			"description"	=>	"Transport Charges updated",//
 			"status"		=>	"0",//
 			"updated_by"	=>	$this->session->userdata('adminid'),//
 		);
-		$this->Transaction_model->update($data,array('trans_type' => 'SALE', 'trans' => 'TRANSPORT', 'trans_id' => $saleid));
+		$this->Transaction_model->update($data,array('trans_type' => 'SALE', 'trans' => 'TRANSPORT', 'trans_id' => $saleid));*/
 
 		echo $response;
 	}
@@ -832,6 +1022,7 @@ class Sales extends CI_Controller
 		$searchByMonth = $_POST['month_opt'];		
 		$searchByStatus = $_POST['status_opt'];
 		$saletype = $_POST['saletype'];
+		$reportRange = $_POST['reportrange'];
 		$from_date = $_POST['from_date'];
 		$to_date = $_POST['to_date'];		
 				
@@ -839,7 +1030,9 @@ class Sales extends CI_Controller
 		## Search 	
 		$allcounts = $this ->Sales_model->saleAnalytics();
 
-		$products =  $this->Sales_model->sales_search($limit,$start,$def_search,$searchValue,$order,$dir,$searchValue,$searchByMonth,$searchByStatus,$from_date,$to_date,$saletype); 
+		$total =  $this->Sales_model->totalrecords($limit,$start,$def_search,$searchValue,$order,$dir,$searchValue,$searchByMonth,$searchByStatus,$from_date,$to_date,$saletype,$reportRange);
+
+		$products =  $this->Sales_model->sales_search($limit,$start,$def_search,$searchValue,$order,$dir,$searchValue,$searchByMonth,$searchByStatus,$from_date,$to_date,$saletype,$reportRange); 
 		
 		$data = [];
 		if(count($products)>0)
@@ -853,7 +1046,7 @@ class Sales extends CI_Controller
 				$brand_res = json_decode($brand,true); */
 				$brand_res = json_decode($this->Sales_model->getbranchname($r['branchid']),true);
 				$brand_name = '<a href="javascript:void(0)" >'.$brand_res['data']['branch_name'].'</a>';
-				if($r['editlimit']>3)
+				if($r['editlimit']>2)
 				{
 					$est = 1;
 				}
@@ -909,8 +1102,8 @@ class Sales extends CI_Controller
 			"draw" => $draw,
 			"start" => $start,
 			"length" => $limit,
-			"recordsTotal" => count($products),
-			"recordsFiltered" => count($products),
+			"recordsTotal" => count($total),
+			"recordsFiltered" => count($total),
 			"creditsale" => ($allcounts["creditsale"]==null)? 0 : $allcounts["creditsale"],
 			"cashsale" => ($allcounts["cashsale"]==null)? 0 : $allcounts["cashsale"],
 			"data" => $data,

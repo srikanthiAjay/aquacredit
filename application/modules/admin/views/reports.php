@@ -32,6 +32,23 @@ $(".reports_menu ul li").click(function(){
 		});
 	</script>
 	<style type="text/css">
+		.hide_blk {display: none;}
+		td.nbm_usr_td, th.nbm_usr_td {width: 80px!important; max-width: 80px!important;}
+		td.ttl_amnt_td, th.ttl_amnt_td {width: 150px!important; max-width: 150px!important;}
+		td.prgt_td, th.prgt_td {width: 150px!important; max-width: 150px!important;}
+		.grn_row {color: green!important;}
+		.rd_row {color: red!important;}
+		.grn_arow{margin-left: 5px;}
+		.dataTable tr td {cursor: pointer;}
+		#feed_date.dataTable tr td {cursor: default;}
+		.dataTables_filter {margin-top: 10px;}
+		.dataTables_wrapper td, .dataTables_wrapper th {height: auto!important; padding-top: 10px!important; padding-bottom: 10px!important;}
+	#feed_Product_wrapper, #feed_month_wrapper, #feed_date_wrapper {display: none;}
+		.dataTables_length .check_wt_serc {max-width: 220px;}
+		.blu_txt {color: #007bff;}
+		.back_btn {position: relative;top: -2px;}
+		.tab-content .dataTable {border-top: 1px solid #f0f1f5!important;}
+		.dataTables_wrapper thead {border-bottom: 6px solid #f0f1f5!important;}
 		.reports_menu {
 			width: 230px;
 			background: #fff;
@@ -46,7 +63,8 @@ $(".reports_menu ul li").click(function(){
 	.reports_menu ul li {width: 100%; padding:5px 0px;}
 	.reports_menu ul li a {text-decoration: none; display: block; font-size: 13px; color: #58666e; padding:10px 20px;}
 	.sts_pp {float: none; margin-left: 30px;}
-	.sts_fil_blk {left: 30px;}
+	.sts_fil_blk {left: 30px; top: 37px!important;}
+	.sts_pp:after {top: -12px;}
 	.reports_menu ul li.act a {color: #0e82ff; border-right: 2px solid #0e82ff;}
 	.rprt_anl {
 			position: fixed;
@@ -58,7 +76,7 @@ $(".reports_menu ul li").click(function(){
 		}
 		.btn_anl {font-size: 13px;}
 		.act_rppt {display: none;}
-		.res_tbl table {min-width: 690px;}
+		.res_tbl table {min-width: 780px;}
 		.anlts {width: 252px; float: left; padding: 0px 15px 0px 0px; box-sizing: border-box;}
 		.tbls_blk {width: calc(100% - 252px); float: left;}
 		.anl_crd {width: 100%; border: 1px solid #dddddd; padding: 10px 20px; margin-bottom: 12px; background: #fff; border-radius: 5px;}
@@ -162,11 +180,12 @@ $(".reports_menu ul li").click(function(){
 	.lnks {cursor: pointer;}
 	.fr {float: right;}
 	.td_mob {font-size: 11px; color: #007bff; font-weight: bold;}
-	.al_r_tbl, .cash_tbl {width: 100%;}
+	.al_r_tbl, .cash_tbl {width: 100%!important;}
+	.rprt_anl {height: calc(100% - 80px)};
 	.cash_tbl {border-radius: 5px;}
 	.al_r_tbl td, .cash_tbl td {border-bottom: 1px solid #f0f1f5;}
 	.al_r_tbl th, .cash_tbl th {border-bottom: 5px solid #f0f1f5;}
-	.al_r_tbl td, .al_r_tbl th, .cash_tbl td, .cash_tbl th {color: #58666e; background: #fff; font-size: 13px; padding:0px 20px!important; height: 40px;}
+	.al_r_tbl td, .al_r_tbl th {color: #58666e; background: none!important; font-size: 13px; padding:0px 20px!important; height: 40px;}
 	.al_r_tbl td span {color: #030303;}
 	.sub_prc {font-size: 11px; color: #1c9f02; font-weight: bold;}
 	/*#over_reports {display: none;}*/
@@ -257,11 +276,32 @@ $(".reports_menu ul li").click(function(){
 			.tabs_tbl li.act_tab {background: #007bff; color: #fff;}
 			.dataTables_length {padding-left: 0px!important;}
 			.date_anl {margin-top: 0px;}
+			.tab-content .dataTables_length {padding-left: 15px!important;}
+			.tab-content div.dataTables_wrapper div.dataTables_filter label input {margin-top: 10px!important;}
+			.dropdown.responsivetabs-more .dropdown-toggle {height: 79px; display: block;  width: 50px;  background: #fff url(http://3.7.44.132/aquacredit/assets/images/menu_drop_down.png) 5px 5px no-repeat; border-radius: 5px;  margin-top: 5px;}
+			.icn_anl {display: none;}
 		}
-
+		@media (max-width: 620px){
+			/*.tp_anl ul.nav-tabs li {width: 100%;}*/
+			.icn_anl {display: none;}
+			/*.total_purchase {display: none;}*/
+			.tp_anl ul.nav-tabs li .icn_anl_rt {width: auto;}
+			.nav-item .nav-link.active .anl_crd:after {display: none;}
+			.tp_anl ul.nav-tabs li .top_in_op h1 {font-size: 12px!important;}
+			.tp_anl ul.nav-tabs li .icn_anl_rt {padding-left: 0px;}
+			.nav-item .nav-link .anl_crd {padding: 8px 15px!important;}
+			.tp_anl ul li {margin-right: 10px!important;}
+			.tp_anl ul.nav-tabs li .anl_crd {margin-bottom: 5px!important;}
+			
+		}
+		@media (max-width: 510px){ 
+			.top_blk_inv li {border-right: none;}
+			.top_blk_inv li:last-child {margin-top: 10px;}
+		}
 		@media (max-width: 490px){ 
 			.date_anl, .btn_anl {width: 100%; margin-top: 10px;}
 		}
+	#cash_tbl_tbl_wrapper .dataTables_filter {margin-top: 0px!important;}
 	</style>
 
 	
@@ -279,7 +319,7 @@ $(".reports_menu ul li").click(function(){
 <li> <a href="#sales" title=""> Sales </a> </li>
 <li> <a href="#trade_start" title=""> Trades </a> </li>
 <li> <a href="#pay_rec" title=""> Payables & Receivables </a> </li>
-<li> <a href="#cash_book" title=""> Cash book </a> </li>
+<li> <a href="#cash_book" title=""> Cash Book </a> </li>
 			</ul>
 		</div>
 		<div class="rprt_anl"> 
@@ -456,6 +496,538 @@ $(".reports_menu ul li").click(function(){
 											</tr>
 										</tbody>
 									</table>
+
+									<table id="feed_Product">
+										<thead>
+											<tr> 
+												<th> <span class="back_btn"> <img src="http://3.7.44.132/aquacredit/assets/images/back_btn.png"> </span> Product Name </th>
+												<th class="txt_rt"> Opening <span class="ttl_th"> Total: 50,000 </span></th>
+												<th class="txt_rt"> Inwards <span class="ttl_th"> Total: 50,000 </span> </th>
+												<th class="txt_rt"> Outwards <span class="ttl_th"> Total: 50,000 </span> </th>
+												<th class="txt_rt"> Closing <span class="ttl_th"> Total: 50,000 </span> </th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											<tr> 
+												<td> Product Name </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+<table id="feed_month">
+	<thead>
+				<tr> 
+												<th> <span class="back_btn"> <img src="http://3.7.44.132/aquacredit/assets/images/back_btn.png"> </span> Month </th>
+												<th class="txt_rt"> Opening <span class="ttl_th"> Total: 50,000 </span></th>
+												<th class="txt_rt"> Inwards <span class="ttl_th"> Total: 50,000 </span> </th>
+												<th class="txt_rt"> Outwards <span class="ttl_th"> Total: 50,000 </span> </th>
+												<th class="txt_rt"> Closing <span class="ttl_th"> Total: 50,000 </span> </th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr> 
+												<td> November - <span class="blu_txt"> 2019 </span> </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> December - <span class="blu_txt"> 2019 </span> </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> January - <span class="blu_txt"> 2020 </span> </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> February - <span class="blu_txt"> 2020 </span> </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> March - <span class="blu_txt"> 2020 </span> </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> April - <span class="blu_txt"> 2020 </span> </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> May - <span class="blu_txt"> 2020 </span> </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> June - <span class="blu_txt"> 2020 </span> </td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>	
+
+										</tbody>
+</table>
+
+
+<table id="feed_date">
+	<thead>
+				<tr> 
+												<th> <span class="back_btn"> <img src="http://3.7.44.132/aquacredit/assets/images/back_btn.png"> </span> Date </th>
+												<th>Type</th>
+												<th class="txt_rt"> Opening <span class="ttl_th"> Total: 50,000 </span></th>
+												<th class="txt_rt"> Inwards <span class="ttl_th"> Total: 50,000 </span> </th>
+												<th class="txt_rt"> Outwards <span class="ttl_th"> Total: 50,000 </span> </th>
+												<th class="txt_rt"> Closing <span class="ttl_th"> Total: 50,000 </span> </th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr> 
+												<td> 01-Dec-2019  </td>
+												<td> 
+													<div class="blu_txt"> <b>Sale (SL65896)</b> </div>
+													<div><b>Prudhvi.Ps </b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>10 Bags</b> </span>  <span> X 1000.00 </span> </div>
+													<div class="txt_rt"> = <b>10,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>20 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>18,000</b> </div>
+												</td>
+											</tr>
+
+
+											<tr> 
+												<td> 01-Dec-2019  </td>
+												<td> 
+													<div class="blu_txt"> <b>Sale (SL65896)</b> </div>
+													<div><b>Prudhvi.Ps </b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>20 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>18,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>10 Bags</b> </span>  <span> X 1000.00 </span> </div>
+													<div class="txt_rt"> = <b>10,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>10 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>9,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> 01-Dec-2019  </td>
+												<td> 
+													<div class="blu_txt"> <b>Purchase  (PU65896)</b> </div>
+													<div><b>Prudhvi.Ps </b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>10 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>9,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+														<div class="txt_rt"> <span class="blu_txt"> <b>20 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>18,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> 01-Dec-2019  </td>
+												<td> 
+													<div class="blu_txt"> <b>Sale (SL65896)</b> </div>
+													<div><b>Prudhvi.Ps </b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>10 Bags</b> </span>  <span> X 1000.00 </span> </div>
+													<div class="txt_rt"> = <b>10,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>20 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>18,000</b> </div>
+												</td>
+											</tr>
+
+											<tr> 
+												<td> 01-Dec-2019  </td>
+												<td> 
+													<div class="blu_txt"> <b>Sale (SL65896)</b> </div>
+													<div><b>Prudhvi.Ps </b> </div>
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>20 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+														<div class="txt_rt"> <span class="blu_txt"> <b>10 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>9,000</b> </div>
+												</td>
+												<td class="txt_rt"> 
+													
+												</td>
+												<td class="txt_rt"> 
+													<div class="txt_rt"> <span class="blu_txt"> <b>30 Bags</b> </span>  <span> X 900.00 </span> </div>
+													<div class="txt_rt"> = <b>27,000</b> </div>
+												</td>
+											</tr>
+											
+
+										</tbody>
+</table>
+
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane fade" id="medicine">...medicine...</div>
@@ -1002,7 +1574,7 @@ $(".reports_menu ul li").click(function(){
         <tbody>
         	 <tr>
                 <td>Product Name</td>
-                <td class="" width="150">Brand Name</td>
+                <td class="" width="150">Sanitizers</td>
                 <td class="txt_rt" width="150">2000</td>
             </tr>
             <tr>
@@ -1864,71 +2436,71 @@ $(".reports_menu ul li").click(function(){
 	<thead>
             <tr>
                 <th>Brand Name</th>
-                 <th class="txt_cnt" width="80">No of Users</th>
-                <th class="txt_rt">Total Amount</th>
-                <th class="txt_rt">Profit</th>
+                 <th class="txt_cnt nbm_usr_td" width="80">No of Users</th>
+                <th class="txt_rt ttl_amnt_td">Total Amount</th>
+                <th class="txt_rt prgt_td">Profit</th>
             </tr>
         </thead>
         <tbody>
         	 <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
              <tr>
                 <td>Brand Name</td>
-                <td class="txt_cnt" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
-                <td class="txt_rt" width="150">₹1000.86</td>
-                <td class="txt_rt" width="150">₹10.86</td>
+                <td class="txt_cnt nbm_usr_td" width="80"><a href="#" title="" data-toggle="modal" data-target="#user_lst"> 10 </a></td>
+                <td class="txt_rt ttl_amnt_td" width="150">₹1000.86</td>
+                <td class="txt_rt prgt_td" width="150">₹10.86</td>
             </tr>
             
         </tbody>
@@ -2816,10 +3388,13 @@ $(".reports_menu ul li").click(function(){
 	
 	<div class="anl_btn"> 
 						<div class="anl_crd bor_lf_none date_anl fl"> 
-					<i class="fa fa-filter date_fil" aria-hidden="true" style="font-size: 9px;"></i>
+					<!-- <span class="pull-right" id="reportrange"><i class="fa fa-filter date_fil" aria-hidden="true" style="font-size: 9px;"></i></span>
+					<input type="hidden" id="date_val" name="date_val" /> -->
 					<div class="top_in_op">
                             <p>Date</p>
-                            <h1 id="total_purchase">12-May-2020 to 10-Jun-2020</h1>
+                            <h1 >12-May-2020 to 10-Jun-2020</h1>
+                            
+                            
                         </div>
 				</div>
 				<div class="btn_anl fr btn btn-primary"> Show All Analytics </div>
@@ -2835,18 +3410,18 @@ $(".reports_menu ul li").click(function(){
 							<div class="icn_anl_rt"> 
 								<div class="top_in_op">
                             <p>Total Amount</p>
-                            <h1 id="total_purchase">₹20,000</h1>
+                            <h1 >0</h1>
                         </div>                     
 							</div>
 					</div>
 					   <ul class="btm_blk_anl"> 
                         	<li> 
                         		<div class="lft_tl"> Bank Account </div>
-                        		<div class="rt_prc"> ₹10,000 </div>
+                        		<div class="rt_prc" > 0 </div>
                         	</li>
                         	<li> 
                         		<div class="lft_tl"> Cash Account </div>
-                        		<div class="rt_prc"> ₹10,000 </div>
+                        		<div class="rt_prc" > 0 </div>
                         	</li>
   
                         </ul>
@@ -2865,11 +3440,16 @@ $(".reports_menu ul li").click(function(){
 
 
 			<div class="anlts"> 
-				<div class="anl_crd bor_lf_none date_anl"> 
-					<i class="fa fa-filter date_fil" aria-hidden="true" style="font-size: 9px;"></i>
+				<div class="anl_crd bor_lf_none date_anl" id="reportrange"> 
+					<!-- <i class="fa fa-filter date_fil" aria-hidden="true" style="font-size: 9px;"></i> -->
+					<span class="pull-right" >
+										<i class="fa fa-filter"  aria-hidden="true" style="font-size: 9px;"></i>
+										<span></span>
+									</span>
+									<input type="hidden" id="date_val" name="date_val" />
 					<div class="top_in_op">
                             <p>Date</p>
-                            <h1 id="total_purchase">12-May-2020 to 10-Jun-2020</h1>
+                            <h1 id="total_purchase dateval" class="datevalshow" >Till Date</h1>
                         </div>
 				</div>
 				<div class="anl_crd bor_lf_none">
@@ -2880,25 +3460,25 @@ $(".reports_menu ul li").click(function(){
 							<div class="icn_anl_rt"> 
 								<div class="top_in_op">
                             <p>Total Amount</p>
-                            <h1 id="total_purchase">₹20,000</h1>
+                            <h1 id="totamount">0</h1>
                         </div>                     
 							</div>
 					</div>
 					   <ul class="btm_blk_anl"> 
                         	<li> 
                         		<div class="lft_tl"> Bank Account </div>
-                        		<div class="rt_prc"> ₹10,000 </div>
+                        		<div class="rt_prc" id="bankamount"> 0 </div>
                         	</li>
                         	<li> 
                         		<div class="lft_tl"> Cash Account </div>
-                        		<div class="rt_prc"> ₹10,000 </div>
+                        		<div class="rt_prc" id="cashamount"> 0 </div>
                         	</li>
   
                         </ul>
 				</div>
 				
 				<div class="anl_crd bor_lf_none"> 
-					<h2 class="create_hdg"> Transport Details </h2>
+					<h2 class="create_hdg" style="margin-top: 12px"> Accounts </h2>
 					<ul class="all_bnks"> 
 						<li><div class="bank_logo"> <img src="http://3.7.44.132/aquacredit/assets/images/cash_account.png" alt="" title="" class="mCS_img_loaded"> </div>     <div class="bank_mny"><div class="bank_bal" id="branch_cash">₹ -1,67,766</div><div class="accont_numb">Cash Account</div></div></li>
 						<li><div class="bank_logo"> <img src="http://3.7.44.132/aquacredit/assets/images/cash_account.png" alt="" title="" class="mCS_img_loaded"> </div>     <div class="bank_mny"><div class="bank_bal" id="branch_cash">₹ -1,67,766</div><div class="accont_numb">Cash Account</div></div></li>
@@ -2910,114 +3490,103 @@ $(".reports_menu ul li").click(function(){
 			</div>
 
 			<div class="tbls_blk"> 
-					<div class="res_tbl"> 
-						<table class="cash_tbl">
+					<div class="res_tbl">
+						<table class="cash_tbl" id="cash_tbl_tbl">
 							<thead>
+							
 								<tr> 
-									<th colspan="4" style="height: 62px;"> 
-										<h2 class="create_hdg" style="padding-top: 20px; padding-bottom: 10px;"> Cashbook </h2>
-									 </th>									
-								</tr>
-							</thead>
-							<tbody>
-								<tr> 
-									<td> Date </td>
-									<td> Type 
+									<th> Date </th>
+									<th> Type 
 										<span class="sts_pp">
-						<i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
-					</span>
-					<div class="sts_fil_blk rad_btns"> 
+											<i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
+										</span>
+										<div class="sts_fil_blk rad_btns"> 
 											
 												<label class="form-check-label radio_blk checkd" for="utype_all">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="" id="utype_all" checked="">
+												<input class="form-check-input" type="radio" name="cash_type_opt" value="" id="utype_all" checked="" value="">
 												All</label>
 										
 											
 												<label class="form-check-label radio_blk utypes" for="utype_f">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="farmer" id="utype_f">
-												Farmer</label>
+												<input class="form-check-input" type="radio" name="cash_type_opt" value="Loan" id="utype_f" value="Loan">
+												Loan</label>
 										
 										
 												<label class="form-check-label radio_blk utypes" for="utype_nf">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="non_farmer" id="utype_nf">
-												Non Farmer</label>
+												<input class="form-check-input" type="radio" name="cash_type_opt" value="Sale" id="utype_nf" value="Sale">
+												Sale</label>
 										
 										
 												<label class="form-check-label radio_blk utypes" for="utype_d">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="dealer" id="utype_d">
-												Dealer/Sub-Dealer</label>
+												<input class="form-check-input" type="radio" name="cash_type_opt" value="Purchase" id="utype_d" value="Purchase">
+												Purchase</label>
+
+												<label class="form-check-label radio_blk utypes" for="utype_d">
+												<input class="form-check-input" type="radio" name="cash_type_opt" value="Receipt" id="utype_d" value="Receipt">
+												Receipt</label>
 										
-											
-												<label class="form-check-label radio_blk ttypes" for="ttype_a" style="display: none;">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="agent" id="ttype_a">
-												Agent</label>
-										
-											
-												<label class="form-check-label radio_blk ttypes" for="ttype_e" style="display: none;">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="exporter" id="ttype_e">
-												Exporter</label>
-											
 										</div>
-									</td>
-									<td> 
+									</th>
+									<th> 
 										Bank / Cash
 										<span class="sts_pp">
-						<i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
-					</span>
-					<div class="sts_fil_blk rad_btns"> 
+											<i class="fa fa-filter" aria-hidden="true" style="font-size: 9px;"></i>
+										</span>
+										<div class="sts_fil_blk rad_btns"> 
 											
 												<label class="form-check-label radio_blk checkd" for="utype_all">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="" id="utype_all" checked="">
+												<input class="form-check-input" type="radio" name="cash_type" value="" id="utype_all" checked="">
 												All</label>
 										
 											
 												<label class="form-check-label radio_blk utypes" for="utype_f">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="farmer" id="utype_f">
+												<input class="form-check-input" type="radio" name="cash_type" value="bank" id="utype_f">
 												Bank </label>
 										
 										
 												<label class="form-check-label radio_blk utypes" for="utype_nf">
-												<input class="form-check-input" type="radio" name="user_type_opt" value="non_farmer" id="utype_nf">
+												<input class="form-check-input" type="radio" name="cash_type" value="cash" id="utype_nf">
 												Cash</label>
-										
-										
-										
-											
+				
 											
 										</div>
-									</td>
-									<td class="txt_rt"> Amount </td>
+									</th>
+									<th class="txt_rt" style="padding-right: 40px!important;"> Amount </th>
+								</tr>
+							</thead>
+							
+								
+								<tbody>
+								<tr> 
+									<td> 20-May-2020 </td>
+									<td> Loan - 0566 </td>
+									<td> HDFC- XXXXXXX6665 </td>
+									<td class="txt_rt grn_row"> ₹100.86 <span> <img class="grn_arow" src="http://3.7.44.132/aquacredit/assets/images/grn_c_ar.png" alt="" title=""> </span> </td>
 								</tr>
 								<tr> 
 									<td> 20-May-2020 </td>
 									<td> Loan - 0566 </td>
 									<td> HDFC- XXXXXXX6665 </td>
-									<td class="txt_rt grn_row"> ₹100.86 </td>
+									<td class="txt_rt grn_row"> ₹100.86 <span> <img class="grn_arow" src="http://3.7.44.132/aquacredit/assets/images/grn_c_ar.png" alt="" title=""> </span> </td>
 								</tr>
 								<tr> 
 									<td> 20-May-2020 </td>
 									<td> Loan - 0566 </td>
 									<td> HDFC- XXXXXXX6665 </td>
-									<td class="txt_rt grn_row"> ₹100.86 </td>
-								</tr>
-								<tr> 
-									<td> 20-May-2020 </td>
-									<td> Loan - 0566 </td>
-									<td> HDFC- XXXXXXX6665 </td>
-									<td class="txt_rt grn_row"> ₹100.86 </td>
+									<td class="txt_rt grn_row"> ₹100.86 <span> <img class="grn_arow" src="http://3.7.44.132/aquacredit/assets/images/grn_c_ar.png" alt="" title=""> </span> </td>
 								</tr>
 								<tr> 
 									<td> 20-May-2020 </td>
 									<td> Sale - 0566 </td>
 									<td> Cash- KKD </td>
-									<td class="txt_rt rd_row"> ₹100.86 </td>
+									<td class="txt_rt rd_row"> ₹100.86 <span> <img class="grn_arow" src="http://3.7.44.132/aquacredit/assets/images/rd_c_ar.png" alt="" title=""> </span> </td>
 								</tr>
 
 								<tr> 
 									<td> 20-May-2020 </td>
 									<td> Loan - 0566 </td>
 									<td> HDFC- XXXXXXX6665 </td>
-									<td class="txt_rt rd_row"> ₹100.86 </td>
+									<td class="txt_rt rd_row"> ₹100.86 <span> <img class="grn_arow" src="http://3.7.44.132/aquacredit/assets/images/rd_c_ar.png" alt="" title=""> </span> </td>
 								</tr>								
 							</tbody>
 						</table>
@@ -3227,14 +3796,148 @@ $(".reports_menu ul li").click(function(){
 </div>
 
 <script type="text/javascript">
+var url = '<?php echo base_url(); ?>';
 $(document).ready( function () {
-    $('#lns_tbl, #sls_tbl, #harv_dtls, #tonnge_tbl').DataTable();
-    $('#cmp_tbl, #user_lst_blk, #far_loc, #user_loc_lst_blk, #trades_tbl, #paybl_tble, #recv_tble').DataTable();
+
+
+
+    $('#lns_tbl, #sls_tbl, #harv_dtls, #tonnge_tbl').DataTable({
+    	"autoWidth": false
+    });
+    $('#cmp_tbl, #user_lst_blk, #far_loc, #user_loc_lst_blk, #trades_tbl, #paybl_tble, #recv_tble').DataTable({
+    	"autoWidth": false
+    });
     $('#feed_brand').DataTable({
     	// "paging": false,
     	"language": { search: "" },
+    	"autoWidth": false
     });
-$('#feed_brand_wrapper .dataTables_length').html('<div class="check_wt_serc val_seld"> <div class="show_va">Branchs</div> <div class="selectVal">Branch1</div> <ul class="check_list"> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="branch" name="branch" value="Branch1" checked="checked"> <label class="form-check-label" for="branch"> Branch1                                    </label> </div> </li> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="branch2" name="branch2" value="Branch2" checked="checked"> <label class="form-check-label" for="branch2"> Branch2                                    </label> </div> </li> </ul>  </div>');
+    $('#feed_Product, #feed_month, #feed_date').DataTable({
+    	// "paging": false,
+    	"language": { search: "" },
+    	"autoWidth": false
+    });
+
+    getadminbanks();
+    /**/
+	var table = $('#cash_tbl_tbl').DataTable({     
+      'ordering': false,
+      'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',   
+         'searching': true,
+         "pageLength": 20,
+         "language": { searchPlaceholder: "Search by Type",
+         search: "" },
+        "columnDefs": [
+           
+      { className: "txt_rt ", "targets": 3 },
+     
+      ],
+        "order": [[ 1, 'desc' ]],
+       'ajax': {
+           'url':url+'api/reports/getcashbook',
+           'data': function(data){
+
+              var cash_type_opt = $("input[name='cash_type_opt']:checked").val();
+              var cash_type = $("input[name='cash_type']:checked").val();
+               var reportrange = $('#date_val').val();	
+               var from_date = $("#from_date").val();
+               var to_date = $("#to_date").val();
+
+              data.cash_type_opt = cash_type_opt;
+              data.cash_type = cash_type;
+              data.reportrange = reportrange;
+              data.from_date = from_date;
+              data.to_date = to_date;
+             
+           },
+           "dataSrc": function (json) {    
+          // alert(json.bankamount);
+            $("#bankamount").html('₹'+addCommas(json.bankamount)); 
+            $("#cashamount").html('₹'+addCommas(json.cashamount)); 
+            $("#totamount").html('₹'+addCommas(json.totamount));
+
+            return json.data;
+          }
+        }
+      
+});
+	$("input[name='cash_type_opt']").on('click',function() {		
+  		table.draw();
+  	});
+
+  	$("input[name='cash_type']").on('click',function() {		
+  		table.draw();
+  	});
+  	$(document).on('click', '.ranges ul li', function() {
+        $(this).parent().children().removeClass('active');
+        $(this).addClass('active');
+        $('.drp-selected').css('font-weight', 'bold');
+
+        /*if ($(this).text() != "Date Range") {*/
+        	$('.datevalshow').html($(this).text());
+        /*}*/
+        if ($(this).text() == "Till Date") {
+            $("#date_val").val('Till Date');
+        }
+
+        if ($(this).text() != "Date Range") {
+            table.draw();
+        }
+    });
+
+    $(document).on('click', '.applyBtn', function() {
+    	var reportrange = $('#date_val').val();	
+        $('.datevalshow').html(reportrange);
+        table.draw();
+    });
+
+    $("#custom_date").click(function() {
+        table.draw();
+    });
+
+    $("#from_date").change(function(e) {
+        e.stopPropagation()
+    });
+/**/
+ $('#feed_Product .back_btn').click(function(){
+ 	$('#feed_Product_wrapper').hide();
+ 	$('#feed_brand_wrapper').show();
+ });
+
+  $('#feed_month .back_btn').click(function(){
+ 	$('#feed_Product_wrapper').show();
+ 	$('#feed_month_wrapper').hide();
+ });
+
+   $('#feed_date .back_btn').click(function(){
+ 	$('#feed_date_wrapper').hide();
+ 	$('#feed_month_wrapper').show();
+ });
+
+  $('#feed_brand tbody tr').click(function(){
+ 	$('#feed_brand_wrapper').hide();
+ 	$('#feed_Product_wrapper').show();
+ });
+
+  $('#feed_Product tbody tr').click(function(){
+ 	$('#feed_Product_wrapper').hide();
+ 	$('#feed_month_wrapper').show();
+ });
+
+   $('#feed_month tbody tr').click(function(){
+ 	$('#feed_month_wrapper').hide();
+ 	$('#feed_date_wrapper').show();
+ });
+
+  $('#cash_tbl_tbl_wrapper .dataTables_length').html('<h2 class="create_hdg" style="padding-top: 0px;"> Cash Book </h2>');
+  $('#feed_month_wrapper .dataTables_length').html('<div class="check_wt_serc val_seld"> <div class="show_va">Select Product</div> <div class="selectVal">Avant Saldo Mixtos 10Kg</div> <ul class="check_list"> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="prd1" name="branch" value="Avant Saldo Mixtos 10Kg" checked="checked"> <label class="form-check-label" for="prd1"> Avant Saldo Mixtos 10Kg  </label> </div> </li> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="prd2" name="branch" value="Category2"> <label class="form-check-label" for="prd2"> Product 2                                    </label> </div> </li> </ul>  </div>');
+
+  $('#feed_date_wrapper .dataTables_length').html('<div class="check_wt_serc val_seld"> <div class="show_va">Select Product</div> <div class="selectVal">Avant Saldo Mixtos 10Kg</div> <ul class="check_list"> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="prdd1" name="branch" value="Avant Saldo Mixtos 10Kg" checked="checked"> <label class="form-check-label" for="prdd1"> Avant Saldo Mixtos 10Kg  </label> </div> </li> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="prdd2" name="branch" value="Category2"> <label class="form-check-label" for="prdd2"> Product 2                                    </label> </div> </li> </ul>  </div>');
+
+$('#feed_brand_wrapper .dataTables_length').html('<div class="check_wt_serc val_seld"> <div class="show_va">Select Category</div> <div class="selectVal">Branch1</div> <ul class="check_list"> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="branch" name="branch" value="All Categories" checked="checked"> <label class="form-check-label" for="branch"> All Categories  </label> </div> </li> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="branch2" name="branch" value="Category2"> <label class="form-check-label" for="branch2"> Category2                                    </label> </div> </li> </ul>  </div>');
+$('#feed_Product_wrapper .dataTables_length').html('<ul class="fltr_ul"><li class="fltr_li"><div class="check_wt_serc val_seld"> <div class="show_va">Select Company </div> <div class="selectVal">Avanti Pvt.LTd</div> <ul class="check_list"> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="selComp" name="cmp" value="Avanti Pvt.LTd" checked="checked"> <label class="form-check-label" for="selComp"> Avanti Pvt.LTd </label> </div> </li> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="cmp2" name="cmp" value="Company 2"> <label class="form-check-label" for="cmp2"> Compnay 2                                    </label> </div> </li> </ul>  </div></li> <li class="fltr_li"><div class="check_wt_serc val_seld"> <div class="show_va">Select Category</div> <div class="selectVal">Branch1</div> <ul class="check_list"> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="branch3" name="branch" value="All Categories" checked="checked"> <label class="form-check-label" for="branch3"> All Categories  </label> </div> </li> <li> <div class="form-check"> <input class="form-check-input" type="radio" id="branch4" name="branch" value="Category2"> <label class="form-check-label" for="branch4"> Category2                                    </label> </div> </li> </ul>  </div></li></ul>');
  $('.check_wt_serc').click(function() {
         $(".check_wt_serc").not(this).removeClass('act_v');
         $(this).toggleClass('act_v')
@@ -3248,7 +3951,7 @@ $('#feed_brand_wrapper .dataTables_length').html('<div class="check_wt_serc val_
             } else {
                 var val = acc_no;
             }
-            alert(val);
+            // alert(val);
             $(this).parent().parent('li').parent('ul').parent('.check_wt_serc').find('.selectVal').text(val);
             $(this).parent().parent('li').parent('ul').removeClass('show_chk');
             $(this).parent().parent('li').parent('ul').parent('.check_wt_serc').removeClass('act_v').addClass('val_seld');
@@ -3425,9 +4128,63 @@ $('#feed_brand_wrapper .dataTables_length').html('<div class="check_wt_serc val_
     });
       //
 
-    $('.nav-tabs').responsiveTabs();
+    // $('.nav-tabs').responsiveTabs();
 
 } );
+function getadminbanks() {
+    bank_icn = '';
+    $.ajax({
+        url: url + "api/Banks/allaccounts",
+        data: {},
+        type: 'POST',
+        datatype: 'json',
+        success: function(response) {
+            res = JSON.parse(response);
+            var opt = '';
+            if (res.data.length > 0) {
+                $.each(res.data, function(index, bank) {
+
+                     if (bank.account_type == "BANK") {
+                        if (bank.account_name == "SBI") { bank_icn = 'sib_icn.png'; } else if (bank.account_name == "HDFC") { bank_icn = 'hdfc_icn.png'; } else if (bank.account_name == "ICICI") { bank_icn = 'icici_icn.png'; }
+
+                        opt += '<li><div class="bank_logo"> <img src="http://3.7.44.132/aquacredit/assets/images/' + bank_icn + '" alt="" title=""> </div><div class="bank_mny"><div class="bank_bal"> ₹ ' + addCommas(bank.avail_amount) + ' </div><div class="accont_numb">' + bank.account_number + '</div></div></li>';
+                    } else if (bank.account_type == "CASH") {
+                        opt += '<li><div class="bank_logo"> <img src="http://3.7.44.132/aquacredit/assets/images/cash_account.png" alt="" title=""> </div>     <div class="bank_mny"><div class="bank_bal" id="branch_cash"> ₹ ' + addCommas(bank.avail_amount) + ' </div><div class="accont_numb">' + bank.account_name + '</div></div></li>';
+                    }
+                });
+            }
+            
+            $(".all_bnks").html(opt);
+            //document.getElementById("admin_bank").fstdropdown.rebind();
+        }
+    });
+}
+ $('#reportrange').daterangepicker({
+        opens: 'right',
+        drops: 'down',
+        showDropdowns: true,
+        locale: {
+            format: 'D-MMM-YYYY',
+            customRangeLabel: 'Date Range'
+        },
+        parentEl: '.dateEle',
+        ranges: {
+            'Till Date': [],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Last 6 Months': [moment().subtract(5, 'month').startOf('month'), moment().endOf('month')],
+            "Last Year": [moment().subtract(1, "y").startOf("year"), moment().subtract(1, "y").endOf("year")]
+        }
+    }, cb);
+ function cb(start, end) {
+    $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+       
+    if ($('#date_val').val() == "Invalid date - Invalid date") {
+        $('#date_val').val('');
+    } else {
+        $('#date_val').val(start.format('D-MMM-YYYY') + ' to ' + end.format('D-MMM-YYYY'));
+    }
+}
 </script>
 <!-- <script type="text/javascript">
   (function($) {

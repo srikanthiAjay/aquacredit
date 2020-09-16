@@ -65,7 +65,7 @@ class Categories_model extends CI_Model
 		//echo "srikanthi"; exit;
 		$this->db->select("c.cat_id,c.cat_name,COUNT(b.brand_id) as brands");
 		$this->db->from("categories c");
-		$this->db->join("brands b","FIND_IN_SET(c.cat_id,b.brand_cat)");
+		$this->db->join("brands b","FIND_IN_SET(c.cat_id,b.brand_cat)","left");
 		$this->db->where("c.level",'1');
 		$this->db->where("c.status",'1');
 		$this->db->group_by("c.cat_id");
