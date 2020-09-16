@@ -1,0 +1,232 @@
+.sle_cr_r {
+      width: calc(100% - 350px);
+    transition: all linear 0.2s;
+    margin-left: 10px;
+    float: left;
+    background: #fff;
+    padding: 30px;
+    box-sizing: border-box;
+    margin-top: 6px;
+}
+.sale_rt {
+    width: 320px;
+    transition: all linear 0.2s;
+    min-height: calc(100% - 70px);
+    top: 61px;
+    right: 10px;
+    /*overflow-x: hidden;*/
+    background: #fff;
+    position: absolute;
+    padding: 25px;
+    box-sizing: border-box;
+    padding-bottom: 0px;
+}
+.sale_rt .create_hdg {margin-bottom: 15px;}
+.sale_rt .checkbox input {
+    position: relative;
+    bottom: -1px;
+    margin-right: 5px;
+}
+.sale_rt .checkbox {
+font-size: 13px;
+margin-bottom: 15px;
+}
+
+.assign_type {
+    width: auto;
+    list-style: none;
+    position: relative;
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    display: table;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active, .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {border-color: #fff #fff #007bff!important;}
+.sale_rt .nav-link {padding: 0px!important;}
+.sale_rt .nav-item {margin-right: 20px;}
+.sale_rt .tab-content {margin-top: 20px;}
+.check_wt_serc .check_list {height: auto;}
+.admin_bank_li .check_list {height: 200px;}
+.sale_rt .nav-link {color: #58666e}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active, .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {color: #007bff!important;}
+.assign_type li {
+    width: 98px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0px 0px 0px 0px rgba(0,123,255,0);
+    transition: all linear 0.2s;
+    float: left;
+    margin-right: 10px;
+    height: 73px;
+    border: 1px solid #ebebeb;
+    border-radius: 5px;
+    text-align: center;
+}
+.assign_type li.act_type {
+    border-color: #7abaff;
+    box-shadow: 5px 5px 5px -1px rgba(0,123,255,0.10);
+    position: relative;
+}
+.assign_type li img {
+    margin-top: 8px;
+}
+.assign_type li input {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+.assign_type li span {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 5px;
+}
+.create_ul {
+    padding: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    display: table;
+    width: 100%; list-style: none;
+}
+.create_li {
+    float: left;
+    position: relative;
+    height: 55px;
+    margin-right: 10px;
+    list-style: none;
+}
+.err_msg {position: absolute;bottom: 0px; right: 5px; font-size: 11px; color: #dc3545 }
+.sa_lst {width: 100%;
+    margin-top: 10px;
+    border-top: 1px solid #e6e9ec;
+    border-bottom: none;
+    min-width: 620px;
+}
+
+.sa_lst th, .sa_lst td {
+    background: none;
+    padding: 5px 15px;
+    /*height: 40px;*/
+    border-bottom: 1px solid #e6e9ec;
+    border-right: 1px solid #e6e9ec;
+}
+/*.sa_lst th input, .sa_lst td input {height: 40px;}*/
+.sa_lst th {
+    border-top: 1px solid #e6e9ec;
+}
+.sa_lst th:first-child, .sa_lst tr td:first-child {
+    border-left: 1px solid #e6e9ec;
+}
+.sa_lst input[type=text] {
+    width: 100%;
+    color: #58666e;
+    border: none;
+}
+.add_more {
+    text-align: right;
+    width: 100%;
+    font-size: 13px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.create_hdg .ttl {float: left;
+    margin-top: 18px!important;
+    margin-right: 10px;}
+    .dele_th_td {
+    width: 80px;
+    text-align: center;
+}
+ .res_tbl {margin-bottom: 20px; /*max-width: 700px;*/}
+ .create_hdg span {margin-top: 10px;}
+ .create_hdg {overflow: hidden;}
+ .txt_rt {text-align: right;}
+ .txt_cnt {text-align: center;}
+ .txt_rt input {text-align: right;}
+ .txt_cnt input {text-align: center;}
+ .qty, .disc {width: 80px;}
+ .mrp {width: 180px;}
+ .ttl_prc {width: 150px;}
+ .date {width: 120px;}
+ .trans_inf {
+    list-style: none;
+    width: 100%;
+    display: table;
+    margin: 0px;
+    padding: 0px;
+}
+ .create_hdg .sm_blk {top: 10px;} 
+ .create_hdg .inp_ss .sm_blk {top: -6px;}
+.trans_inf li {
+    display: inline-block;
+    float: left;
+    margin-right: 10px;
+    height: 45px;
+}
+
+.bank_logo {
+    width: 30px;
+    float: left;
+    position: relative;
+    bottom: 5px;
+}
+.admin_bank_li .bank_logo {
+    bottom: -5px;
+}
+.bank_mny {
+    width: calc(100% - 30px);
+    float: left;
+    padding-left: 20px;
+}
+.to_comp {display: none;}
+.bnk_tr .admin_bank_li .check_list {top: auto; bottom: 34px;}
+.admin_bank_li .form-check input {
+    display: none;
+}
+.admin_bank_li .check_list .form-check {padding-left: 0px!important;}
+.po_ftr {
+    width: 100%;
+    text-align: right;
+    display: table;
+    /*max-width: 700px;*/
+}
+.pur_amnt {width: 150px;}
+/*.note_add {padding-top: 7px;}*/
+.show_note textarea {border: 1px solid #ced4da; font-size: 13px; padding:5px 10px; box-shadow: none; outline: none; box-sizing: border-box;}
+.note_add textarea { margin-bottom: 5px;font-size: 13px;}
+.note_add a {font-size: 13px;}
+.sb_btn {
+    width: 115px;
+    /*margin-top: 20px;*/
+    font-size: 13px;
+}
+.note_add { margin-bottom: 5px;    font-size: 13px;}
+.main_tp_20 {margin-top: 20px;}
+.sml_ttl {font-size: 13px; margin-top: 0px; color: #007bff;}
+.sale_rt .create_li {width: 100%; margin-right: 0px;}
+.sale_rt .top_in_op {border: none; padding-left: 0px; padding-right: 0px; padding-bottom: 0px; margin-bottom: 20px; overflow:hidden;}
+.sale_rt .top_in_op h1 {color: #58666e; width: calc(100% - 80px); float: left; font-size: 13px; margin-top: 0px; margin-bottom: 0px;}
+.sale_rt .top_in_op p {margin-top: 0px; width: 75px; text-align: right; float: right; margin-bottom: 10px!important;}
+.bdr_cmp {    border-top: 1px solid #cccc;
+    padding-top: 20px;}
+.sale_rt .top_in_op h1 span {color: #007bff}
+@media (max-width: 1200px){
+	.sale_rt {width: 300px}
+	.sle_cr_r {width: calc(100% - 330px); margin-top: 0px;}
+	.create_li {min-width: 150px;}
+	.trans_inf li {min-width: 120px;}
+}
+@media (max-width: 1000px){
+	.sale_rt {width: 100%; height: auto; min-height: auto; position: relative; top: 0px; right: 0px;}
+	.sle_cr_r {width: 100%; margin-top: 10px; margin-left: 0px;}
+	.sale_rt .create_li {width: 50%; padding: 0px 5px; box-sizing: border-box;}
+	.check_wt_serc {padding-right: 0px; width: 100%; max-width: 100%;}
+	.ttl_prc{width: 120px;}
+	.mrp { width: 150px;}
+	}
+@media (max-width: 500px){ 
+	.sale_rt .create_li {padding: 0px; width: 100%;}
+}

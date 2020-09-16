@@ -1,0 +1,52 @@
+<<<<<<< HEAD
+input[type=text] {height: 40px;}
+.multiselect {
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    height: 40px;
+}
+.btn-group {
+    width: 100%;
+}
+
+.dropdown-toggle::after {
+
+    float: right;
+    margin-top: 11px;
+
+}
+.total_amont {font-weight: bold;}
+.multiselect-container>li>a>label {padding-left: 20px; padding-top: 10px;}
+.sub_hdg {color: #000; margin-bottom: 15px; display: block;    padding-bottom: 15px;
+    border-bottom: 1px solid #ccc;}
+.mar_25_t {margin-top: 20px;}
+=======
+input[type=text] {height: 40px;}
+.multiselect {
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    height: 40px;
+}
+.btn-group {
+    width: 100%;
+}
+
+.dropdown-toggle::after {
+
+    float: right;
+    margin-top: 11px;
+
+}
+.total_amont {font-weight: bold;}
+.multiselect-container>li>a>label {padding-left: 20px; padding-top: 10px;}
+.sub_hdg {color: #000; margin-bottom: 15px; display: block;    padding-bottom: 15px;
+    border-bottom: 1px solid #ccc;}
+.mar_25_t {margin-top: 20px;}
+>>>>>>> 879a1b5b54a411bf1c5dde2c628913c9b8ea40b0
+.tr_bor_blk {padding: 20px; background: #f8f8f8; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px;

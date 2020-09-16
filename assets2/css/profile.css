@@ -1,0 +1,23 @@
+.profile_blk {padding: 25px; overflow: hidden;}
+.pro_l_blk {width: 150px; float: left; margin-right: 30px; margin-top: 30px; margin-left: 30px;}
+.uplod_blk {width: 100%; margin-top: 15px; padding: .375rem .75rem; color: #fff; border-radius: .25rem; text-align: center; cursor: pointer; font-size: 14px; position: relative;}
+.uplod_blk input {position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; z-index: 99; cursor: pointer; opacity: 0;}
+.pro_r_blk {width: calc(100% - 210px); padding: 30px 30px 30px 30px; background:#fff; float: left; border-left: 1px solid #ddd;}
+.pro_r_blk input {font-size: 13px; height: 40px; border: 1px solid #f0f0f0;}
+.ch_pw {font-size: 14px; width: 100%; margin-top: 10px;}
+.hdg_bk {padding-bottom: 15px; font-weight: bold; overflow: hidden; width: 100%; margin-bottom: 20px; border-bottom: 1px solid #ddd; font-size: 16px;}
+.form-group label {font-size: 11px; display: block;}
+.mar_btm {margin-bottom: 30px;}
+.pro_r_blk .btn {font-size: 13px; height: 35px;}
+.bg_gry {background: #f8f8f8!important; border: 1px solid #ddd;}
+
+@media(max-width: 960px){
+	.pro_r_blk .col-md-6 {width: 100%!important; flex: 0 0 100%; max-width: 100%;}
+	.pro_r_blk .btn {width: 100%!important;}
+	.s_bt {display: none!important;}
+}
+
+@media(max-width: 800px){
+		.pro_l_blk {width: 100%; margin: 0px; padding: 30px; box-sizing: border-box; text-align: center;}
+		.pro_r_blk {width: 100%; border-left: none;}
+	}

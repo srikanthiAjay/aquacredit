@@ -1,0 +1,8 @@
+.pad_20 {padding: 20px; width: 100%; box-sizing: border-box;}
+.txt_rt {text-align: right;}
+.txt_cntr {text-align: center;}
+.txt_red {color: red;}
+.opic_non {opacity: 1; text-indent: -200px;}
+.table-bordered td, .table-bordered th {border-bottom:none;}
+.grn_clr {color: #2f9a4d}
+.res_tbl table {min-width: 800px;}

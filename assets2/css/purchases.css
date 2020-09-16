@@ -1,0 +1,394 @@
+.padding_10 {padding: 5px 10px 10px 10px;}
+.purc_btn {font-size: 13px; font-weight: normal; margin-top: 10px;}
+.list_blk {margin-top: 10px; width: 100%;}
+.list_tbl {width: 100%;}
+#pur_lst_tbl_wrapper .row:first-child {
+    background: #fff;
+    height: 56px;
+}
+.tabs_tbl {
+    list-style: none;
+    padding: 4px 0px;
+    position: relative;
+    float: left;
+    margin: 0px 0px 0px 0px;
+}
+.tabs_tbl li {
+    display: inline-block;
+    /* width: 160px; */
+    text-align: center;
+    transition: all linear 0.2s;
+    cursor: pointer;
+    font-size: 13px;
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 12px 15px 6px 15px;
+}
+.check_list.show_chk li {min-width: 100%;}
+.tabs_tbl li span {
+    position: relative;
+    z-index: 1;
+    transition: all linear 0.2s;
+}
+.tabs_tbl li.act_tab span {
+    color: #fff;
+}
+.tabs_tbl:after {
+    position: absolute;
+    transition: all linear 0.2s;
+    bottom: -6px;
+    left: 0px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    transform: perspective(5px) rotateX(0.93deg) translateZ(-1px);
+    transform-origin: 0 0;
+    content: ' ';
+    height: 57px;
+    width: 172px;
+    background: #007bff;
+}
+.dataTables_filter {
+    margin-right: 0px!important;
+    padding-right: 7px;
+    padding-top: 11px;
+}
+.dataTables_filter label {
+    margin-bottom: 0px!important;
+}
+/*.dataTable th {
+    background: #fff;
+    border-left: none!important;
+    border-top: none!important;
+    border-right: none!important;
+    border-bottom: 1px solid #f0f1f5!important;
+    padding: 10px 10px!important;
+}
+.dataTables_wrapper .dataTable td {
+    padding: 10px 10px!important;
+    background: #fff;
+    border-left: none!important;
+    border-top: none!important;
+    border-right: none!important;
+    border-bottom: 1px solid #f0f1f5!important;
+}*/
+.dataTables_info {
+    display: none;
+}
+.dataTables_paginate {
+    padding-bottom: 8px;
+    padding-right: 20px;
+    padding-top: 8px;
+}
+.edt {color: #28a745}
+.del {color: #dc3545}
+#pur_lst_tbl {
+   border-left: none!important;
+     border-right: none!important;
+      border-bottom: none!important;
+      border-top: 6px solid #f0f1f5!important;
+    min-width: 1115px;
+    margin-bottom: 0px!important;
+    margin-top: 0px!important;
+}
+/*.sts_pp:after {top: -11px!important}*/
+.dataTables_wrapper .row:last-child {
+    background: #fff!important;
+    padding-bottom: 20px;
+}
+.pp_clss {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.5;
+    transition: all linear 0.2s;
+}
+.pp_clss:hover {
+    opacity: 1;
+}
+.act_ms {
+    width: 50px!important;
+    text-align: center;
+}
+.id_td {
+    width: 55px!important;
+}
+.app_date {
+    width: 105px!important;
+    min-width: 105px!important;
+}
+.brn_lst .form-check {border: 1px solid #e6e9ec; border-radius: 5px; font-size: 13px; padding: 3px 10px; margin-right: 5px; margin-bottom: 5px;}
+.brn_lst {margin: 15px 0px;}
+.act_ms {
+    width: 50px!important;
+    text-align: center;
+}
+.stat_blk {
+    width: 80px!important;
+}
+.modal-content {padding: 30px;}
+.po_ftr {width: 100%; text-align: right; display: table; }
+.invoice_up i {font-size: 12px;}
+.sb_btn {width: 115px; margin-top: 20px; font-size: 13px;}
+.assign_type {width: auto; list-style: none; position: relative; padding: 0px; margin-top: 5px; margin-bottom: 20px; display: table;}
+.assign_type li {width: 98px; opacity: 0.5; cursor: pointer; position: relative; box-shadow: 0px 0px 0px 0px rgba(0,123,255,0); transition: all linear 0.2s; float: left; margin-right: 
+10px; height: 73px; border: 1px solid #ebebeb; border-radius: 5px; text-align: center;}
+.pay_sec {display: none; overflow:hidden;}
+.confrm_blk {overflow: hidden;}
+.trn_in_blk {position: relative;}
+.blk_disb {position: absolute; display: none; background: #fff; width: 100%; left: 0px; height: 100%; opacity: 0.5; top: -6px; z-index: 9999;}
+.ord_comp_blk {display: none;}
+.qs_blk {padding-bottom: 5px; padding-top: 5px; margin-bottom: 15px; border-bottom: 1px solid #f0f2f4;}
+.rem_tr_amn {border-top: 1px solid #f0f2f4; margin-top: 15px; padding-top: 10px;}
+.qs_blk .create_hdg {margin-bottom: 10px;}
+.trans_pm {margin-top: 20px!important;}
+.amnt_tbm {width: 100%; margin-top: 5px; position: relative; border: 2px solid #e6ffe6; padding: 20px; box-sizing: border-box;}
+.pop_amnt_r .amnt_tbm {border-color: #e2f3ff;}
+.blk_no_dis {display: block!important;}
+.assign_type li img {margin-top: 8px;}
+.po_Rel {position: relative;}
+.grn_err {font-size: 11px; color: #177b03; position: absolute; left: 22px; bottom: 5px;}
+.err_err {font-size: 11px; color: #dc3545; position: absolute; left: 22px; bottom: 5px;}
+.ds_as_type {position: absolute; display: none; z-index:99999999; top: 0px; left: 0px; width: 100%; height: 100%; cursor: not-allowed;}
+.assign_type li span {display: block; text-align: center;font-size: 12px;
+    margin-top: 5px;}
+.yorn .radio-inline input {margin-right: 5px; position: relative; bottom: -2px;}
+.yorn .radio-inline {margin-right: 10px;}
+.amnt_tbm ul {margin: 0px; padding: 0px; list-style: none; display: table;}
+.amnt_tbm ul li {float: left; width: 50%;}
+.trns_blk {width: 100%;}
+.trns_blk {width: 268px; float: right; padding: 0px 15px;}
+.clr_blk {clear: both;}
+.fnt_16 {font-size: 16px;}
+.ttl_blk {overflow-x: hidden;padding: 10px 0px; width: 100%; margin-top: 15px; border-top: 1px solid #f0f2f4;}
+/*.amnt_tbm ul li .cre_inp {margin-bottom: 0px;}*/
+.amnt_tbm ul li:first-child {padding-right: 5px;}
+.amnt_tbm ul li:last-child {padding-left: 5px;}
+.assign_type li.act_type {border-color: #7abaff; opacity: 1; box-shadow: 5px 5px 5px -1px rgba(0,123,255,0.10); position: relative;}
+.assign_type li input {opacity: 0; position: absolute; cursor: pointer; top: 0px; left: 0px; width: 100%; height: 100%;}
+.lnk_typ.assign_type li input {cursor: pointer;}
+.text_rt {text-align: right!important;}
+.trans_inf {list-style: none; width: 100%; display: table; margin: 0px; padding: 0px; padding-bottom: 80px;}
+.in_v_upd a {font-size: 11px; padding: 4px 0px; cursor: pointer; text-align: right; display: inline-block;}
+.inv_upl_li.trans_inf li {height: 60px!important;}
+.pay_sec .ad_note {display: block; margin-top: 8px;}
+.pp_note {display: none; clear: both;}
+.trans_inf li {display: inline-block;float: left; margin-right: 10px; height: 45px;}
+#create_module .trans_inf {padding-bottom: 0px;}
+.disc_blk input[type=text], .ord_lst input[type=text] {width: 100%; color: #58666e; border: none;}
+.text_cent {text-align: center;}
+.pop_stp_tbs {background: #f0f2f4; left: 50%; /*margin-left: -121px;*/ margin-left: -81px; width: 162px; height: 1px; bottom: -1px; position: absolute;}
+.ord_lst {width: 100%; margin-top: 10px; border-top: 1px solid #e6e9ec;}
+.ord_lst th, .hdg_tbl td {/*background: rgba(0,0,0,0.03);*/ background: none; padding: 5px 10px; border-bottom: 1px solid #e6e9ec; border-right: 1px solid #e6e9ec}
+.ord_lst th {border-top: 1px solid #e6e9ec;}
+.ord_lst tr td {border-bottom: 1px solid #e6e9ec; border-right: 1px solid #e6e9ec; padding: 5px 10px; border-left: 1px solid #e6e9ec} 
+.ord_lst th:first-child, .ord_lst tr td:first-child {border-left: 1px solid #e6e9ec;}
+.qty_pp input {text-align: center;}
+#edt_module .ord_lst tr:last-child td {border-bottom: none;}
+.p_t_5 {padding-top: 5px!important;}
+#create_module .ord_lst tr:last-child td {border-bottom: 1px solid #e6e9ec;}
+.mar_tp_non {margin-top: 0px;}
+.mar_tp_non.ord_lst {border-top: none!important;}
+.togl_hdr {padding: 8px 10px; cursor: pointer;
+    border: 1px solid #e6e9ec; margin-top: 10px;}
+    .fl {float: left;}
+    .grd_ttl a {font-size: 13px;}
+    .pad_am {font-size: 12px; padding-top: 2px; margin-right: 10px;}
+    .pad_am i {font-size: 10px; transition: all linear 0.2s;transform: rotate(0deg);}
+    /*.collapsed .pad_am i {transform: rotate(180deg);}*/
+    .fr {float: right;}
+.tbs_div {width: 17px; cursor: pointer; line-height: 16px; border-radius: 50%; height: 17px; text-align: center; border:1px solid #e1e1e1; background: #fff; font-size: 11px; color: #a3a3a3; position: absolute; top: -9px;}
+.fst_step {left: 0px;}
+.ttl_pop {width: 150px;}
+.ttl_amnt {font-size: 16px;}
+.pur_pr{border: none!important; opacity: 1!important; width: auto!important; padding-top: 10px!important;}
+#edt_module .ord_lst tr:last-child td {border: none; font-weight: normal; padding-top: 15px;}
+.ord_lst {border-bottom: none;}
+.po_ftr .check_wt_serc .check_list {top: -201px}
+.sec_step {margin-left: 75px;}
+.thrd_step {left: 150px;}
+.fth_step {left:225px;}
+.act_tb {background: #007bff; border-color: #007bff; color: #fff;}
+.dne_tb {border-color: #007bff; color: #007bff;}
+.tb_hdg {width: 144px; opacity: 0; left: 50%; top: 0; transition: all linear 0.2s; left: -62px; overflow: hidden; height:0px; position: absolute; box-shadow: 0px 0px 0px 0px rgba(0,123,255,0.10); border-radius: 0px;}
+.act_tb .tb_hdg {width: 144px; opacity: 1; overflow: visible; color:#007bff; text-align: center; line-height: 32px; font-size: 13px;  top: -56px; left: -62px; height: 35px; position: absolute; box-shadow: 2px 2px 5px 0px rgba(0,123,255,0.10); border: 1px solid #ebebeb; border-radius: 30px;}
+.bdr_blue { height: 1px; width:0px; background:#007bff; position: absolute; left: 0px; top: 0px; transition: all linear 0.2s; }
+.paid_amont_bb {position: absolute; font-size: 12px; /*background: #fff;*/ background: none!important; top: 15px!important; display: none; color: #15992e; width: 100px; top: -2px; left: 70px;}
+.brnchs_list {margin: 0px; margin-top: 20px; padding: 0px; list-style: none;}
+.brnchs_list li {display: inline-block; height: 45px; min-width: 200px;}
+.cnt{width: 54px; font-size: 11px; padding: 2px 5px; float: right; border:1px solid #ced4da; border-radius: 4px;}
+.paid_icn {position: relative; top: -1px;}
+.brnchs_list .form-check {margin-bottom: 10px;}
+.act_tb .tb_hdg:after, .act_tb .tb_hdg:before {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.ad_nt {margin-top: 8px; display: block;}
+.pp_note textarea {    overflow: auto;
+    resize: vertical;
+    border: 1px solid #ced4da;
+    font-size: 13px;
+    padding: 10px;
+    width: 220px;
+}
+.comp_blk {display: none;}
+.pay_blk_btn {clear: both; bottom: 0px; width: 100%; margin-top: 20px;}
+.pay_blk_btn button {font-size: 13px; float: right;}
+.act_tb .tb_hdg:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-top-color: #ffffff;
+    border-width: 10px;
+    margin-left: -10px;
+}
+.act_tb .tb_hdg:before {
+    border-color: rgba(235, 235, 235, 0);
+    border-top-color: #ebebeb;
+    border-width: 11px;
+    margin-left: -11px;
+}
+.act_pp, .qty_pp  {width: 70px;}
+.comp_blk .qty_pp {width: 100px!important;}
+.qty_prc {width: 140px!important;}
+.txt_cnt {text-align: center;}
+.grd_ttl td {font-size: 16px; font-weight: normal;}
+.show_blk {display: block!important;}
+.sel_brn_blk {float: left; margin-top: 20px;}
+.tabs_tbl.cmp_ul:after {left: 160px; width: 184px;}
+.check_list .form-check, .check_list .form-group {text-align: left;}
+.pop_hdr {position:relative; margin-top: 30px; border-bottom: 1px solid #f0f2f4; margin-bottom: 20px; padding-bottom: 10px;}
+.pop_amnt_status { width: 100%; display: table;}
+.pop_amnt_l {width: 50%; float: left; padding-right: 10px; margin-bottom: 10px;}
+.pop_amnt_r {width: 50%; float: left; padding-left: 10px; margin-bottom: 10px;}
+.tp_blk {width: 100%; display: table;}
+.tp_blk_lf {width: 210px; float: left; font-size: 16px; color: #58666e;}
+.tp_blk_rt {width: 82px; float: right; font-size: 13px; color: #58666e; }
+.ord_comp_bl {height: 350px; width: 100%;
+    padding-right: 14px;}
+    .sb_btn:focus {box-shadow: none!important;}
+    .invoice_up input {opacity: 0;}
+    .invoice_up {/*margin-top: 14px;*/ text-align: left; width: 200px; cursor: pointer; float: left;}
+    .invoice_up label {margin-bottom: 0px!important; position: relative;}
+    .invoice_up label input {position: absolute;}
+   
+    #myTab .nav-item a.nav-link {color: #58666e!important;font-size: 13px; padding-left: 0px; padding-right: 0px; font-weight: 500;}
+    #myTab.nav-tabs .nav-item.show .nav-link, #myTab.nav-tabs .nav-link.active {color: #0056b3!important;}
+    .order_hist .grd_ttl td .invoice_up {margin-top: 0px;}
+    #myTab .nav-item a.nav-link {border-width:2px;}
+     #myTab .nav-item {margin-right: 20px;}
+    }
+
+    .nav-tabs {border-bottom: 1px solid #e6e9ec;}
+    .ord_comp_blk {overflow: hidden;}
+.trn_pmt_sts {margin-bottom: 0px; width: 100%; text-align: right; font-size: 11px;}
+.adm_ant {    margin-top: 0px;
+    padding: 5px 15px;}
+.adm_ant input {position: relative; bottom: -1px; margin-right: 5px;}
+.avail_bal table {font-size: 13px;
+    color: #58666e;
+    background: #fff;
+    width: 100%;}
+.tp_rt_tgl {    
+    width: 46px;
+    height: 18px;
+    background: #dadada;
+    position: relative;
+    border-radius: 50px;
+    float: right;
+    padding: 0px 6px;
+    font-size: 12px;
+    color: #fff;
+    padding-top: 0px;
+    transition: all linear 0.2s;
+}
+#edt_module .modal-content {height: 548px;}
+.hide_blk {display: none;}
+.tp_tgl_txt {float: left; width: 30px;}
+.tp_rt_tgl:after {content: ' '; transition: all linear 0.2s; width: 16px; height: 16px; position: absolute; right: 1px; top: 1px; background: #fff; border-radius: 100%;}
+.tp_rt_tgl.yes_val:after {right: 29px;}
+.ll_inp .check_wt_serc {margin-bottom: 0px;}
+.ll_inp li {height: 35px!important;}
+.fnt_13 {font-size: 13px!important;}
+.ad_mr {float: right!important;
+    font-size: 13px;
+    line-height: 38px;
+    text-align: right;
+    margin-right: 0!important;}
+.tp_rt_tgl.yes_val{text-align: right;  background: #7cc576;}
+.top_in_op h1 input {position: relative; cursor:text; height: auto; border: none; font-size:     font-size: 16px;
+    color: #007bff; opacity: 1;}
+    .pur_pr, .top_in_op {cursor:default!important;}
+    .top_in_op h1 input {cursor:text}
+    .bal_amn_cash {font-size: 11px; margin-left: 20px; margin-bottom: 0px!important; color: #808f97;}
+    .adm_ant label {margin-bottom: 0px!important;}
+    .fl_over {width: 100%; overflow-x: hidden;}
+    .bdr_tp {border-top: 1px solid #e6e9ec; padding: 10px 15px!important;}
+    .avail_bal {    border: 1px solid #e6e9ec;
+    background: #f8f8f8;
+    /*border-radius: 5px;*/
+    /*margin-bottom: 20px;*/
+    /*width: 100%;*/
+    width: 350px;
+    margin-top: 10px;
+    float: right;
+/*border-top: none;*/}
+/*.ord_lst .avail_bal {margin-top: 0px!important;} */
+    .gry_clr {color: #ccc}
+.avail_bal label {margin-bottom: 0px;}
+.create_hdg .invoice_up {float: none; font-size: 13px; margin-left: 10px;}
+.avail_bal table td {padding:5px 15px!important;}
+.ord_lst tr.last_cld2 td {border-left: none; border-right: none; padding-right: 0px;}
+.ord_lst tr.disc_blk td:last-child {padding-right: 10px;}
+/*.avail_bal tr:last-child td {border-top: 1px solid #e6e9ec;}*/
+.avail_bal tr td:last-child {border-left: 1px solid #e6e9ec!important;}
+.avail_bal tr td:first-child {width: 220px;}
+.avail_bal .top_in_op h1, .avail_bal .top_in_op p {margin-bottom:0px!important; margin-top: 
+0px!important; text-align: right;  }
+.ord_comp_blk .top_in_op h1, .ord_comp_blk .top_in_op p {margin-bottom:0px!important; margin-top: 
+0px!important;}
+.avail_bal .top_in_op {border-left: none!important; padding: 0px!important;}
+ .pen_st {color: #de843c;}
+ .order_hist .create_hdg {    margin-bottom: 15px;
+    color: #58666e;
+    font-size: 15px;}
+ .order_hist {   /* border-top: 1px solid #e6e9ec;*/
+    padding-top: 15px;}
+.order_hist  .grd_ttl td {font-size: 13px;}
+.ord_comp_bl .nav-tabs {margin-top: 15px;}
+  /*.togl_hdr i.fa-hourglass-end, .togl_hdr i.fa-check { font-size: 13px; margin-right: 5px;}*/
+   /*.togl_hdr i.fa-paperclip {margin-left: 5px;}*/
+   .bank_logo {width: 30px; float: left; position: relative; bottom: 5px;}
+.bank_bal {font-size: 14px; color: #000; padding-bottom: 0px; /*border-bottom: 1px solid #eee; margin-bottom: 0px;*/}
+.accont_numb {font-size: 12px; color: #7d888e;}
+.bank_mny {width: calc(100% - 30px); float:left; padding-left: 20px;}
+.us_bn_ls .form-check input, .admin_bank_li .form-check input {display: none;}
+.admin_bank_li .bank_logo {bottom: -5px;}
+.admin_bank_li .form-check, .us_bn_ls .form-check {padding-left: 0px;}
+.date_inp {width: 120px;}
+@media (min-width: 576px) {
+#edt_module .modal-dialog, #create_module .modal-dialog {
+    max-width: 690px!important;
+    margin: 1.75rem auto;
+}
+}
+@keyframes rotate {
+  0% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+    90% {
+        -webkit-transform: rotate(0);
+        transform: rotate(0);
+    }
+    100% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+}

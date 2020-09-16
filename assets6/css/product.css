@@ -1,0 +1,8 @@
+.qty .slct_box::after, .mrp .slct_box::after {top: 20px!important;}
+.mrp{padding-top:15px; background: #f8f8f8; padding: 20px; border: 1px solid #ccc;}
+.pad_t {padding-top: 20px;}
+.form-control {height: 40px;}
+label {font-size: 13px!important;}
+select {outline: none;}
+.multiselect { height: 40px; }
+#prdt_lst_tbl_filter {margin-right: 0px!important;}

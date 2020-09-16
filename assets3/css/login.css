@@ -1,0 +1,156 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #40586f;
+}
+
+.log_blk {
+    border-radius: 5px;
+    height: 416px;
+    border: 1px solid #dadce0;
+    width: 450px;
+    box-sizing: border-box;
+    padding: 40px 40px 36px;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    margin-left: -225px;
+}
+
+.sign_txt {
+    font-size: 16px;
+    padding: 20px 0px 20px 0px;
+    color: #007bff;
+}
+
+.log_logo {
+    width: 100%;
+    text-align: center;
+}
+
+.log_logo img {
+    width: 100px;
+}
+
+.log_inp_blk {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.log_inp_blk .log_lbl {
+    position: absolute;
+    left: 20px;
+    transition: all linear 0.2s;
+    font-size: 14px;
+    background: #fff;
+    top: 15px;
+    z-index: 0;
+}
+
+.log_inp_blk input {
+    padding: 13px 15px;
+    margin: 1px;
+    width: 100%;
+    outline: none;
+    box-shadow: none;
+    background: none;
+    position: relative;
+    z-index: 1;
+    border-radius: 4px;
+    border: 1px solid #dadce0;
+    color: #58666e;
+}
+
+.log_inp_blk input:focus~.log_lbl,
+.log_inp_blk.val_tr .log_lbl {
+    z-index: 2;
+    color: #007bff;
+    font-size: 12px;
+    top: -11px;
+    background: #fff;
+    padding: 3px 10px;
+}
+
+.log_qt {
+    margin: 0px;
+    padding: 0px;
+    font-size: 13px;
+}
+
+.btm_log_blk {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.btm_log_blk .btn {
+    font-size: 13px;
+    padding: 6px 25px;
+}
+
+.cptcha {
+    text-align: left;
+}
+
+.log_inp_blk input:focus {
+    border: 2px solid #007bff;
+    margin: 0px;
+    border-radius: 5px;
+}
+
+.inps_blkslog {
+    width: 200%;
+    left: 0px;
+    right: 0px;
+    transition: all linear 0.2s;
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    display: table;
+    list-style: none;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #58666e !important;
+}
+
+.inps_blkslog li {
+    width: calc(50% - 20px);
+    float: left;
+    margin-right: 20px
+}
+
+.log_mn_blk {
+    overflow: hidden;
+    padding: 20px 0px;
+    height: 74px;
+    position: relative;
+}
+
+.mal_addr {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    display: none;
+    cursor: pointer;
+}
+
+.mal_addr img {
+    width: 20px;
+    color: #40586f
+}
+
+.qtyt {
+    position: absolute;
+    bottom: -86px;
+    width: 100%;
+    left: 0px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 23px;
+}
+
+.qtyt span {
+    font-size: 30px;
+}

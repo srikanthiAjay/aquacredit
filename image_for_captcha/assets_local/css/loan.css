@@ -1,0 +1,108 @@
+<<<<<<< HEAD
+input[type=text] {height: 40px;}
+/*.btn {width: 100%; height: 40px;}*/
+.mar_25_t {margin-top: 25px;}
+.act_v {padding: 30px; box-sizing: border-box;}
+.act_v .val, .txt_rt {text-align: right;}
+.act_v ul, .action_list {padding: 0px; margin: 0px; list-style: none;}
+.act_v li {font-size: 14px; font-weight: bold; margin-bottom: 10px;}
+.act_v .val {font-size: 14px; color: #007bff; font-weight: bold;}
+.mar_btm_non {margin-bottom: 0px!important;}
+.blue_clr {color: #007bff;}
+/*.filter_bk {margin-bottom: 25px;}*/
+.action_list {overflow: hidden;}
+.action_list li {float: left;}
+.org_clr {color: #ff7800;}
+.red_clr { color: red; }
+.grn_clr { color: green; }
+.modal-backdrop {opacity: 0.5}
+.modal_footer {
+    text-align: center;
+    border-top: 0px;
+    padding-bottom: 40px;
+}
+.modal-body h1, .modal-body p {
+    text-align: center;
+}
+/*.filter_bk {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    margin-top: 25px;
+}*/
+.laon_tbl {margin-top: 25px;}
+.multiselect {
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    height: 40px;
+}
+.btn-group {
+    width: 100%;
+}
+
+.dropdown-toggle::after {
+
+    float: right;
+    margin-top: 11px;
+
+}
+.filter_bk {margin-bottom: 20px; padding-right: 15px;}
+=======
+input[type=text] {height: 40px;}
+/*.btn {width: 100%; height: 40px;}*/
+.mar_25_t {margin-top: 25px;}
+.act_v {padding: 30px; box-sizing: border-box;}
+.act_v .val, .txt_rt {text-align: right;}
+.act_v ul, .action_list {padding: 0px; margin: 0px; list-style: none;}
+.act_v li {font-size: 14px; font-weight: bold; margin-bottom: 10px;}
+.act_v .val {font-size: 14px; color: #007bff; font-weight: bold;}
+.mar_btm_non {margin-bottom: 0px!important;}
+.blue_clr {color: #007bff;}
+/*.filter_bk {margin-bottom: 25px;}*/
+.action_list {overflow: hidden;}
+.action_list li {float: left;}
+.org_clr {color: #ff7800;}
+.red_clr { color: red; }
+.grn_clr { color: green; }
+.modal-backdrop {opacity: 0.5}
+.modal_footer {
+    text-align: center;
+    border-top: 0px;
+    padding-bottom: 40px;
+}
+.modal-body h1, .modal-body p {
+    text-align: center;
+}
+/*.filter_bk {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    margin-top: 25px;
+}*/
+.laon_tbl {margin-top: 25px;}
+.multiselect {
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    height: 40px;
+}
+.btn-group {
+    width: 100%;
+}
+
+.dropdown-toggle::after {
+
+    float: right;
+    margin-top: 11px;
+
+}
+.filter_bk {margin-bottom: 20px; padding-right: 15px;}
+>>>>>>> 879a1b5b54a411bf1c5dde2c628913c9b8ea40b0
+.multiselect-container>li>a>label {padding-left: 20px; padding-top: 10px;}

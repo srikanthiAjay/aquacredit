@@ -1,0 +1,118 @@
+<<<<<<< HEAD
+.filter_bk {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 15px 20px;
+    box-sizing: border-box;
+}
+.multiselect {
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+}
+.btn-group {
+    width: 100%;
+}
+
+.dropdown-toggle::after {
+
+    float: right;
+    margin-top: 11px;
+
+}
+.top_in_op h1 {
+    font-size: 30px;
+    color: #0088cc;
+    text-align: center;
+    margin: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+.top_in_op p {
+    font-size: 14px;
+    color: #808f97;
+    margin-top: 10px;
+}
+.tp_tt_blk .top_in_op {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.bor_lf_none .top_in_op {
+    border-left: none;
+}
+.form-group {margin-bottom: 0px!important;}
+.mar_btm {margin-bottom: 20px;}
+.modal-backdrop {opacity: 0.5}
+.modal_footer {
+    text-align: center;
+    border-top: 0px;
+    padding-bottom: 40px;
+}
+.modal-body h1, .modal-body p {
+    text-align: center;
+}
+.multiselect-container > li > a > label {padding-left: 20px!important;}
+=======
+.filter_bk {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 15px 20px;
+    box-sizing: border-box;
+}
+.multiselect {
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+}
+.btn-group {
+    width: 100%;
+}
+
+.dropdown-toggle::after {
+
+    float: right;
+    margin-top: 11px;
+
+}
+.top_in_op h1 {
+    font-size: 30px;
+    color: #0088cc;
+    text-align: center;
+    margin: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+.top_in_op p {
+    font-size: 14px;
+    color: #808f97;
+    margin-top: 10px;
+}
+.tp_tt_blk .top_in_op {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.bor_lf_none .top_in_op {
+    border-left: none;
+}
+.form-group {margin-bottom: 0px!important;}
+.mar_btm {margin-bottom: 20px;}
+.modal-backdrop {opacity: 0.5}
+.modal_footer {
+    text-align: center;
+    border-top: 0px;
+    padding-bottom: 40px;
+}
+.modal-body h1, .modal-body p {
+    text-align: center;
+}
+.multiselect-container > li > a > label {padding-left: 20px!important;}
+>>>>>>> 879a1b5b54a411bf1c5dde2c628913c9b8ea40b0
+.hdg_bk {width: calc(100% - 20px);}

@@ -1,0 +1,43 @@
+.form-control {font-size: 14px!important;}
+.mar_tp {margin-top: 20px;}
+.multiselect {
+    border: 1px solid #ced4da;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    height: 40px;
+}
+.btn-group {
+    width: 100%;
+}
+.dropdown-toggle::after {
+    float: right;
+    margin-top: 11px;
+}
+.multiselect-container > li > a > label > input[type="checkbox"] {
+    float: left;
+    height: auto !important;
+    margin-right: 10px;
+    position: relative;
+    bottom: -3px;
+}
+.select_cat {width: 100%; margin-top: 20px;}
+.multiselect-container > li > a > label {
+    padding-left: 10px !important;
+    overflow: hidden;
+}
+.cat_sub_select {margin-bottom: 20px;}
+.sub_cat, .cat_sub_select ul {padding: 0px; margin: 0px; list-style: none; overflow: hidden;}
+.sub_cat li {margin-bottom: 10px; float: left; width: 50%;}
+.sub_cat li:first-child {width: 100%;}
+/*.create_new1 input {opacity: 0;}*/
+.cat_sub_select li {position: relative; background: #fff; border: 1px solid #ccc; border-radius: 5px; padding: 5px 10px; float: left; margin: 10px 25px 0px 0px; font-size: 14px;}
+.med_dis {margin-top: 20px;}
+.cat_sub_select li span {margin-left: 5px; cursor: pointer;}
+.create_popup { width: 500px; display: none; position: absolute; z-index: 99999; top: 20px; left: 50%; margin-left:-250px; border-radius: 10px; padding: 30px; box-sizing: border-box; background: #fff;}
+.create_popup textarea{border: 1px solid #ced4da; width: 100%; border-radius: 5px; padding: 20px;}
+.create_popup .btn {width: 100%;}
+.sel_ca {margin-bottom: 10px;}
+.form-group input {height: 40px;}
+/*.cat_blk_nn {padding: 15px; background: #fff; border: 1px solid #f8f8f8; border-radius: 5px; margin-bottom: 15px;}*/
