@@ -35,7 +35,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 	
 	<script src="<?php echo base_url();?>assets/pnotify/pnotify.custom.js"></script>
-	<script src="<?php echo base_url();?>assets/js/jquery.responsivetabs"></script>
+	<script src="<?php echo base_url();?>assets/js/jquery.responsivetabs.js"></script>
 	<link rel="stylesheet" href="<?php echo base_url();?>/assets/pnotify/pnotify.custom.css" />
 	
 	<!-- Create Users -->	 

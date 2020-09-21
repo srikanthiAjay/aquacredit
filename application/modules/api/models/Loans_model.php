@@ -71,6 +71,7 @@ class Loans_model extends CI_Model
 
 	function getTotalLoansOfUser($user_id = "", $crop_id = "")
 	{
+		//get user unsettled loans
 		$this->db->select_sum('loan_amt');
 		$this->db->from('loan_details');
 		if($user_id != "")
@@ -78,6 +79,7 @@ class Loans_model extends CI_Model
 		if($crop_id != "")
 			$this->db->where("crop_id",$crop_id);
 		$this->db->where("status",'1');
+		$this->db->where("settled",'0');
 		$query = $this->db->get();
 		return $query->row()->loan_amt;
 	}

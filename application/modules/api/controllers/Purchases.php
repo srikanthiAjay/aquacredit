@@ -1362,7 +1362,7 @@ class Purchases extends CI_Controller
 			}
 
 			//Update Branch Amount
-			$branch_amt=['amount'=>$rem_bwallet_amt];
+			$branch_amt=['avail_amount'=>$rem_bwallet_amt];
 			$this->Purchases_model->updateBranchAmount($branch_id,$branch_amt);
 
 			//Confirm Branch

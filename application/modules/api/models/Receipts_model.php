@@ -26,6 +26,21 @@ class Receipts_model extends CI_Model
 		$query = $this->db->get_where("receipts", ['receipts.rc_id' => $rc_id])->row_array();
 		return(json_encode(array('status'=>'success','data'=>$query)));
 	}
+
+	function getUserReceiptTotal($uid = null,$crop_id=null)
+	{
+		//get user unsettled receipts
+		$this->db->select_sum('transfer_amount');
+		$this->db->from('receipts');
+		if($uid != "")
+			$this->db->where("from_user_id",$uid);
+		if($crop_id != "")
+			$this->db->where("from_crop_id",$crop_id);
+		$this->db->where("status",'1');
+		$this->db->where("settled",'0');
+		$query = $this->db->get();
+		return $query->row()->transfer_amount;
+	}
 	
 	function receiptsAnalytics()
 	{

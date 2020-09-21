@@ -117,7 +117,7 @@ function getlloandata() {
                     $('#billdate').html(trades.billdate);
                     id = trades.trans_id;
 
-                    htmlRows = '<tr><td><input type="text" class="txt_cnt mykey datepicker" onkeydown="return false;" value="' + trades.startdate + '" name="startdate[]" id="startdate' + id + '" style="width:96px;" disabled>  </td><td><input type="text" class="txt_cnt mykey datepicker" value="' + trades.enddate + '" name="enddate[]" id="enddate' + id + '"  onkeypress="return validateFloatKeyPress(this,event);" style="width:96px;"></td><td><span id="daydis' + id + '"> ' + trades.days + '</span> </td><td> ' + trades.croploan + '</td><td class="txt_rt"> ' + '₹' + currency_format(tcamtt, 2) + '</td><td> <input type="text" class="txt_cnt rt_int mykey" value="' + interestval + '" name="iinterest[]" id="iinterest' + id + '" onkeypress="return validateFloatKeyPress(this,event);"> <input type="hidden" value="' + trades.amount + '" name="tot[]" id="tot' + id + '" ><input type="hidden" value="' + trades.days + '" name="days[]" id="days' + id + '" ><input type="hidden" value="' + trades.months + '" name="months[]" id="months' + id + '" ><input type="hidden" value="' + trades.id + '" name="trans_id[]" id="trans_id' + id + '" ><input type="hidden"  name="interestamtval[]" id="interestamtval' + id + '" value="' + trades.interest_amount + '" /><input type="hidden" name="totamtval[]" id="totamtval' + id + '" value="' + trades.total_amount + '" /></td><td class="txt_rt" id="interestamt' + id + '"> ' + interest_amount + '</td><td class="txt_rt txt_red" id="totamt' + id + '">' + total_amount + '</td></tr>';
+                    htmlRows = '<tr><td><input type="text" class="txt_cnt mykey datepicker" onkeydown="return false;" value="' + trades.startdate + '" name="startdate[' + id + ']" id="startdate' + id + '" style="width:96px;" disabled>  </td><td><input type="text" class="txt_cnt mykey datepicker" value="' + trades.enddate + '" name="enddate[' + id + ']" id="enddate' + id + '"  onkeypress="return validateFloatKeyPress(this,event);" style="width:96px;"></td><td><span id="daydis' + id + '"> ' + trades.days + '</span> </td><td> ' + trades.croploan + '</td><td class="txt_rt"> ' + '₹' + currency_format(tcamtt, 2) + '</td><td> <input type="text" class="txt_cnt rt_int mykey" value="' + interestval + '" name="iinterest[' + id + ']" id="iinterest' + id + '" onkeypress="return validateFloatKeyPress(this,event);"> <input type="hidden" value="' + trades.amount + '" name="tot[' + id + ']" id="tot' + id + '" ><input type="hidden" value="' + trades.days + '" name="days[' + id + ']" id="days' + id + '" ><input type="hidden" value="' + trades.months + '" name="months[' + id + ']" id="months' + id + '" ><input type="hidden" value="' + trades.id + '" name="trans_id[' + id + ']" id="trans_id' + id + '" ><input type="hidden"  name="interestamtval[' + id + ']" id="interestamtval' + id + '" value="' + trades.interest_amount + '" /><input type="hidden" name="totamtval[' + id + ']" id="totamtval' + id + '" value="' + trades.total_amount + '" /></td><td class="txt_rt" id="interestamt' + id + '"> ' + interest_amount + '</td><td class="txt_rt txt_red" id="totamt' + id + '">' + total_amount + '</td></tr>';
 
                     $('#loandata').append(htmlRows);
 
@@ -201,6 +201,18 @@ function getlloandata() {
             var sumrecord = final_sale = final_products = cat_row = '';
             var bags = feed_weight = 0;
             $(".sale_details").remove();
+
+            $('#salestepshow').val(1);
+            var lsshow = $('#loanstepshow').val();
+            if (lsshow == 0) {
+                $('.sec_step').show();
+                $('.sale_tb').show();
+
+                $('#saleOrder').show();
+                $('#confirmOrder').hide();
+                $('#finalOrder').hide();
+            }
+
             $.each(data.categories, function(c_index, category) {
                 var category_sum = 0;
                 cat_brand_count = Object.keys(data.brands[c_index]).length;
@@ -218,7 +230,7 @@ function getlloandata() {
 
                     $.each(data.brands[c_index], function(b_index, brand) {
                         cat_row += '<tr>' +
-                            '<td class="brnd_ane" data-toggle="collapse" data-target="#prds_tbl' + b_index + '" aria-expanded="false" aria-controls="prds_tbl' + b_index + '">' +
+                            '<td class="brnd_ane" data-toggle="collapse" data-target="#prds_tbl' + c_index + b_index + '" aria-expanded="false" aria-controls="prds_tbl' + c_index + b_index + '">' +
                             '<a href="javascript:void(0);" >' + brand.name + '</a>' +
                             '</td>' +
                             '<td class="pp_amnt txt_rt">' + '₹' + currency_format(brand.sum_mrp, 2) + '</td>' +
@@ -231,7 +243,7 @@ function getlloandata() {
                             '</tr>' +
                             '<tr>' + //3
                             '<td colspan="4" class="prd_b_tb">' +
-                            '<div id="prds_tbl' + b_index + '" class="collapse tgl_div">' +
+                            '<div id="prds_tbl' + c_index + b_index + '" class="collapse tgl_div">' +
                             '<table>' +
                             '<tr>' +
                             '<th class="brnd_ane"> Product Name </th>' +
@@ -306,11 +318,12 @@ function getlloandata() {
             $('#feeddata').html(final_products);
             $('#tfeedbad').html(bags);
             $('#feedusage').html(feed_weight);
-            $('#feedusageval').val(feed_weight);
+            $('#feed_wt').val(feed_weight);
 
             if (data.harvest > 0) {
                 var hamt = parseFloat(data.harvest);
                 $('#harvestamount').html(hamt.toFixed(2));
+                $("#harvest_amount").val(hamt.toFixed(2));
                 $('#harvesthide').show();
 
                 var hwgt = parseFloat(data.tradetons).toFixed(2);
@@ -320,14 +333,28 @@ function getlloandata() {
                 $('#feedharvestsymbol').show();
                 ratio = feedRatio(hwgt, feed_weight);
                 $("#ratio_display").html(ratio);
+                $("#fcr").val(ratio);
                 get_sec = ratio.split(":");
                 secVal = get_sec[1];
                 if (secVal >= 1 && secVal < 1.3) {
                     $("#feed_status").html('Good');
+                    $("#fcr_status").val('Good');
                 } else if (secVal >= 1.3 && secVal <= 1.5) {
                     $("#feed_status").html('Average');
+                    $("#fcr_status").val('Average');
                 } else if (secVal > 1.5) {
                     $("#feed_status").html('Bad');
+                    $("#fcr_status").val('Bad');
+                }
+                if (get_sec[0] > get_sec[1]) {
+                    $(".ratio_icon").removeClass("lss_rto eql_rto").addClass("grt_rto");
+
+                } else if (get_sec[0] < get_sec[1]) {
+                    $(".ratio_icon").removeClass("grt_rto eql_rto").addClass("lss_rto");
+
+                } else if (get_sec[0] == get_sec[1]) {
+                    $(".ratio_icon").removeClass("lss_rto grt_rto").addClass("eql_rto");
+
                 }
                 //console.log(ratio);
             } else {
@@ -356,6 +383,7 @@ function getlloandata() {
                 /* *********** */
                 if (finalval.transport > 0) {
                     $('#ftransport').html('₹' + currency_format(finalval.transport, 2));
+                    $("#transport").val(finalval.transport);
                     $('#ftransporthide').show();
                 } else {
                     $('#ftransporthide').hide();
@@ -364,12 +392,14 @@ function getlloandata() {
                 if (finalval.loading > 0) {
                     $('#floading').html('₹' + currency_format(finalval.loading, 2));
                     $('#floadinghide').show();
+                    $("#loading").val(finalval.loading);
                 } else {
                     $('#floadinghide').hide();
                 }
 
                 if (finalval.lab > 0) {
                     $('#flabfee').html('₹' + currency_format(finalval.lab, 2));
+                    $("#lab_fee").val(finalval.lab);
                     $('#flabhide').show();
                 } else {
                     $('#flabhide').hide();
@@ -377,6 +407,7 @@ function getlloandata() {
 
                 if (finalval.expenses > 0) {
                     $('#expenses').html('₹' + currency_format(finalval.expenses, 2));
+                    $("#expenses_val").val(finalval.expenses);
                     $('#exphide').show();
                 } else {
                     $('#exphide').hide();
@@ -384,6 +415,7 @@ function getlloandata() {
 
                 if (finalval.receipt > 0) {
                     $('#freceipts').html('₹' + currency_format(finalval.receipt, 2));
+                    $("#receipts").val(finalval.receipt);
                     $('#receipthide').show();
                 } else {
                     $('#receipthide').hide();
@@ -391,12 +423,15 @@ function getlloandata() {
 
                 if (finalval.returnamount > 0) {
                     $('#fretrun').html('₹' + currency_format(finalval.returnamount, 2));
+                    $("#returns").val(finalval.returnamount);
                     $('#returnhide').show();
                 } else {
                     $('#returnhide').hide();
                 }
                 $("#crop_location").html(finalval.crop_location);
+                $("#crop_location_val").val(finalval.crop_location);
                 $("#crop_type").html(finalval.crop_type);
+                $("#harvest_type").val(finalval.crop_type);
                 /*  */
             });
         }
@@ -449,161 +484,6 @@ function form_validation(err, err_msg, tagid) {
     return false;
 }
 
-/*form submit*/
-$("#confirmOrder").on("click", function() {
-
-    var rcount = $('#rowcount').val();
-
-    var i;
-    for (i = 0; i <= rcount; i++) {
-
-        var interests = $('#iinterest' + i).val();
-
-        if (interests == 0 || interests == '') {
-            err = 1;
-            err_msg = "Please select sale type!";
-            tagid = "#iinterest" + i;
-            return form_validation(err, err_msg, tagid);
-        }
-    }
-
-    formData = new FormData(loanfrm);
-    $.ajax({
-        url: url + "api/users/loandataupdate",
-        data: formData,
-        type: 'POST',
-        contentType: false,
-        processData: false,
-        enctype: 'multipart/form-data',
-        datatype: 'json',
-        success: function(response) {
-            res = JSON.parse(response);
-            var lstp = $('#salestepshow').val();
-            if (lstp == 1) {
-                $(".sec_step").trigger("click");
-            } else {
-                $(".thrd_step").trigger("click");
-            }
-        }
-    });
-});
-$("#saleOrder").on("click", function() {
-
-    formData = new FormData(salefrm);
-    formData.append("user_id", user_id);
-    formData.append("crop_id", $('#crop_id').val());
-    $.ajax({
-        url: url + "api/users/saledataupdate",
-        data: formData,
-        type: 'POST',
-        contentType: false,
-        processData: false,
-        enctype: 'multipart/form-data',
-        datatype: 'json',
-        success: function(response) {
-            res = JSON.parse(response);
-            $(".thrd_step").trigger("click");
-        }
-    });
-});
-$("#finalOrder").on("click", function() {
-    var gval = $('#grand_totalval').val();
-    var interestval = $('#totalinterestval').val();
-    var crpid = $("#crop_id").val();
-    var gdiscount = $('#granddiscount_amountval').val();
-    var loanstep = $('#loanstepshow').val();
-    var salestep = $('#salestepshow').val();
-
-    $.ajax({
-        url: url + "api/users/updatefinaldata",
-        data: { userid: user_id, crop_id: crpid, gval: gval, interestval: interestval, gdiscount: gdiscount, loanstep: loanstep, salestep: salestep },
-        type: 'POST',
-        datatype: 'json',
-        success: function(response1) {
-            res1 = JSON.parse(response1);
-            location.reload();
-        }
-    });
-
-
-});
-$(document).on('blur', "[id^=iinterest]", function() {
-    id = $(this).attr("id").replace("iinterest", '');
-    //update_activity_table('rate_of_interest', $(this).val(), id);
-    calculateTotal();
-});
-$(document).on('change', "[id^=startdate]", function() {
-    calculateTotal();
-});
-$(document).on('change', "[id^=enddate]", function() {
-    calculateTotal();
-});
-
-//dev_php brand discount apply
-$(document).on('blur', "[id^=branddiscountval]", function() {
-    //validate discount and clear product discounts if not empty
-    id = $(this).attr("id");
-    id = id.replace("branddiscountval", '');
-    var disc_limit = $('#discount_limit' + id).val();
-    var discount = $(this).val();
-    resetProductDiscounts(id); // clear listed products discount
-    if (parseFloat(disc_limit) < parseFloat(discount)) {
-        $(this).val('0');
-        new PNotify({
-            title: 'Discount Limit',
-            text: "Brand discount limit is " + disc_limit + "%",
-            type: 'success',
-            shadow: true,
-            delay: 3000,
-            stack: { "dir1": "down", "dir2": "right", "push": "top" }
-        });
-    } else {
-        //calculate discount of particular brand
-        total_amount = $("#brandtotal" + id).val();
-        discount_value = (total_amount * discount) / 100;
-        $("#discountvalue" + id).val(discount_value);
-        amount_after_disc = total_amount - discount_value;
-        $("#brandtotamt" + id).html('₹' + currency_format(amount_after_disc, 2));
-    }
-    //calculateTotalsale();
-    getGrandDiscount();
-});
-
-//product discount apply
-$(document).on('blur', "[id^=proDiscount]", function() {
-    product_discount = $(this).val();
-    if (product_discount != "") {
-        var id = $(this).attr('id');
-        arr = id.split("_");
-        pid = arr[2];
-        bid = arr[1];
-        cid = arr[0].replace("proDiscount", '');
-        $("#branddiscountval" + cid + "_" + bid).val('0'); //clear brand discount
-        pro_disc_limit = $("#proDiscLmt" + cid + "_" + bid + "_" + pid).val();
-        if (parseFloat(product_discount) > parseFloat(pro_disc_limit)) {
-            //clear product discount
-            $(this).val('0');
-            new PNotify({
-                title: 'Discount Limit',
-                text: "Product discount limit is " + pro_disc_limit + "%",
-                type: 'success',
-                shadow: true,
-                delay: 3000,
-                stack: { "dir1": "down", "dir2": "right", "push": "top" }
-            });
-        } else {
-            total_amount = $("#proMRPTotal" + cid + "_" + bid + "_" + pid).val();
-            discount_value = (total_amount * product_discount) / 100;
-            $("#proDiscountVal" + cid + "_" + bid + "_" + pid).val(discount_value);
-            amount_after_disc = total_amount - discount_value;
-            $("#pro_total" + cid + "_" + bid + "_" + pid).html('₹' + currency_format(amount_after_disc, 2));
-            TotalProductDiscount(cid + "_" + bid);
-        }
-    }
-    getGrandDiscount();
-
-});
-
 //dev_php get discount from product listing under a brand
 function TotalProductDiscount(cbid) {
     var final_discount = 0;
@@ -628,7 +508,21 @@ function getGrandDiscount() {
     $(".granddiscount_amount").html('₹' + currency_format(final_discount, 2));
     $("#granddiscount_amountval").val(roundTo(final_discount, 2));
     getGrandTotal();
-    //calculate final discount
+
+    //append discount row
+    $('#discount_row').remove();
+    discount_row = '<tr role="row" class="even" id="discount_row"><td class=" date">19-Sep-2020</td><td><a href="javascript:void(0);" title="">DISCOUNT</a></td><td class=" txt_rt out_td"><span class="grn_clr"><span class="arr_blk">₹' + final_discount + '<img src="' + url + '/assets/images/grn_c_ar.png"> </span></span></td></tr>';
+    $('#usr_lst_tbl1 tr:last').after(discount_row);
+
+    total_bal = $("#sum_total").val();
+    total_trans_amount = parseFloat(total_bal) + final_discount;
+    $("#sum_total").val(total_trans_amount);
+    if (total_trans_amount > 0) {
+        $("#in_td1").html('<span class="grn_clr">₹' + currency_format(total_trans_amount, 2) + '</span');
+    } else {
+        tta = Math.abs(total_trans_amount);
+        $("#in_td1").html('<span class="txt_red">₹' + currency_format(tta, 2) + '</span>');
+    }
 }
 
 //dev_php total mrp
@@ -686,7 +580,7 @@ function resetProductDiscounts(id) {
     });
 }
 
-function printDiv() {
+/* function printDiv() {
     var divContents = document.getElementById("final_print").innerHTML;
     var a = window.open('', '', 'height=1200, width=1200');
     a.document.write('<html>');
@@ -698,7 +592,7 @@ function printDiv() {
     a.document.write('<link href="http://localhost/credit_new/assets/css/bootstrap-4.4.1.min.css" rel="stylesheet" type="text/css" />');
     a.document.close();
     a.print();
-}
+} */
 
 // for step one loans
 function calculateTotal() {
@@ -713,24 +607,7 @@ function calculateTotal() {
         /*calculate day difference*/
         var start = $('#startdate' + id).val();
         var end = $('#enddate' + id).val();
-        /*var sd = new Date(start);
-        var ed = new Date(end);
-        var diff = new Date(ed - sd);
-        var daysval = diff/1000/60/60/24;*/
-        var From_date = new Date(start);
-        var To_date = new Date(end);
-        var diff_date = To_date - From_date;
 
-        /*var years = Math.floor(diff_date/31536000000);
-        var months = Math.floor((diff_date % 31536000000)/2628000000);
-        var days = Math.floor(((diff_date % 31536000000) % 2628000000)/86400000);*/
-
-        /* alert(months);
-         alert(days);*/
-
-        /*var cf = months*30;
-        var daysval = cf+days;*/
-        /**/
         $.ajax({
             url: url + 'api/Users/getdayscount',
             type: "POST",
@@ -745,16 +622,15 @@ function calculateTotal() {
 
                 var t = $("#iinterest" + id).val();
                 var p = $('#tot' + id).val();
-                var days = daysval;
-                var r = $('#months' + id).val();
+                //var days = daysval;
+                /*  var r = $('#months' + id).val();
 
-                if (r == 0) {
-                    r = 1;
-                }
-
-                var intrests = ((p * t) / 3000) * days
-                $("#intrestResult").val(intrests)
-                $("#totalResult").val((+p) + intrests)
+                 if (r == 0) {
+                     r = 1;
+                 } */
+                var intrests = ((p * t) / 3000) * daysval;
+                $("#intrestResult").val(intrests);
+                $("#totalResult").val((+p) + intrests);
 
                 $('#interestamt' + id).html('₹' + currency_format(intrests, 2));
                 $('#interestamtval' + id).val(intrests);
@@ -770,10 +646,7 @@ function calculateTotal() {
 
             }
         });
-        /**/
-
     });
-
 
     $('#finalamount').html('₹' + currency_format(totalamtvalue, 2));
     $('#totalamount').html('₹' + currency_format(totval, 2));
@@ -783,10 +656,27 @@ function calculateTotal() {
     $('#totalinterestval').val(totinterestvalue);
 
 
-    $('#floanamount').html('₹' + currency_format(totalamtvalue, 3));
-    $('#tloanamount').html('₹' + currency_format(totval, 3));
-    $('#tinterestamount').html('₹' + currency_format(totinterestvalue, 3));
+    $('#floanamount').html('₹' + currency_format(totalamtvalue, 2));
+    $("#total_loan_amount").val(totalamtvalue);
+    $('#tloanamount').html('₹' + currency_format(totval, 2));
+    $("#loan_amount").val(totval);
+    $('#tinterestamount').html('₹' + currency_format(totinterestvalue, 2));
+    $("#loan_interest").val(totinterestvalue);
 
+    //append intrest row
+    $('#interest_row').remove();
+    interest_row = '<tr role="row" class="odd" id="interest_row"><td class=" date">19-Sep-2020</td><td><a href="javascript:void(0);" title="">INTEREST</a></td><td class=" txt_rt out_td"><span class="txt_red"><span class="arr_blk">₹' + totinterestvalue + '<img src="' + url + 'assets/images/rd_c_ar.png"> </span></span></td></tr>';
+    $('#usr_lst_tbl1 tr:last').after(interest_row);
+
+    total_bal = $("#sum_total").val();
+    total_trans_amount = parseFloat(total_bal) - totinterestvalue;
+    $("#sum_total").val(total_trans_amount);
+    if (total_trans_amount > 0) {
+        $("#in_td1").html('<span class="grn_clr">₹' + currency_format(total_trans_amount, 2) + '</span');
+    } else {
+        tta = Math.abs(total_trans_amount);
+        $("#in_td1").html('<span class="txt_red">₹' + currency_format(tta, 2) + '</span>');
+    }
 }
 
 
@@ -795,7 +685,8 @@ $(document).ready(function() {
     $('#confirmOrder').show();
     $('#finalOrder').hide();
     hidcrop = ""
-        //get crops data
+    var tables = "";
+    //get crops data
     $.ajax({
         url: url + "api/UserCrops/index/" + user_id,
         data: {},
@@ -808,6 +699,7 @@ $(document).ready(function() {
             var sel = "";
             if (user_id != "") {
                 var opt = '<div class="form-check"><input class="form-check-input" type="radio" name="crop_opt" id="crp" /><label class="form-check-label" for="crp"></label></div>';;
+                $("#crop_count").html("All crops(" + res.data.length + ")");
                 if (res.data.length > 0) {
                     opt = '';
                     $.each(res.data, function(index, crop) {
@@ -818,7 +710,6 @@ $(document).ready(function() {
                         } else {
                             sel = "";
                         }
-                        //if(crop.cd_id == hidcrop){ sel = "checked"; }else{ sel = "";}
                         opt += '<div class="form-check"><input class="form-check-input" type="radio" name="crop_opt" id="crp' + index + '" value="' + crop.cd_id + '" ' + sel + ' required /><label class="form-check-label" for="crp' + index + '">' + crop.crop_location + '</label></div>';
                     });
                 }
@@ -827,6 +718,7 @@ $(document).ready(function() {
             }
             $("#crop_opt_li").html(opt);
             load_unsettled();
+            final_unsettled();
             load_analytics();
             //summary_settled();
         }
@@ -835,7 +727,7 @@ $(document).ready(function() {
     $(document).on("change", ".check_list input[name='crop_opt']", function() {
         var id = $('input[name=crop_opt]:checked').val();
         $("#crop_id").val(id);
-        $(".swith_blk").toggleClass('tog_yes');
+        $(".swith_blk").removeClass('tog_yes');
         $('.usr_lst_tbl').DataTable().destroy();
         load_unsettled();
         load_analytics();
@@ -882,43 +774,6 @@ $(document).ready(function() {
     $('.ad_nt').click(function() {
         $('.pp_note').toggleClass('show_blk');
     });
-
-    $(document).on('click', '.comp_cl', function() {
-        $(this).addClass('act_tab');
-        $('.tabs_tbl').addClass('cmp_ul');
-        $('.drft_cl').removeClass('act_tab');
-        $('.usr_lst_tbl').DataTable().destroy();
-        load_settled();
-    });
-
-    $(document).on('click', '.drft_cl', function() {
-        $(this).addClass('act_tab');
-        $('.tabs_tbl').removeClass('cmp_ul');
-        $('.comp_cl').removeClass('act_tab');
-        $('.usr_lst_tbl').DataTable().destroy();
-        load_unsettled();
-    });
-
-    // $('#fil2').multiselect();
-    // $('#fil1').multiselect();
-    // $('#fil3').multiselect();
-
-    /* $('.loans_tp').click(function() {
-        $('.alpha_blk').show();
-        $('.side_popup').addClass('opn_slide');
-        $('#loans_tp').show();
-        $('#orders_tp').hide();
-        $('#crop_top').hide();
-    }); */
-
-    /* $('.orders_tp').click(function() {
-        $('.alpha_blk').show();
-        $('.side_popup').addClass('opn_slide');
-        $('#loans_tp').hide();
-        $('#orders_tp').show();
-        $('#crop_top').hide();
-    }); */
-
 
     $('.crop_top').click(function() {
         $('.alpha_blk').show();
@@ -1034,7 +889,6 @@ $(document).ready(function() {
     });
 
     $('#drawal_amt_commas').keyup(function() {
-
         bankBalCheck();
         setTimeout(function() {
 
@@ -1052,22 +906,249 @@ $(document).ready(function() {
 
         }, 500);
     });
+
+    /*form submit*/
+    $("#confirmOrder").on("click", function() {
+
+        var rcount = $('#rowcount').val();
+
+        var i;
+        for (i = 0; i <= rcount; i++) {
+
+            var interests = $('#iinterest' + i).val();
+
+            if (interests == 0 || interests == '') {
+                err = 1;
+                err_msg = "Please select sale type!";
+                tagid = "#iinterest" + i;
+                return form_validation(err, err_msg, tagid);
+            }
+        }
+        var lstp = $('#salestepshow').val();
+        if (lstp == 1) {
+            $(".sec_step").trigger("click");
+        } else {
+            $(".thrd_step").trigger("click");
+        }
+
+        /* formData = new FormData(loanfrm);
+        $.ajax({
+            url: url + "api/users/loandataupdate",
+            data: formData,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            enctype: 'multipart/form-data',
+            datatype: 'json',
+            success: function(response) {
+                res = JSON.parse(response);
+                
+            }
+        }); */
+    });
+
+    $("#saleOrder").on("click", function() {
+        formData = new FormData(salefrm);
+        formData.append("user_id", user_id);
+        formData.append("crop_id", $('#crop_id').val());
+        $.ajax({
+            url: url + "api/users/saledataupdate",
+            data: formData,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            enctype: 'multipart/form-data',
+            datatype: 'json',
+            success: function(response) {
+                res = JSON.parse(response);
+                $(".thrd_step").trigger("click");
+            }
+        });
+    });
+
+    $("#finalOrder").on("click", function() {
+        var gval = $('#grand_totalval').val();
+        var interestval = $('#totalinterestval').val();
+        var crop_id = $("#crop_id").val();
+        var gdiscount = $('#granddiscount_amountval').val();
+        var loanstep = $('#loanstepshow').val();
+        var salestep = $('#salestepshow').val();
+
+        $.ajax({
+            url: url + "api/users/updatefinaldata",
+            //data: { userid: user_id, crop_id: crpid, gval: gval, interestval: interestval, gdiscount: gdiscount, loanstep: loanstep, salestep: salestep },
+            data: $('#loanfrm, #salefrm, #final_frm').serialize() + "&loanstep=" + loanstep + "&salestep=" + salestep + "&gdiscount=" + gdiscount + "&interestval=" + interestval + "&crop_id=" + crop_id + "&user_id=" + user_id + "&gval=" + gval,
+            type: 'POST',
+            datatype: 'json',
+            success: function(response1) {
+                settled_id = response1;
+                window.location.href = url + "/api/users/settled_pdf/" + settled_id;
+                location.reload();
+            }
+        });
+
+
+    });
+    $(document).on('blur', "[id^=iinterest]", function() {
+        id = $(this).attr("id").replace("iinterest", '');
+        //update_activity_table('rate_of_interest', $(this).val(), id);
+        calculateTotal();
+    });
+    $(document).on('change', "[id^=startdate]", function() {
+        calculateTotal();
+    });
+    $(document).on('change', "[id^=enddate]", function() {
+        calculateTotal();
+    });
+
+    //dev_php brand discount apply
+    $(document).on('blur', "[id^=branddiscountval]", function() {
+        //validate discount and clear product discounts if not empty
+        id = $(this).attr("id");
+        id = id.replace("branddiscountval", '');
+        var disc_limit = $('#discount_limit' + id).val();
+        var discount = $(this).val();
+        resetProductDiscounts(id); // clear listed products discount
+        if (parseFloat(disc_limit) < parseFloat(discount)) {
+            $(this).val('0');
+            new PNotify({
+                title: 'Discount Limit',
+                text: "Brand discount limit is " + disc_limit + "%",
+                type: 'success',
+                shadow: true,
+                delay: 3000,
+                stack: { "dir1": "down", "dir2": "right", "push": "top" }
+            });
+        } else {
+            //calculate discount of particular brand
+            total_amount = $("#brandtotal" + id).val();
+            discount_value = (total_amount * discount) / 100;
+            $("#discountvalue" + id).val(discount_value);
+            amount_after_disc = total_amount - discount_value;
+            $("#brandtotamt" + id).html('₹' + currency_format(amount_after_disc, 2));
+        }
+        //calculateTotalsale();
+        getGrandDiscount();
+    });
+
+    //product discount apply
+    $(document).on('blur', "[id^=proDiscount]", function() {
+        product_discount = $(this).val();
+        if (product_discount != "") {
+            var id = $(this).attr('id');
+            arr = id.split("_");
+            pid = arr[2];
+            bid = arr[1];
+            cid = arr[0].replace("proDiscount", '');
+            $("#branddiscountval" + cid + "_" + bid).val('0'); //clear brand discount
+            pro_disc_limit = $("#proDiscLmt" + cid + "_" + bid + "_" + pid).val();
+            if (parseFloat(product_discount) > parseFloat(pro_disc_limit)) {
+                //clear product discount
+                $(this).val('0');
+                new PNotify({
+                    title: 'Discount Limit',
+                    text: "Product discount limit is " + pro_disc_limit + "%",
+                    type: 'success',
+                    shadow: true,
+                    delay: 3000,
+                    stack: { "dir1": "down", "dir2": "right", "push": "top" }
+                });
+            } else {
+                total_amount = $("#proMRPTotal" + cid + "_" + bid + "_" + pid).val();
+                discount_value = (total_amount * product_discount) / 100;
+                $("#proDiscountVal" + cid + "_" + bid + "_" + pid).val(discount_value);
+                amount_after_disc = total_amount - discount_value;
+                $("#pro_total" + cid + "_" + bid + "_" + pid).html('₹' + currency_format(amount_after_disc, 2));
+                TotalProductDiscount(cid + "_" + bid);
+            }
+        }
+        getGrandDiscount();
+
+    });
+
+    /* date filters */
+    $('#reportrange').daterangepicker({
+        opens: 'right',
+        drops: 'down',
+        showDropdowns: true,
+        locale: {
+            format: 'D-MMM-YYYY',
+            customRangeLabel: 'Date Range'
+        },
+        parentEl: '.dateEle',
+        ranges: {
+            'Till Date': [],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Last 6 Months': [moment().subtract(6, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            "Last Year": [moment().subtract(1, "y").startOf("year"), moment().subtract(1, "y").endOf("year")]
+        }
+    }, cb);
+
+    $(document).on('click', '.ranges ul li', function() {
+        $(this).parent().children().removeClass('active');
+        $(this).addClass('active');
+        $('.drp-selected').css('font-weight', 'bold');
+        if ($(this).text() == "Till Date") {
+            $("#date_val").val('Till Date');
+        }
+
+        if ($(this).text() != "Date Range") {
+            $('#usr_lst_tbl').DataTable().destroy();
+            load_unsettled();
+        }
+    });
+
+    $(document).on('click', '.applyBtn', function() {
+        $('#usr_lst_tbl').DataTable().destroy();
+        load_unsettled();
+    });
+    /* date filters */
+
+    $(document).on('click', '.comp_cl', function() {
+        $(this).addClass('act_tab');
+        $('.tabs_tbl').addClass('cmp_ul');
+        $('.drft_cl').removeClass('act_tab');
+        $('#usr_lst_tbl').DataTable().destroy();
+        load_settled();
+    });
+
+    $(document).on('click', '.drft_cl', function() {
+        $(this).addClass('act_tab');
+        $('.tabs_tbl').removeClass('cmp_ul');
+        $('.comp_cl').removeClass('act_tab');
+        $('#usr_lst_tbl').DataTable().destroy();
+        load_unsettled();
+    });
 });
+
+/* date  filters */
+function cb(start, end) {
+    $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+    if ($('#date_val').val() == "Invalid date - Invalid date") {
+        $('#date_val').val('');
+    } else {
+        $('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
+    }
+}
 
 function load_unsettled() {
     $("#table_footer").show();
-    $(".usr_lst_tbl").empty();
+    //$(".usr_lst_tbl").empty();
     var h = $(window).height();
     var min_h = h - 315;
-    var tables = $('#usr_lst_tbl').DataTable({
+    $("#unsettled_header").show();
+    $("#settled_header").hide();
+    tables = $('#usr_lst_tbl').DataTable({
         'ordering': false,
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
+        "lengthChange": false,
         "columns": [
-            { title: "Date", className: "date", "width": "20%" },
-            { title: "Detail", className: "" },
-            { title: "Amount", className: "txt_rt out_td", "width": "40%" } //grn_clr txt_red out_td
+            { className: "date", "width": "20%" },
+            { className: "" },
+            { className: "txt_rt out_td", "width": "40%" } //grn_clr txt_red out_td
         ],
 
         language: {
@@ -1083,6 +1164,8 @@ function load_unsettled() {
                 data.user_id = user_id;
                 data.crop_id = $("#crop_id").val();
                 data.settled = $(".act_tab").attr("id");
+                var reportrange = $('#date_val').val();
+                data.reportrange = reportrange;
             },
             "dataSrc": function(json) {
                 //alert(json.total_record);
@@ -1124,8 +1207,10 @@ function load_unsettled() {
         }
     });
 
+
+
     $('#usr_lst_tbl_wrapper .dataTables_scrollBody').css('height', min_h);
-    $('#usr_lst_tbl_wrapper .dataTables_length').html('<ul class="tabs_tbl"><li class="act_tab drft_cl" id="status_0"> <span>Unsettled</span> </li><li class="comp_cl" id="status_1"> <span>Settled </span> </li></ul> <span class="tbl_btn">  </span>');
+    $('#usr_lst_tbl_wrapper .dataTables_length').html('');
     $('#usr_lst_tbl_wrapper .dataTables_scrollBody').mCustomScrollbar("destroy");
     $('#usr_lst_tbl_wrapper .dataTables_scrollBody').mCustomScrollbar({
         theme: "minimal",
@@ -1147,7 +1232,9 @@ function load_unsettled() {
             }
         }
     });
+}
 
+function final_unsettled() {
     var tables_pop = $('#usr_lst_tbl1').DataTable({
         'ordering': false,
         'processing': true,
@@ -1176,6 +1263,7 @@ function load_unsettled() {
                 }
 
                 total_trans_amount = json.total_trans_amount;
+                $("#sum_total").val(total_trans_amount);
                 if (total_trans_amount > 0) {
                     $("#in_td1").html('<span class="grn_clr">₹' + currency_format(total_trans_amount, 2) + '</span');
                 } else {
@@ -1272,20 +1360,24 @@ function load_unsettled() {
 
 function load_settled() {
     $("#table_footer").hide();
-    $("#usr_lst_tbl").empty();
+    //$("#usr_lst_tbl").empty();
     var h = $(window).height();
     var min_h = h - 230;
+    $("#unsettled_header").hide();
+    $("#settled_header").show();
+    return false;
     var tables = $('#usr_lst_tbl').DataTable({
         'ordering': false,
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
+        "lengthChange": false,
         "columns": [
-            { title: "", className: "pl_m", "width": "50px" },
-            { title: "Settled Date", className: "date", "width": "100px" },
-            { title: "Settled Id", className: "", "width": "" },
-            { title: "Status", className: "txt_rt out_td", "width": "" },
-            { title: "Download", className: "txt_rt down_blk", "width": "" },
+            { className: "pl_m", "width": "50px" },
+            { className: "date", "width": "100px" },
+            { className: "", "width": "" },
+            { className: "txt_rt out_td", "width": "" },
+            { className: "txt_rt down_blk", "width": "" },
         ],
 
         language: {
@@ -1308,7 +1400,7 @@ function load_settled() {
         }
     });
     $('#usr_lst_tbl_wrapper .dataTables_scrollBody').css('height', min_h);
-    $('#usr_lst_tbl_wrapper .dataTables_length').html('<ul class="tabs_tbl cmp_ul"><li class="drft_cl" id="status_0"> <span>Unsettled</span> </li><li class="act_tab comp_cl" id="status_1"> <span>Settled </span> </li></ul> <span class="tbl_btn">  </span>');
+    $('#usr_lst_tbl_wrapper .dataTables_length').html('');
     $('#usr_lst_tbl_wrapper .dataTables_scrollBody').mCustomScrollbar("destroy");
     $('#usr_lst_tbl_wrapper .dataTables_scrollBody').mCustomScrollbar({
         theme: "minimal",

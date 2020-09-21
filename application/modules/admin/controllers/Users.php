@@ -14,6 +14,7 @@ class Users extends CI_Controller
 		$this->load->model('api/Sales_model');
 		$this->load->model('api/Trades_model');
 		$this->load->model('api/Transaction_model');
+		$this->load->model('api/Receipts_model');
 		$this->load->helper('form');
 		$this->load->helper('captcha');
 		$this->load->helper('url');
@@ -44,6 +45,10 @@ class Users extends CI_Controller
 		$data["page_title"] = "User Details";				
 		$adminid = $this->session->userdata("adminid");
 		$data['user'] = $this->Users_model->getUser($uid);
+		//approved loans
+		$credit_limit = $data['user']['credit_limit'];
+		$receipts = $this->Receipts_model->getUserReceiptTotal($uid);
+		
 		//total loans
 		$data['totalLoan'] = $this->Loans_model->getTotalLoansOfUser($uid);
 		//total orders
@@ -52,6 +57,8 @@ class Users extends CI_Controller
 		$data["totalHarvest"] = $this->Trades_model->getTotalTradeByUser($uid);
 		//total acres
 		$data["totalAcres"] = $this->Users_model->getUserTotalCrop($uid);
+
+		$data['available_credit'] = $credit_limit + $receipts - $data['totalLoan'] ;
 		$this->load->view('admin/userdetails',$data);
 	}
 
@@ -693,8 +700,8 @@ class Users extends CI_Controller
 					'feed'=>(!empty($_POST['feed']))?trim($_POST['feed']):"",
 					'roi'=>(!empty($_POST['roi']))?trim($_POST['roi']):"",
 					'doc_rem'=>(!empty($_POST['doc_rem']))?trim($_POST['doc_rem']):"",
-					'doc_received_date'=>(!empty($_POST['recdate']))?trim($_POST['recdate']):"0000:00:00 00:00",
-					'doc_return_date'=>(!empty($_POST['retdate']))?trim($_POST['retdate']):"0000:00:00 00:00",
+					'doc_received_date'=>(!empty($_POST['recdate']))?trim(date('Y-m-d',strtotime($_POST['recdate']))):"0000:00:00 00:00",
+					'doc_return_date'=>(!empty($_POST['retdate']))?trim(date('Y-m-d',strtotime($_POST['retdate']))):"0000:00:00 00:00",
 					'credit_limit'=>(!empty($_POST['credit_limit']))?trim($_POST['credit_limit']):"",
 					'open_balance'=>(!empty($_POST['open_balance']))?trim($_POST['open_balance']):"",
 					'medicines1'=>(!empty($_POST['medicines'][0]))?trim($_POST['medicines'][0]):0,

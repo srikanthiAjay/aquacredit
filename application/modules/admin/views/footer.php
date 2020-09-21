@@ -172,7 +172,7 @@
         })
 	}
 	var count_interval = setInterval(function(){
-        check_session();
+        //check_session();
     }, 10000);
 			
 	</script>

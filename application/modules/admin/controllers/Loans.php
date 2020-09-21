@@ -18,8 +18,7 @@ class Loans extends CI_Controller
 		
 		if($this->session->userdata('adminid') == "")
 		{ 
-			redirect('admin');
-			
+			redirect('admin');			
 		}
 	}
 

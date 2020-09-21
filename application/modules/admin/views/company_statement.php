@@ -91,7 +91,7 @@ html{
 								<tr>
 									<!-- <th></th> -->
 									<th class="date">  Date
-									<span class="pull-right" id="reportrange">
+										<span class="pull-right" id="reportrange">
 											<i class="fa fa-filter"  aria-hidden="true" style="font-size: 9px;"></i> 
 											<span></span>
 										</span>	
@@ -380,7 +380,7 @@ $(document).ready(function() {
 	$("input[name='trans_type'], input[name='month_opt']").on('click',function() {
 		tables.ajax.reload();
 	});
-	
+	/* date filters */
 	function cb(start, end) {
 		$('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));		
 		if($('#date_val').val() == "Invalid date - Invalid date")
@@ -390,7 +390,6 @@ $(document).ready(function() {
 			$('#date_val').val(start.format('D/MMM/YYYY') + ' - ' + end.format('D/MMM/YYYY'));
 		}		
   	}
-	
 	
 	$('#reportrange').daterangepicker({
 		opens: 'right',
@@ -426,7 +425,7 @@ $(document).ready(function() {
     $(document).on('click','.applyBtn',function(){
 		tables.draw();
     });	
-	
+	/* date filter ends */
 	$('.swith_blk').click(function(){
 		
 		$(".expand_details").each(function() {       

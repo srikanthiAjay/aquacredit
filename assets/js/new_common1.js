@@ -1,85 +1,85 @@
 var thisform = "#single";
 $(document).ready(function() {
-	
-	BankNames('bc_name_1'); CropTypes('crop_type_1');
-	
+
+    BankNames('bc_name_1');
+    CropTypes('crop_type_1');
+
     $('.mnu_blk').click(function() {
         $(this).toggleClass('act_menu');
         $('.left_blk ul').toggleClass('dis_blk');
     });
 
     $('.ad_bnk').unbind().click(function(event) {
-		
-		var err = 0;
-		$("#farmer input[type='text'], .bname").each(function(){			
-				
-        	if($(this).val() == '' && $(this).attr("id") != "undefined"){
-        		
-        		var this_id = $(this).attr("id");
-        		
-				var split_id = this_id.split("_");
-        		//alert(split_id[0]);
-        		if(split_id[0] == "fname" || split_id[0] == "ac" || split_id[0] == "bc" || split_id[0] == "ifsc" || split_id[0] == "branch")
-        		{
-					
-        			err = 1; tagid = "#"+this_id;
-					//$("#"+this_id).css("border", "");
-        			//$(this).css("border", "1px solid red");
-        			if(split_id[0] == "fname"){	err_msg = "Please enter account holder name!"; }
-					if(split_id[0] == "ac"){ err_msg = "Please enter account number!"; }
-					if(split_id[0] == "bc"){ err_msg = "Please select bank name!"; }
-					if(split_id[0] == "ifsc"){ err_msg = "Please enter ifsc code!"; }
-					if(split_id[0] == "branch"){ err_msg = "Please enter branch name!"; }
-					return form_validation(err,err_msg,tagid);
-        		}			
-        						
-        	}
+
+        var err = 0;
+        $("#farmer input[type='text'], .bname").each(function() {
+
+            if ($(this).val() == '' && $(this).attr("id") != "undefined") {
+
+                var this_id = $(this).attr("id");
+
+                var split_id = this_id.split("_");
+                //alert(split_id[0]);
+                if (split_id[0] == "fname" || split_id[0] == "ac" || split_id[0] == "bc" || split_id[0] == "ifsc" || split_id[0] == "branch") {
+                    err = 1;
+                    tagid = "#" + this_id;
+                    //$("#"+this_id).css("border", "");
+                    //$(this).css("border", "1px solid red");
+                    if (split_id[0] == "fname") { err_msg = "Please enter account holder name!"; }
+                    if (split_id[0] == "ac") { err_msg = "Please enter account number!"; }
+                    if (split_id[0] == "bc") { err_msg = "Please select bank name!"; }
+                    if (split_id[0] == "ifsc") { err_msg = "Please enter ifsc code!"; }
+                    if (split_id[0] == "branch") { err_msg = "Please enter branch name!"; }
+                    return form_validation(err, err_msg, tagid);
+                }
+
+            }
         });
-		
-		
-		if(err == 0){
-		
-			var bank_cnt = $("#bank_cnt").attr("data-bank-cnt");
-			var extra_id = (parseInt(bank_cnt) + 1);
-			BankNames('bc_name_'+extra_id);
-			var html = ['<div class="bank_dtl_blk" data-bank-id="bank_acc_' + extra_id + '" data-bid="' + extra_id + '"> <span class="remove" onclick="removeBankAcc(' + extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span> <div class="row">',
-				'<div class="col-md-12">',
-				'<div class="form-group border-lable-flt">',            
-				'<input type="text" class="form-control" id="fname_' + extra_id + '" name="fname[]" placeholder=" " />',
-				'<label for="fname_' + extra_id + '">Person Full Name</label>',
-				'<label id="fname_' + extra_id + '-error" class="error" for="fname_' + extra_id + '"></label>',
-				'</div>',
-				'</div>',
-				'<div class="col-md-6">',
-				'<div class="form-group border-lable-flt">',           
-				'<input type="text" class="form-control allownumericwithoutdecimal" id="ac_number_' + extra_id + '" name="ac_number[]" placeholder=" " />',
-				 '<label for="ac_number_' + extra_id + '">Account Number</label>',
-				'</div>',
-				'</div>',
-				'<div class="col-md-6">',
-				'<div class="form-group">',            
-				'<select id="bc_name_'+ extra_id +'" name="bc_name[]" class="bname" placeholder="Select Bank" ></select>',				
-				'</div>',
-				'</div>',
-				'<div class="col-md-6">',
-				'<div class="form-group border-lable-flt">',            
-				'<input type="text" class="form-control" id="ifsc_' + extra_id + '" name="ifsc[]" placeholder=" " />',
-				'<label for="ifsc_' + extra_id + '">IFSC</label>',
-				'</div>',
-				'</div>',
-				'<div class="col-md-6">',
-				'<div class="form-group border-lable-flt">',            
-				'<input type="text" class="form-control" id="branch_name" name="branch_name[]" placeholder=" " />',
-				'<label for="branch_name">Branch Name</label>',
-				'</div>',
-				'</div></div> </div>'
-			];
-			$(this).parent('.hdg_bk').siblings('.bank_list').find('.bank_list_pos').append(html.join("\n"));
-			var k = $(this).parent('.hdg_bk').siblings('.bank_list').find('.bank_list_pos').children('.bank_dtl_blk').length;
-			var wth = $('.bank_dtl_blk').width() + 32;
-			var s = k * 20;
-			$(this).parent('.hdg_bk').siblings('.bank_list').find('.bank_list_pos').css('width', k * wth + s);
-		}
+
+
+        if (err == 0) {
+
+            var bank_cnt = $("#bank_cnt").attr("data-bank-cnt");
+            var extra_id = (parseInt(bank_cnt) + 1);
+            BankNames('bc_name_' + extra_id);
+            var html = ['<div class="bank_dtl_blk" data-bank-id="bank_acc_' + extra_id + '" data-bid="' + extra_id + '"> <span class="remove" onclick="removeBankAcc(' + extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span> <div class="row">',
+                '<div class="col-md-12">',
+                '<div class="form-group border-lable-flt">',
+                '<input type="text" class="form-control" id="fname_' + extra_id + '" name="fname[]" placeholder=" " />',
+                '<label for="fname_' + extra_id + '">Person Full Name</label>',
+                '<label id="fname_' + extra_id + '-error" class="error" for="fname_' + extra_id + '"></label>',
+                '</div>',
+                '</div>',
+                '<div class="col-md-6">',
+                '<div class="form-group border-lable-flt">',
+                '<input type="text" class="form-control allownumericwithoutdecimal" id="ac_number_' + extra_id + '" name="ac_number[]" placeholder=" " />',
+                '<label for="ac_number_' + extra_id + '">Account Number</label>',
+                '</div>',
+                '</div>',
+                '<div class="col-md-6">',
+                '<div class="form-group">',
+                '<select id="bc_name_' + extra_id + '" name="bc_name[]" class="bname" placeholder="Select Bank" ></select>',
+                '</div>',
+                '</div>',
+                '<div class="col-md-6">',
+                '<div class="form-group border-lable-flt">',
+                '<input type="text" class="form-control" id="ifsc_' + extra_id + '" name="ifsc[]" placeholder=" " />',
+                '<label for="ifsc_' + extra_id + '">IFSC</label>',
+                '</div>',
+                '</div>',
+                '<div class="col-md-6">',
+                '<div class="form-group border-lable-flt">',
+                '<input type="text" class="form-control" id="branch_name" name="branch_name[]" placeholder=" " />',
+                '<label for="branch_name">Branch Name</label>',
+                '</div>',
+                '</div></div> </div>'
+            ];
+            $(this).parent('.hdg_bk').siblings('.bank_list').find('.bank_list_pos').append(html.join("\n"));
+            var k = $(this).parent('.hdg_bk').siblings('.bank_list').find('.bank_list_pos').children('.bank_dtl_blk').length;
+            var wth = $('.bank_dtl_blk').width() + 32;
+            var s = k * 20;
+            $(this).parent('.hdg_bk').siblings('.bank_list').find('.bank_list_pos').css('width', k * wth + s);
+        }
 
         $('.remove').unbind().click(function() {
             var k = $(this).parent().parent().children('.bank_dtl_blk').length;
@@ -118,72 +118,71 @@ $(document).ready(function() {
     });
 
     $('.ad_crp').unbind().click(function() {
-		
-		var err = 0;
-		$("#farmer input[type='text'], .ctype").each(function(){			
-				$("#"+$(this).attr("id")).css("border","");
-        	if($(this).val() == '' && $(this).attr("id") != "undefined"){
-        		
-        		var this_id = $(this).attr("id");
-        		
-				var split_id = this_id.split("_");
-        		//alert(split_id[0]);
-        		if(split_id[0] == "crop" || split_id[0] == "acres" || split_id[0] == "transaction")
-        		{
-					
-        			err = 1; tagid = "#"+this_id;
-					if(split_id[0] == "crop")
-					{
-						if(split_id[1] == "loc"){ err_msg = "Please enter crop location!";}
-						else{ err_msg = "Please select crop type!"; $(this).parent().children(".btn-group").find(".multiselect").css("border", "1px solid red"); }
-					}
-					if(split_id[0] == "acres"){ err_msg = "Please enter no. of acres!"; }
-					if(split_id[0] == "transaction"){ err_msg = "Please enter open balance!"; }
-					return form_validation(err,err_msg,tagid);
-        		}			
-        						
-        	}
+
+        var err = 0;
+        $("#farmer input[type='text'], .ctype").each(function() {
+            $("#" + $(this).attr("id")).css("border", "");
+            if ($(this).val() == '' && $(this).attr("id") != "undefined") {
+
+                var this_id = $(this).attr("id");
+
+                var split_id = this_id.split("_");
+                //alert(split_id[0]);
+                if (split_id[0] == "crop" || split_id[0] == "acres" || split_id[0] == "transaction") {
+
+                    err = 1;
+                    tagid = "#" + this_id;
+                    if (split_id[0] == "crop") {
+                        if (split_id[1] == "loc") { err_msg = "Please enter crop location!"; } else { err_msg = "Please select crop type!";
+                            $(this).parent().children(".btn-group").find(".multiselect").css("border", "1px solid red"); }
+                    }
+                    if (split_id[0] == "acres") { err_msg = "Please enter no. of acres!"; }
+                    if (split_id[0] == "transaction") { err_msg = "Please enter open balance!"; }
+                    return form_validation(err, err_msg, tagid);
+                }
+
+            }
         });
 
-		if(err == 0){
-			
-			var crop_cnt = $("#crop_cnt").attr("data-crop-cnt");
-			var crop_extra_id = (parseInt(crop_cnt) + 1);
-			CropTypes('crop_type_'+crop_extra_id);
-			var html = ['<div class="crp_dtl_blk" data-crop-id="crop_details_' + crop_extra_id + '" data-cid="' + crop_extra_id + '"> <span class="crp_remove" onclick="removeCrop(' + crop_extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span> <div class="row">',
-				'<div class="col-md-6">',
-				'<div class="form-group border-lable-flt">',            
-				'<input type="text" class="form-control" id="crop_loc_' + crop_extra_id + '" name="crop_loc[]" placeholder=" " />',
-				'<label for="crop_loc_' + crop_extra_id + '" class="control-label required">Crop Location</label>',
-				'</div>',
-				'</div>',
-				'<div class="col-md-6">',
-				'<div class="form-group">',            
-				'<select id="crop_type_'+ crop_extra_id +'" name="crop_type[]" class="ctype" placeholder="Select Crop" ></select>',
-				'</div>',
-				'</div>',
-				'<div class="col-md-6">',
-				'<div class="form-group border-lable-flt">',            
-				'<input type="text" class="form-control" id="acres_' + crop_extra_id + '" name="acres[]" placeholder=" " onkeypress="return allowNumerORDecimal(event,this)"/>',
-				'<label for="acres_' + crop_extra_id + '" class="control-label required">Number of Acres</label>',
-				'</div>',
-				'</div>',
-				'<div class="col-md-6">',
-				'<div class="form-group border-lable-flt">',            
-				'<input type="text" class="form-control" id="transaction_balance_' + crop_extra_id + '" name="transaction_balance[]" placeholder=" " onkeypress="return allowNumerORDecimal(event,this)"/>',
-				'<label for="transaction_balance_' + crop_extra_id + '" class="control-label required">Open Balance</label>',
-				'</div>',
-				'</div>',
-				'</div>'
-			];
-			//$('.crp_list_pos').append(html.join("\n"));
-			$(this).parent('.hdg_bk').siblings('.crp_list').find('.crp_list_pos').append(html.join("\n"));
-			var k = $(this).parent('.hdg_bk').siblings('.crp_list').find('.crp_list_pos').children('.crp_dtl_blk').length;
-			var wth = $('.crp_dtl_blk').width() + 32;
-			var s = k * 20;
-			//$('.crp_list_pos').css('width', k*wth+s);
-			$(this).parent('.hdg_bk').siblings('.crp_list').find('.crp_list_pos').css('width', k * wth + s);
-		}
+        if (err == 0) {
+
+            var crop_cnt = $("#crop_cnt").attr("data-crop-cnt");
+            var crop_extra_id = (parseInt(crop_cnt) + 1);
+            CropTypes('crop_type_' + crop_extra_id);
+            var html = ['<div class="crp_dtl_blk" data-crop-id="crop_details_' + crop_extra_id + '" data-cid="' + crop_extra_id + '"> <span class="crp_remove" onclick="removeCrop(' + crop_extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span> <div class="row">',
+                '<div class="col-md-6">',
+                '<div class="form-group border-lable-flt">',
+                '<input type="text" class="form-control" id="crop_loc_' + crop_extra_id + '" name="crop_loc[]" placeholder=" " />',
+                '<label for="crop_loc_' + crop_extra_id + '" class="control-label required">Crop Location</label>',
+                '</div>',
+                '</div>',
+                '<div class="col-md-6">',
+                '<div class="form-group">',
+                '<select id="crop_type_' + crop_extra_id + '" name="crop_type[]" class="ctype" placeholder="Select Crop" ></select>',
+                '</div>',
+                '</div>',
+                '<div class="col-md-6">',
+                '<div class="form-group border-lable-flt">',
+                '<input type="text" class="form-control" id="acres_' + crop_extra_id + '" name="acres[]" placeholder=" " onkeypress="return allowNumerORDecimal(event,this)"/>',
+                '<label for="acres_' + crop_extra_id + '" class="control-label required">Number of Acres</label>',
+                '</div>',
+                '</div>',
+                '<div class="col-md-6">',
+                '<div class="form-group border-lable-flt">',
+                '<input type="text" class="form-control" id="transaction_balance_' + crop_extra_id + '" name="transaction_balance[]" placeholder=" " onkeypress="return allowNumerORDecimal(event,this)"/>',
+                '<label for="transaction_balance_' + crop_extra_id + '" class="control-label required">Open Balance</label>',
+                '</div>',
+                '</div>',
+                '</div>'
+            ];
+            //$('.crp_list_pos').append(html.join("\n"));
+            $(this).parent('.hdg_bk').siblings('.crp_list').find('.crp_list_pos').append(html.join("\n"));
+            var k = $(this).parent('.hdg_bk').siblings('.crp_list').find('.crp_list_pos').children('.crp_dtl_blk').length;
+            var wth = $('.crp_dtl_blk').width() + 32;
+            var s = k * 20;
+            //$('.crp_list_pos').css('width', k*wth+s);
+            $(this).parent('.hdg_bk').siblings('.crp_list').find('.crp_list_pos').css('width', k * wth + s);
+        }
 
         $('.crp_remove').unbind().click(function() {
 
@@ -227,7 +226,7 @@ $(document).ready(function() {
             '<div class="form-group">',
             '<span class="deflt">&nbsp;</span><a href="javascript:void(0)" title="" class="fr change_med" onclick="nchangemed(' + med_extra_id + ')"> Change </a><span class="med_remove" onclick="removeMed(' + med_extra_id + ')"> <img src="' + url + '/assets/images/close_btn.png" alt="" title="" /> </span>',
             '<span class="border-lable-flt"><input type="text" class="form-control" id="medicines' + med_extra_id + '" name="medicines[]" placeholder="Medicines' + med_extra_id + '" onkeypress="return allowNumerORDecimal(event,this)">',
-			'<label for="medicines' + med_extra_id + '">Medicines' + med_extra_id + '</label>',
+            '<label for="medicines' + med_extra_id + '">Medicines' + med_extra_id + '</label>',
             '<input type="hidden"  id="hidfm' + med_extra_id + '" name="hidfm' + med_extra_id + '"/>',
             '<input type="hidden" id="hidm' + med_extra_id + '" name="hidm' + med_extra_id + '" value="" />',
             '</span></div>',
@@ -434,20 +433,20 @@ $(document).ready(function() {
         var part = [
             '<div class="row dtl_par" data-bank-id="partner_acc_' + partner_extra_id + '" data-pid="' + partner_extra_id + '">',
             '<div class="col-md-4">',
-            '<div class="form-group border-lable-flt">',            
+            '<div class="form-group border-lable-flt">',
             '<input type="text" id="pname" name="pname[]" class="form-control" placeholder=" ">',
-            '<label for="pname_' + partner_extra_id + '">Partner Name</label> ',			
+            '<label for="pname_' + partner_extra_id + '">Partner Name</label> ',
             '</div>',
             '</div>',
             '<div class="col-md-4">',
-            '<div class="form-group border-lable-flt">',            
+            '<div class="form-group border-lable-flt">',
             '<input type="text" id="paadhar" name="paadhar[]" class="form-control allownumericwithoutdecimal" placeholder=" " maxlength="12"> ',
             '<label for="paadhar_' + partner_extra_id + '">Aadhar</label> ',
             '</div>',
             '</div>',
 
             '<div class="col-md-4">',
-            '<div class="form-group border-lable-flt">',            
+            '<div class="form-group border-lable-flt">',
             '<input type="text" class="form-control" id="pmobile" name="pmobile[]" placeholder=" " style="width: calc(100% - 40px); float:left;" maxlength="10">',
             '<label for="pmobile_' + partner_extra_id + '">Phone Number</label>',
             '<span class="cl_part" maxlength="10" onclick="removePartner(' + partner_extra_id + ')"><img src="' + url + '/assets/images/close_btn.png" width="17"/></span>',
@@ -605,17 +604,17 @@ $(document).ready(function() {
 
             if (hidmob.length > 1) {
                 $(this).parent().parent().parent().siblings('.aler_lnks').find('.new_mob_em_blk.new_m li.defa_c').html(new_email.join("\n"));
-				//$(this).parent().parent().parent().siblings('.aler_lnks').find('#mob_numb_new').prop('disabled', false);
+                //$(this).parent().parent().parent().siblings('.aler_lnks').find('#mob_numb_new').prop('disabled', false);
             } else {
                 $(this).parent().parent().parent().siblings('.aler_lnks').find('.new_mob_em_blk.new_m').html(new_email.join("\n"));
-				//$(this).parent().parent().parent().siblings('.aler_lnks').find('#mob_numb_new').prop('disabled', true);
+                //$(this).parent().parent().parent().siblings('.aler_lnks').find('#mob_numb_new').prop('disabled', true);
             }
             if (hidmail.length > 1) {
                 $(this).parent().parent().parent().siblings('.aler_lnks').find('.new_mob_em_blk.new_p li.defa_c').html(new_phone.join("\n"));
-				//$(this).parent().parent().parent().siblings('.aler_lnks').find('#email_id_new').prop('disabled', false);
+                //$(this).parent().parent().parent().siblings('.aler_lnks').find('#email_id_new').prop('disabled', false);
             } else {
                 $(this).parent().parent().parent().siblings('.aler_lnks').find('.new_mob_em_blk.new_p').html(new_phone.join("\n"));
-				//$(this).parent().parent().parent().siblings('.aler_lnks').find('#email_id_new').prop('disabled', true);
+                //$(this).parent().parent().parent().siblings('.aler_lnks').find('#email_id_new').prop('disabled', true);
             }
 
             $(this).parent().parent().parent().siblings('.aler_lnks').find('.form-control').removeAttr('disabled', 'true');
@@ -626,7 +625,7 @@ $(document).ready(function() {
             $('#hid_mail').val(hidmail.join());
 
 
-        }else {
+        } else {
 
             $(this).parent().parent().parent().siblings('.aler_lnks').find('.form-control').prop("disabled", true);
             $('.dft_mob_blk').empty();
@@ -793,77 +792,76 @@ $(document).ready(function() {
 
 });
 
-function BankNames(dynid)
-{	
-	$.ajax({		
-		url: url+"api/Banks/banknames",
-		data: {},
-		type:'POST',		
-		datatype:'json',
-		success : function(response){
-			
-			var opt = "<option value='' data-img=''> Select Bank </option>";
-			res= JSON.parse(response);
-			$.each(res.data, function(index, bank) {
-				
-				opt += "<option value='" + bank.short_name + "' data-img='"+bank.bank_icon
-				+"' >" + bank.bank_name + "</option>";
-			});
-			$('#'+dynid).html(opt);
-			$('#'+dynid).multiselect({
-				enableHTML: true,
-				optionLabel: function(element) {
-					if($(element).attr('data-img') != "")
-						return '<img src="'+url+'assets/images/'+$(element).attr('data-img')+'"> '+$(element).text();
-					else
-						return ' Select Bank ';
-				},
-				// ...
-			});
-			
-			//$('#'+dynid).multiselect('rebuild');	
-			
-		}
-	});
-	
-	$('#'+dynid).change(function () {	
-		$(this).parent().children(".btn-group").find(".multiselect").css("border", "");
-	});
-			
+function BankNames(dynid) {
+    $.ajax({
+        url: url + "api/Banks/banknames",
+        data: {},
+        type: 'POST',
+        datatype: 'json',
+        success: function(response) {
+
+            var opt = "<option value='' data-img=''> Select Bank </option>";
+            res = JSON.parse(response);
+            $.each(res.data, function(index, bank) {
+
+                opt += "<option value='" + bank.short_name + "' data-img='" + bank.bank_icon +
+                    "' >" + bank.bank_name + "</option>";
+            });
+            $('#' + dynid).html(opt);
+            $('#' + dynid).multiselect({
+                enableHTML: true,
+                optionLabel: function(element) {
+                    if ($(element).attr('data-img') != "")
+                        return '<img src="' + url + 'assets/images/' + $(element).attr('data-img') + '"> ' + $(element).text();
+                    else
+                        return ' Select Bank ';
+                },
+                // ...
+            });
+
+            //$('#'+dynid).multiselect('rebuild');	
+
+        }
+    });
+
+    $('#' + dynid).change(function() {
+        $(this).parent().children(".btn-group").find(".multiselect").css("border", "");
+    });
+
 }
-function CropTypes(dynid)
-{	
-	$.ajax({		
-		url: url+"api/Crops/croptypes",
-		data: {},
-		type:'POST',		
-		datatype:'json',
-		success : function(response){
-			
-			var opt = "<option value='' class='radio_blk'> Crop Type  </option>";
-			res= JSON.parse(response);
-			$.each(res.data, function(index, crop) {
-				
-				opt += "<option value='" + crop.crop_type_id + "' class='radio_blk'>" + crop.crop_type + "</option>";
-			});
-			$('#'+dynid).html(opt);
-			/* $('#'+dynid).multiselect({
-				enableHTML: true				
-			}); */
-			$('#'+dynid).multiselect('rebuild');
-			$('input[type="radio"]').change(function() {					
-				$('.radio_blk').removeClass('checkd');
-				$(this).parent().parent().parent('.radio_blk').toggleClass('checkd');
-			});
-			//$('#'+dynid).multiselect('rebuild');	
-			
-		}
-	});
-	
-	$('#'+dynid).change(function () {	
-		$(this).parent().children(".btn-group").find(".multiselect").css("border", "");
-	});
-			
+
+function CropTypes(dynid) {
+    $.ajax({
+        url: url + "api/Crops/croptypes",
+        data: {},
+        type: 'POST',
+        datatype: 'json',
+        success: function(response) {
+
+            var opt = "<option value='' class='radio_blk'> Crop Type  </option>";
+            res = JSON.parse(response);
+            $.each(res.data, function(index, crop) {
+
+                opt += "<option value='" + crop.crop_type_id + "' class='radio_blk'>" + crop.crop_type + "</option>";
+            });
+            $('#' + dynid).html(opt);
+            /* $('#'+dynid).multiselect({
+            	enableHTML: true				
+            }); */
+            $('#' + dynid).multiselect('rebuild');
+            $('input[type="radio"]').change(function() {
+                $('.radio_blk').removeClass('checkd');
+                $(this).parent().parent().parent('.radio_blk').toggleClass('checkd');
+            });
+            //$('#'+dynid).multiselect('rebuild');	
+
+        }
+    });
+
+    $('#' + dynid).change(function() {
+        $(this).parent().children(".btn-group").find(".multiselect").css("border", "");
+    });
+
 }
 
 function checkmobile() {
@@ -1157,18 +1155,18 @@ function delDocConfirm() {
         }
     });
 }
-function form_validation(err,err_msg,tagid)
-{
-  $('.mykey').parent().css("border", "");
-  
-  $("#snackbar").text(err_msg);
-  $("#snackbar").addClass("show");
-  
-  setTimeout(function(){ $("#snackbar").removeClass("show"); }, 3000);
-  //$(tagid).parent().css("border", "1px solid red");
-  $(tagid).css("border", "1px solid red"); 
-  $(tagid).focus();
-  return false;
+
+function form_validation(err, err_msg, tagid) {
+    $('.mykey').parent().css("border", "");
+
+    $("#snackbar").text(err_msg);
+    $("#snackbar").addClass("show");
+
+    setTimeout(function() { $("#snackbar").removeClass("show"); }, 3000);
+    //$(tagid).parent().css("border", "1px solid red");
+    $(tagid).css("border", "1px solid red");
+    $(tagid).focus();
+    return false;
 }
 /*$('.new_blk_add').click(function(){
 	

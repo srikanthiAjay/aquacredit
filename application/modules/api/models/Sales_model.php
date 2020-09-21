@@ -144,6 +144,14 @@ class Sales_model extends CI_Model
 		return(json_encode(array('status'=>'success','data'=>$query)));
 	}
 	
+	function getsale_details($sale_id)
+	{
+		$this->db->select('s.id,s.s_id,s.brandid,s.product_id,s.inventory_id,p.cat_id');
+		$this->db->join('products p', 'p.pid = s.product_id','left');
+		$this->db->where('s.s_id',$sale_id);
+		$select = $this->db->get("sale_details s");
+		 return $select->result();
+	}
 	function getTradesdata($bid = "")
 	{	
 		if($bid!='')
@@ -322,6 +330,7 @@ class Sales_model extends CI_Model
 		if($crop_id != "")
 			$this->db->where("crop_id",$crop_id);
 		$this->db->where("status",'0');
+		$this->db->where("settled",'0');
 		$query = $this->db->get();
 		return $query->row()->total_saleprice;
 	}

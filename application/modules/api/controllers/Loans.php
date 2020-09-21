@@ -16,6 +16,7 @@ class Loans extends CI_Controller
 		$this->load->model('api/Banks_model');
 		$this->load->model('api/Transaction_model');
 		$this->load->model('api/Cash_model');
+		$this->load->model('api/Receipts_model');
 		
 		setlocale(LC_MONETARY, 'en_IN');		
 		
@@ -123,8 +124,9 @@ class Loans extends CI_Controller
 				}
 				else
 				{
-					$approved_loans = $this->Loans_model->getTotalLoansOfUser($r["user_id"]);
-					$aval_credit = $user_credit - $approved_loans;
+					$approved_loans = $this->Loans_model->getTotalLoansOfUser($r["user_id"]);					
+					$receipts = $this->Receipts_model->getUserReceiptTotal($r["user_id"]);
+					$aval_credit = $user_credit + $receipts - $approved_loans;
 					$aval_credit = IND_money_format($aval_credit);
 
 				}
@@ -347,7 +349,8 @@ class Loans extends CI_Controller
 				if($user_credit != null)
 				{
 					$approved_loans = $this->Loans_model->getTotalLoansOfUser($_POST["selectuser_id_edit"]);
-					 $aval_credit = $user_credit - $approved_loans;
+					$receipts = $this->Receipts_model->getUserReceiptTotal($_POST["selectuser_id_edit"]);
+					 $aval_credit = $user_credit + $receipts - $approved_loans;
 					if($aval_credit <= 0)
 					{
 						echo json_encode(array('status' => 'false', 'message' => 'Credit Limit Exceded'));

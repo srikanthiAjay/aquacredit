@@ -96,6 +96,7 @@ class Trades_model extends CI_Model
 		if($crop_id != "")
 			$this->db->where("location",$crop_id);
 		$this->db->where("status",'1'); // completed
+		$this->db->where("settled",'0');
 		$query = $this->db->get();
 		return $query->row()->gtotal;
 	}

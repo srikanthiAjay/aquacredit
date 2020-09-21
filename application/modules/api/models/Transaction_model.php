@@ -28,7 +28,7 @@ class Transaction_model extends CI_Model
 		$this->db->where($where);
 		$data = $this->db->update('transactions',$posts);
 	}
-	function Updatesettledstatus($posts,$bid,$pid)
+	/* function Updatesettledstatus($posts,$bid,$pid)
 	{
 		$data = $this->db->update('dummy_account_sale',$posts, array('brand_id'=>$bid,'product_id'=>$pid));
         
@@ -38,7 +38,7 @@ class Transaction_model extends CI_Model
 		}else{
 			return json_encode(array('status'=>'fail'));
 		}
-	}
+	} */
 	function getRecords($limit = null,$start = null,$params)
 	{
 		$this->db->select('*');
@@ -88,7 +88,7 @@ class Transaction_model extends CI_Model
 			return json_encode(array('status'=>'fail'));
 		}
 	}
-	function Updateinterest($posts,$aid)
+	/* function Updateinterest($posts,$aid)
 	{
 		$data = $this->db->update('loan_activity',$posts, array('loan_id'=>$aid));
         
@@ -98,7 +98,7 @@ class Transaction_model extends CI_Model
 		}else{
 			return json_encode(array('status'=>'fail'));
 		}
-	}
+	} */
 	function Updatesetstatus($posts,$aid)
 	{
 		$data = $this->db->update('loan_details',$posts, array('loan_id'=>$aid));
@@ -235,7 +235,7 @@ class Transaction_model extends CI_Model
 		{
 			$this->db->where('t.location',$posts['crop_id']);
 		}
-		$this->db->where('settled_status','0');
+		$this->db->where('settled','0');
 		$result = $this->db->get('trade t')->row();
 		//echo $this->db->last_query(); exit;
 		return $result;
@@ -317,7 +317,109 @@ class Transaction_model extends CI_Model
 
 		return $response;	
 	}
+
 	function getsaleids($params)
+	{
+		$this->db->select("GROUP_CONCAT(DISTINCT trans_id SEPARATOR ',') AS ids");
+		if(isset($params['user_id']))	$this->db->where("t.user_id",$params['user_id']);
+		if(isset($params['crop_id']))	$this->db->where("t.crop_id",$params['crop_id']);	
+		if(isset($params['user_id']))	$this->db->where("t.status",'0');	
+		if(isset($params['settled_id']))	$this->db->where("t.settled_id",$params['settled_id']);	
+		$this->db->where("t.trans_type",'SALE');
+		$this->db->where("t.trans",'GOODS');
+		$sale_ids = $this->db->get('transactions t')->row(); 
+		return $sale_ids->ids;
+	}
+
+	function settleReceipts($params)
+	{
+		$this->db->select("GROUP_CONCAT(DISTINCT trans_id SEPARATOR ',') AS ids");		
+		$this->db->where("t.user_id",$params['user_id']);
+		if(isset($params['crop_id']))
+			$this->db->where("t.crop_id",$params['crop_id']);	
+		$this->db->where("t.status",'0');	
+		$this->db->where("t.trans_type",'RECEIPT');
+		$ids = $this->db->get('transactions t')->row(); 
+		
+		$update_data = array(
+			"settled" => '1'
+		);
+		$this->db->where_in('rc_id',$ids->ids,FALSE);
+		$data = $this->db->update('receipts',$update_data);
+	}
+
+	function settleTrades($params)
+	{
+		$this->db->select("GROUP_CONCAT(DISTINCT trans_id SEPARATOR ',') AS ids");		
+		$this->db->where("t.user_id",$params['user_id']);
+		if(isset($params['crop_id']))
+			$this->db->where("t.crop_id",$params['crop_id']);	
+		$this->db->where("t.status",'0');	
+		$this->db->where("t.trans_type",'TRADE');
+		$this->db->where("t.trans",'HARVEST');
+		$ids = $this->db->get('transactions t')->row(); 
+		
+		$update_data = array(
+			"settled" => '1'
+		);
+		$this->db->where_in('id',$ids->ids,FALSE);
+		$data = $this->db->update('trade',$update_data);
+	}
+
+	function settleReturns($params)
+	{
+		$this->db->select("GROUP_CONCAT(DISTINCT trans_id SEPARATOR ',') AS ids");		
+		$this->db->where("t.user_id",$params['user_id']);
+		if(isset($params['crop_id']))
+			$this->db->where("t.crop_id",$params['crop_id']);	
+		$this->db->where("t.status",'0');	
+		$this->db->where("t.trans_type",'RETURN');
+		$ids = $this->db->get('transactions t')->row(); 
+		
+		$update_data = array(
+			"settled" => '1'
+		);
+		$this->db->where_in('rtn_id',$ids->ids,FALSE);
+		$data = $this->db->update('returns',$update_data);
+	}
+
+	function settleWithdraws($params)
+	{
+		$this->db->select("GROUP_CONCAT(DISTINCT trans_id SEPARATOR ',') AS ids");		
+		$this->db->where("t.user_id",$params['user_id']);
+		if(isset($params['crop_id']))
+			$this->db->where("t.crop_id",$params['crop_id']);	
+		$this->db->where("t.status",'0');	
+		$this->db->where("t.trans_type",'WITHDRAWAL');
+		$ids = $this->db->get('transactions t')->row(); 
+		
+		$update_data = array(
+			"settled" => '1'
+		);
+		$this->db->where_in('wid',$ids->ids,FALSE);
+		$data = $this->db->update('withdrawals',$update_data);
+	}
+
+	function settleTransactions($params,$settled_data)
+	{
+		$this->db->insert('transaction_settled',$settled_data);
+		$insert_id = $this->db->insert_id();
+
+		$data =  array(
+			"status" => '1',
+			"settled_id" => $insert_id,
+			"updated_on" =>date('Y-m-d H:i:s'),
+			"updated_by" => $this->session->userdata('adminid')
+		);
+		$this->db->where("status",'0');	
+		$this->db->where("user_id",$params['user_id']);
+		if(isset($params['crop_id']))
+			$this->db->where("crop_id",$params['crop_id']);	
+		$this->db->update('transactions',$data);
+		return $insert_id;
+	}
+
+	/* function getsaleids($params)
 	{
 		$this->db->select('transactions.*, sale.id,sale.branchid as brnchid,sale_details.product_id,sale_details.brandid,products.cat_id,categories.cat_id as categoryid,categories.cat_name');
 		$this->db->join('sale', 'sale.id = transactions.trans_id','left');
@@ -335,7 +437,7 @@ class Transaction_model extends CI_Model
         }
 
 		return $response;	
-	}
+	} */
 	function getSettledRecords($limit, $start, $params)
 	{
 		$this->db->select('*');

@@ -327,12 +327,16 @@ class Users extends CI_Controller
 		return $res_files;
 		exit;		
 	}
+
 	public function getdayscount()
 	{
 		$fd = date('d-m-Y',strtotime($_POST['fromdate']));
 		$td = date('d-m-Y',strtotime($_POST['todate']));
 
-		$fromdate = $fd;
+		$diff = strtotime($fd) - strtotime($td); 
+		echo abs(round($diff / 86400)); 
+
+		/* $fromdate = $fd;
 		$todate = $td;
 
 		$date1 = date($fromdate);
@@ -348,145 +352,392 @@ class Users extends CI_Controller
 		}
 		$diff = ((strtotime($date2) - strtotime($date1))/(60*60*24))-$count;
 		$val = (int)(($diff)/30); 
-		echo $diff;
+		echo $diff; */
 	}
 	public function updatefinaldata()
 	{
-		if($_POST['salestep']==1)
+		$params["user_id"] = $_POST["user_id"];
+		if(isset($_POST["crop_id"]))
+			$params["crop_id"] = $_POST["crop_id"]; 
+		$grand_total = $_POST["gval"];
+		//get loans of user and crop id
+		if(isset($_POST["iinterest"]))
 		{
-			/*update discount to sales table*/
-			$queryss1 = $this->db->query("select * from dummy_account_sale where settled_status=0 and userid='".$_POST['userid']."' and cropid='".$_POST['crop_id']."'  and settled_status=0");
-			$dat1ss1 = $queryss1->result_array();
-			foreach($dat1ss1 as $daass1)
-			{			
-				$exx = explode('&',$daass1['product_saleids']);
-				for($ii=0;$ii<count($exx);$ii++)
-				{
-					/*echo "update sale_details set discount='".$daass1['product_discount']."' where s_id='".$exx[$ii]."' and brandid='".$daass1['brand_id']."'  and product_id='".$daass1['product_id']."'";*/
-					$a12 = array('discount' =>$daass1['product_discount']);
-					$act_resdd2 = $this->Transaction_model->Updatesalediscount($a12,$exx[$ii],$daass1['brand_id'],$daass1['product_id']);
-
-					/*update*/
-					$a121 = array('settled_status' =>1);
-					$act_resdd2 = $this->Transaction_model->Updatesettledstatus($a121,$daass1['brand_id'],$daass1['product_id']);
-
-				}
-			}
-			/*update discount to sales table*/
-		}
-			
-		
-		if($_POST['loanstep']==1)
-		{
-			/*update roi to loans table*/
-			$queryss = $this->db->query("select * from transactions where trans_type='LOAN' and user_id='".$_POST['userid']."' and crop_id='".$_POST['crop_id']."' and status=0 ");
-			$dat1ss = $queryss->result_array();
-			foreach($dat1ss as $daass)
+			//loan records exists
+			foreach($_POST["iinterest"] as $loan_id => $intreset)
 			{
-				$llla = $this->db->query("select *from transactions where trans_id='".$daass['trans_id']."' ");
-				$lla = $llla->row_array();
-
-				$a1 = array('rate_of_interest' => $lla['interestval'],
-							'rate_of_value' => $lla['interest_amount'],
-							'start_date' => date('Y-m-d',strtotime($lla['loan_startdate'])),
-							'end_date' => date('Y-m-d',strtotime($lla['loan_enddate']))
+				//update loan activity
+				$loan_data = array(
+					"end_date" =>$_POST["enddate"][$loan_id],
+					"rate_of_interest" =>$intreset,
+					"rate_of_value" =>$_POST["interestamtval"][$loan_id]
 				);
-				$act_res2 = $this->Transaction_model->Updateinterest($a1,$daass['trans_id']);
-
-				$a12 = array('settled' => 1);
-				$act_res1 = $this->Transaction_model->Updatesetstatus($a12,$daass['trans_id']);
+				$this->Loans_model->updateActivity($loan_id,$loan_data);
+				//update loan as settled
+				$loan_set = array(
+					"settled" =>'1'
+				);
+				$this->Loans_model->updateLoan($loan_id,$loan_set);
 			}
-			/*update roi to loans table*/
-		}
-
-		$lll = $this->db->query("select *from transaction_settled order by id desc limit 0,1 ");
-		$ll = $lll->row_array();
-		$bbb = $ll['id']+1;
-
-		$gt = $_POST['gval'];
-		if($_POST['gval']>0)
-		{
-			$bal = $_POST['gval']-$_POST['interestval'];
-			$fbal = $bal+$_POST['gdiscount'];
-		}
-		else
-		{
-			$bal = $_POST['gval']+$_POST['interestval'];
-			$fbal = $bal-$_POST['gdiscount'];
-		}
-		
-		if($fbal>0)
-		{
-			$ftype = 'Gain';
-		}
-		else
-		{
-			$ftype = 'Loss';
-		}
-
-		$activity_posts = array('settled_date' => date('Y-m-d'),
-						'settled_code' => '2020_crop_'.$bbb,
-						'user_id' => $_POST['userid'],
-						'crop_id' => $_POST['crop_id'],
-						'balance_amount' => $fbal,
-						'amount_type' => $ftype,
-						'note' => '',
-						'created_on' => date('Y-m-d')
-		);
-		$act_res = $this->Transaction_model->insertfinalact($activity_posts);
-		$fid = $act_res;
-
-		if($_POST['salestep']==1)
-		{
-			//discount record insert
-			$querybu = $this->db->query("select *from users where user_id='".$_POST['userid']."' ");
-			$dataau = $querybu->row_array();
-
-			$activity_posts1 = array('trans_type' => 'SALE',
-							'trans' => 'Discount',
-							'user_id' => $_POST['userid'],
-							'user_type' => $dataau['user_type'],
-							'crop_id' => $_POST['crop_id'],
-							'amount' => $_POST['gdiscount'],
-							'amount_type' => 'IN',
-							'status' => 1,
-							'settled_id' => $fid,
-							'created_on' => date('Y-m-d'),
-							'created_by' => 1,
-							'updated_on' => date('Y-m-d'),
-							'updated_by' => 1
-			);
-			$act_res1 = $this->Transaction_model->insert($activity_posts1);
-		}
-
-		if($_POST['loanstep']==1)
-		{
-			$activity_posts1 = array('trans_type' => 'LOAN',
+			//insert intreset transaction
+			$interest_trans = array('trans_type' => 'LOAN',
 							'trans' => 'Interest',
-							'user_id' => $_POST['userid'],
-							'user_type' => $dataau['user_type'],
-							'crop_id' => $_POST['crop_id'],
+							'user_id' => $params["user_id"],
+							'crop_id' => $params["crop_id"],
 							'amount' => $_POST['interestval'],
 							'amount_type' => 'OUT',
-							'status' => 1,
-							'settled_id' => $fid,
 							'created_on' => date('Y-m-d'),
-							'created_by' => 1,
-							'updated_on' => date('Y-m-d'),
-							'updated_by' => 1
+							'created_by' => $this->session->userdata('adminid'),
 			);
-			$act_res1 = $this->Transaction_model->insert($activity_posts1);
+			$tansaction = $this->Transaction_model->insert($interest_trans);
+			$grand_total -= $_POST['interestval'];
 		}
-		
-		//interest recored insert
 
-		/*update records*/
-		$activity_posts2 = array('settled_id' => $fid,
-						'status' => 1
+		//get sales of user and crop id
+		if(isset($_POST['branddiscount']))
+		{
+			
+			$sale_ids = $this->Transaction_model->getsaleids($params); 
+			//echo $this->db->last_query();
+			$ids = explode(",",$sale_ids);
+			foreach($ids as $id)
+			{
+				//echo "s";
+				$sale_discount = 0;
+				$get_sale_details = $this->Sales_model->getsale_details($id);
+				//echo $this->db->last_query();
+				foreach($get_sale_details as $detail)
+				{
+					//echo "r";
+					if($_POST['branddiscount'][$detail->cat_id][$detail->brandid] == 0)
+					{
+						//echo "i";
+						if($_POST['proDiscount'][$detail->cat_id][$detail->brandid][$detail->inventory_id] == 0)
+						{
+							$pro_discount = 0;
+							$pro_disc_val = 0;
+						}
+						else
+						{
+							$pro_discount = $_POST['proDiscount'][$detail->cat_id][$detail->brandid][$detail->inventory_id];
+							$pro_disc_val = $_POST['proDiscountVal'][$detail->cat_id][$detail->brandid][$detail->inventory_id];
+						}
+					}
+					else
+					{
+						//echo "k";
+						$pro_discount = $_POST['branddiscount'][$detail->cat_id][$detail->brandid];
+						//$pro_disc_val = $_POST['discountvalue'][$detail->cat_id][$detail->brandid];
+						$pro_disc_val = $_POST['proMRPTotal'][$detail->cat_id][$detail->brandid][$detail->inventory_id] * $pro_discount/100;
+					}
+					//cecho "a";
+					$sale_discount += $pro_disc_val;
+					$disc_data =array(
+						"discount" => $pro_discount,
+						"total_discount" => $pro_disc_val,
+					);
+					$this->Sales_model->updateSaleActivity($detail->id,$disc_data);
+					//echo $this->db->last_query();
+				}
+				//echo "n";
+				$sale_disc =array(
+					"total_discount" => $_POST["gdiscount"],
+					"settled" => '1',
+				);
+				$this->Sales_model->updateSale($id,$sale_disc);
+			}
+
+			//insert intreset transaction
+			$interest_trans = array('trans_type' => 'SALE',
+							'trans' => 'DISCOUNT',
+							'user_id' => $params['user_id'],
+							'crop_id' => $params['crop_id'],
+							'amount' => $_POST['gdiscount'],
+							'amount_type' => 'IN',
+							'created_on' => date('Y-m-d'),
+							'created_by' => $this->session->userdata('adminid'),
+			);
+			$act_res1 = $this->Transaction_model->insert($interest_trans);
+			$count = count($_POST["branddiscount"]);
+			if($count > 0)
+			{
+				foreach($_POST["branddiscount"] as $cid => $brands)
+				{
+					foreach($brands as $bid => $brand)
+					{
+						foreach($_POST["proDiscount"][$cid][$bid] as $pid => $product_disocunt)
+						{
+							$check_dummy = $this->db->query("SELECT id FROM dummy_account_sale WHERE brand_id='".$bid."' AND product_id='".$pid."' AND user_id='".$_POST["user_id"]."' AND crop_id='".$_POST["crop_id"]."'");
+		
+							$exists = $check_dummy->num_rows();
+							
+							$data = array(
+								"category_id" 		=>	$cid,
+								"brand_id" 			=>	$bid,
+								"brand_discount" 	=>	$_POST["branddiscount"][$cid][$bid],
+								"product_id" 		=>	$pid,
+								"product_discount"	=>	$_POST["proDiscount"][$cid][$bid][$pid],
+								"user_id"			=>	$_POST["user_id"],
+								"crop_id"			=>	$_POST["crop_id"]
+							);
+							if($exists)
+							{
+								$act_res = $this->Transaction_model->updateaccountActivity($data,$_POST['user_id'],$_POST['crop_id'],$cid,$bid,$pid);
+							}
+							else
+							{
+								$act_res = $this->Transaction_model->insertaccountActivity($data);
+							}
+						
+						}
+					}
+				}
+			}
+			$grand_total += $_POST["gdiscount"];
+
+		}
+
+		$amount_type = ($grand_total > 0) ? "Gain" : "Loss";
+		
+		$this->Transaction_model->settleReceipts($params); //settle receipts
+		$this->Transaction_model->settleTrades($params); //settle trades
+		$this->Transaction_model->settleReturns($params); //settle returns
+		$this->Transaction_model->settleWithdraws($params); //settle withdraws
+		$rand = substr(md5(microtime()),rand(0,26),5);
+		$settle_data = array('settled_date' => date('Y-m-d'),
+						'settled_code' => 'crop'.$rand,
+						'user_id' => $params['user_id'],
+						'crop_id' => $params['crop_id'],
+						'balance_amount' => $grand_total,
+						'amount_type' => $amount_type,
+						'note' => '',
+
+						'location' => (isset($_POST["crop_location_val"])) ? $_POST["crop_location_val"] : "",
+						'harvest_wt' => (isset($_POST["harvesttonsval"])) ? $_POST["harvesttonsval"] : "",
+						'feed_wt' => (isset($_POST["feed_wt"])) ? $_POST["feed_wt"] : "",
+						'fcr' => (isset($_POST["fcr"])) ? $_POST["fcr"] : "",
+						'fcr_status' => (isset($_POST["fcr_status"])) ? $_POST["fcr_status"] : "",
+						'total_loan_amount' => (isset($_POST["total_loan_amount"])) ? $_POST["total_loan_amount"] : "",
+						'loan_amount' => (isset($_POST["loan_amount"])) ? $_POST["loan_amount"] : "",
+						'loan_interest' => (isset($_POST["loan_interest"])) ? $_POST["loan_interest"] : "",
+						'harvest_amount' => (isset($_POST["harvest_amount"])) ? $_POST["harvest_amount"] : "",
+						'harvest_type' => (isset($_POST["harvest_type"])) ? $_POST["harvest_type"] : "",
+						'lab_fee' => (isset($_POST["lab_fee"])) ? $_POST["lab_fee"] : "",
+						'expenses' => (isset($_POST["expenses_val"])) ? $_POST["expenses_val"] : "",
+						'transport' => (isset($_POST["transport"])) ? $_POST["transport"] : "",
+						'loading' => (isset($_POST["loading"])) ? $_POST["loading"] : "",
+						'receipts' => (isset($_POST["receipts"])) ? $_POST["receipts"] : "",
+						'returns' => (isset($_POST["returns"])) ? $_POST["returns"] : "",
+
+						'created_on' => date('Y-m-d')
 		);
-		$act_res2 = $this->Transaction_model->Updatesettleaccount($activity_posts2,$_POST['userid'],$_POST['crop_id'],$_POST['loanstep'],$_POST['salestep']);
-		echo json_encode($act_res2);
+
+		echo $this->Transaction_model->settleTransactions($params,$settle_data); //settle withdraws
+		exit;
+		//saledataupdate
+
+		// if($_POST['salestep']==1)
+		// {
+		// 	/*update discount to sales table*/
+		// 	$queryss1 = $this->db->query("select * from dummy_account_sale where settled_status=0 and userid='".$_POST['userid']."' and cropid='".$_POST['crop_id']."'");
+		// 	$dat1ss1 = $queryss1->result_array();
+		// 	foreach($dat1ss1 as $daass1)
+		// 	{			
+		// 		$exx = explode('&',$daass1['product_saleids']);
+		// 		for($ii=0;$ii<count($exx);$ii++)
+		// 		{
+		// 			/*echo "update sale_details set discount='".$daass1['product_discount']."' where s_id='".$exx[$ii]."' and brandid='".$daass1['brand_id']."'  and product_id='".$daass1['product_id']."'";*/
+		// 			$a12 = array('discount' =>$daass1['product_discount']);
+		// 			$act_resdd2 = $this->Transaction_model->Updatesalediscount($a12,$exx[$ii],$daass1['brand_id'],$daass1['product_id']);
+
+		// 			/*update*/
+		// 			$a121 = array('settled_status' =>1);
+		// 			$act_resdd2 = $this->Transaction_model->Updatesettledstatus($a121,$daass1['brand_id'],$daass1['product_id']);
+
+		// 		}
+		// 	}
+		// 	/*update discount to sales table*/
+		// }
+			
+		
+		// if($_POST['loanstep']==1)
+		// {
+		// 	/*update roi to loans table*/
+		// 	$queryss = $this->db->query("select * from transactions where trans_type='LOAN' and user_id='".$_POST['userid']."' and crop_id='".$_POST['crop_id']."' and status=0 ");
+		// 	$dat1ss = $queryss->result_array();
+		// 	foreach($dat1ss as $daass)
+		// 	{
+		// 		$llla = $this->db->query("select *from transactions where trans_id='".$daass['trans_id']."' ");
+		// 		$lla = $llla->row_array();
+
+		// 		$a1 = array('rate_of_interest' => $lla['interestval'],
+		// 					'rate_of_value' => $lla['interest_amount'],
+		// 					'start_date' => date('Y-m-d',strtotime($lla['loan_startdate'])),
+		// 					'end_date' => date('Y-m-d',strtotime($lla['loan_enddate']))
+		// 		);
+		// 		$act_res2 = $this->Transaction_model->Updateinterest($a1,$daass['trans_id']);
+
+		// 		$a12 = array('settled' => 1);
+		// 		$act_res1 = $this->Transaction_model->Updatesetstatus($a12,$daass['trans_id']);
+		// 	}
+		// 	/*update roi to loans table*/
+		// }
+
+		// $lll = $this->db->query("select *from transaction_settled order by id desc limit 0,1 ");
+		// $ll = $lll->row_array();
+		// $bbb = $ll['id']+1;
+
+		// $gt = $_POST['gval'];
+		// if($_POST['gval']>0)
+		// {
+		// 	$bal = $_POST['gval']-$_POST['interestval'];
+		// 	$fbal = $bal+$_POST['gdiscount'];
+		// }
+		// else
+		// {
+		// 	$bal = $_POST['gval']+$_POST['interestval'];
+		// 	$fbal = $bal-$_POST['gdiscount'];
+		// }
+		
+		// if($fbal>0)
+		// {
+		// 	$ftype = 'Gain';
+		// }
+		// else
+		// {
+		// 	$ftype = 'Loss';
+		// }
+
+		// $activity_posts = array('settled_date' => date('Y-m-d'),
+		// 				'settled_code' => '2020_crop_'.$bbb,
+		// 				'user_id' => $_POST['userid'],
+		// 				'crop_id' => $_POST['crop_id'],
+		// 				'balance_amount' => $fbal,
+		// 				'amount_type' => $ftype,
+		// 				'note' => '',
+		// 				'created_on' => date('Y-m-d')
+		// );
+		// $act_res = $this->Transaction_model->insertfinalact($activity_posts);
+		// $fid = $act_res;
+
+		// if($_POST['salestep']==1)
+		// {
+		// 	//discount record insert
+		// 	$querybu = $this->db->query("select *from users where user_id='".$_POST['userid']."' ");
+		// 	$dataau = $querybu->row_array();
+
+		// 	$activity_posts1 = array('trans_type' => 'SALE',
+		// 					'trans' => 'Discount',
+		// 					'user_id' => $_POST['userid'],
+		// 					'user_type' => $dataau['user_type'],
+		// 					'crop_id' => $_POST['crop_id'],
+		// 					'amount' => $_POST['gdiscount'],
+		// 					'amount_type' => 'IN',
+		// 					'status' => 1,
+		// 					'settled_id' => $fid,
+		// 					'created_on' => date('Y-m-d'),
+		// 					'created_by' => 1,
+		// 					'updated_on' => date('Y-m-d'),
+		// 					'updated_by' => 1
+		// 	);
+		// 	$act_res1 = $this->Transaction_model->insert($activity_posts1);
+		// }
+
+		// if($_POST['loanstep']==1)
+		// {
+		// 	$activity_posts1 = array('trans_type' => 'LOAN',
+		// 					'trans' => 'Interest',
+		// 					'user_id' => $_POST['userid'],
+		// 					'user_type' => $dataau['user_type'],
+		// 					'crop_id' => $_POST['crop_id'],
+		// 					'amount' => $_POST['interestval'],
+		// 					'amount_type' => 'OUT',
+		// 					'status' => 1,
+		// 					'settled_id' => $fid,
+		// 					'created_on' => date('Y-m-d'),
+		// 					'created_by' => 1,
+		// 					'updated_on' => date('Y-m-d'),
+		// 					'updated_by' => 1
+		// 	);
+		// 	$act_res1 = $this->Transaction_model->insert($activity_posts1);
+		// }
+		
+		// //interest recored insert
+
+		// /*update records*/
+		// $activity_posts2 = array('settled_id' => $fid,
+		// 				'status' => 1
+		// );
+		// $act_res2 = $this->Transaction_model->Updatesettleaccount($activity_posts2,$_POST['userid'],$_POST['crop_id'],$_POST['loanstep'],$_POST['salestep']);
+		// echo json_encode($act_res2);
 	}
+	public function settled_pdf($settled_id)
+	{
+		//exit;
+		//pdf generation
+		//echo $settled_id = $_POST["settled_id"];
+
+		$this->db->select('*');
+		$this->db->where("id",$settled_id);
+		$settled_data = $this->db->get("transaction_settled")->row();
+		$data["settled_data"] = $settled_data;
+
+		$this->db->select("*");
+		$this->db->where("user_id",$settled_data->user_id);
+		$user = $this->db->get("users")->row();
+		$data["user"] = $user;
+
+		$this->db->select('*');
+		$this->db->where("settled_id",$settled_id);
+		$transactions = $this->db->get('transactions')->result();
+		$data["transactions"]=$transactions;
+
+		$params = array("settled_id"=>$settled_id);
+		$sale_ids = $this->Transaction_model->getsaleids($params);
+
+		$this->db->select('s.id,s.quantity as sale_qty,p.pname,p.qty as weight,u.unit_name');
+		$this->db->join("products p","p.pid = s.product_id",'left');
+		$this->db->join("categories c","c.cat_id = p.cat_id",'left');
+		$this->db->join("units u","u.id = p.weightage",'left');
+		$this->db->where_in('s_id',$sale_ids,false);
+		$this->db->where('c.cat_id','1');
+		$feed_products = $this->db->get("sale_details s")->result();
+		$data["feed_products"] = $feed_products;
+
+		$this->db->select('SUM(total_price) AS total_mrp, SUM(total_discount) AS total_discount, c.cat_name');
+		$this->db->join("products p","p.pid = s.product_id",'left');
+		$this->db->join("categories c","c.cat_id = p.cat_id",'left');
+		$this->db->where_in('s_id',$sale_ids,false);
+		$this->db->group_by('c.cat_id','1');
+		$cat_discount = $this->db->get("sale_details s")->result();
+		$data["cat_discount"] = $cat_discount;
+		
+		$html=$this->load->view('admin/pdf_print',$data,true); 
+		$time = time();
+		$pdfFilePath = $_SERVER['DOCUMENT_ROOT']."/credit_new/assets/pdf/transactions/settlement_".date('m-d-Y_hia').".pdf";	
+
+        $this->load->library('Pdf');
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+		$pdf->SetTitle('AquaDeals Invoice');
+
+		$pdf->SetMargins(5, '', 5);
+		$pdf->SetHeaderMargin(30);
+		$pdf->SetTopMargin(20);
+		$pdf->setFooterMargin(20);
+		$pdf->SetAutoPageBreak(true,30);
+		$pdf->SetAuthor('Author');
+		$pdf->SetDisplayMode('real', 'default');
+		$pdf->AddPage('P', 'A4');
+		$pdf->writeHTML($html, true, false, true, false, '');
+
+		$pdf->SetAlpha(0.7);
+		$pdf->Image( base_url().'assets/images/not_paid.png', 10, 90, 70, 50, '', '', 'C', false, 72, 'C', false, false, 0);
+		
+		$pdf->lastPage();
+		ob_end_clean();
+		$pdf->Output($pdfFilePath, 'FD');
+	}
+	
 	public function purchaseamountval()
 	{
 		$queryb = $this->db->query("select *from products where brand_id='".$_POST['bid']."' and pid='".$_POST['pid']."' ");
@@ -540,7 +791,7 @@ class Users extends CI_Controller
 		}
 		echo json_encode($act_res);
 	}
-	public function loandataupdate()
+	/* public function loandataupdate()
 	{
 		for($i=0;$i<=count($_POST['trans_id']);$i++)
 		{
@@ -558,7 +809,7 @@ class Users extends CI_Controller
 			}
 		}
 		echo json_encode($act_res);
-	}
+	} */
 	public function getloandata()
 	{
 		$params['user_id'] = $_POST['userid'];
@@ -611,16 +862,8 @@ class Users extends CI_Controller
 			$params['crop_id'] = $_POST['crop_id'];
 		}
 
-		//get sale ids
-		$this->db->select("GROUP_CONCAT(DISTINCT trans_id SEPARATOR ',') AS ids");
-		
-		$this->db->where("t.user_id",$params['user_id']);
-		$this->db->where("t.crop_id",$params['crop_id']);	
-		$this->db->where("t.status",'0');	
-		$this->db->where("t.trans_type",'SALE');
-		$this->db->where("t.trans",'GOODS');
-		$sale_ids = $this->db->get('transactions t')->row(); 
-		$ids = $sale_ids->ids;
+		//get sale ids		
+		$ids = $this->Transaction_model->getsaleids($params);
 		
 		$this->db->select("t.trans_id, s.id,p.cat_id,c.cat_name, s.brandid, b.brand_name, s.product_id,p.pname,p.qty,p.weightage, s.inventory_id,i.pmrp as p_mrp,i.percentage as p_disc, s.quantity as p_qty");
 		$this->db->join("sale_details s","s.s_id = t.trans_id",'left');
@@ -666,8 +909,10 @@ class Users extends CI_Controller
 
 			$this->db->select("SUM(s.quantity) as total_qty,SUM(mrp*quantity) as brand_mrp,MIN(i.percentage) as brand_disc_limit");
 			$this->db->join("branch_inventory i","i.bin_id = s.inventory_id",'left');
+			$this->db->join("products p","p.pid = s.product_id",'left');
 			$this->db->where_in('s.s_id',$ids,FALSE);
 			$this->db->where('s.brandid',$row->brandid);
+			$this->db->where('p.cat_id',$row->cat_id);
 			$this->db->group_by('s.brandid');
 			$pdetails = $this->db->get("sale_details s")->row();
 			//echo $this->db->last_query(); 
@@ -746,12 +991,12 @@ class Users extends CI_Controller
 				if($value["amount_type"] == "OUT") 
 				{
 					$amount -=$value['amount'];
-					$amt = '<span class="txt_red">'."₹".number_format($value['amount'],2).'<div class="arr_blk"> <img src="http://3.7.44.132/aquacredit/assets/images/rd_c_ar.png"> </div></span>';
+					$amt = '<span class="txt_red"><span class="arr_blk">'."₹".number_format($value['amount'],2).'<img src="http://3.7.44.132/aquacredit/assets/images/rd_c_ar.png"> </span></span>';
 				}  
 				else 
 				{
 					$amount +=$value["amount"];
-					$amt = '<span class="grn_clr">'."₹".number_format($value['amount'],2).'<div class="arr_blk"> <img src="http://3.7.44.132/aquacredit/assets/images/grn_c_ar.png"> </div></span>';
+					$amt = '<span class="grn_clr"><span class="arr_blk">'."₹".number_format($value['amount'],2).'<img src="http://3.7.44.132/aquacredit/assets/images/grn_c_ar.png"> </span></span>';
 				}
 
 				$sllla = $this->db->query("select *from sale where id='".$value['trans_id']."' ");
@@ -1018,16 +1263,16 @@ class Users extends CI_Controller
 		$data["transactions"] = $transactions["data"];
 		$data['user'] = $this->Users_model->getUser($user_id);
 		$data["crop"] = $this->db->select("crop_location")->where("cd_id",$crop_id)->get("user_crop_details")->row();
-		$data["open_balance"] = $this->Users_model->open_balance($user_id,$crop_id);
+		//$data["open_balance"] = $this->Users_model->open_balance($user_id,$crop_id);
 		//$data["crop"] = $crop;
 		//echo "<pre>"; print_r($data); echo "</pre>"; exit;
 		$html=$this->load->view('admin/pdf_transaction',$data,true); 
 		//exit;
 		$time = time();
-		$pdfFilePath = $_SERVER['DOCUMENT_ROOT']."/aquacredit/assets/pdf/transactions/trans_".date('m-d-Y_hia').".pdf";	
+		$pdfFilePath = $_SERVER['DOCUMENT_ROOT']."/credit_new/assets/pdf/transactions/trans_".date('m-d-Y_his').".pdf";	
 
         $this->load->library('Pdf');
-		$pdf = new Pdf('P', 'mm', 'A5', true, 'UTF-8', false);
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
 		$pdf->SetTitle('AquaDeals Invoice');
 
 		$pdf->SetMargins(5, '', 5);
@@ -1037,7 +1282,38 @@ class Users extends CI_Controller
 		$pdf->SetAutoPageBreak(true,30);
 		$pdf->SetAuthor('Author');
 		$pdf->SetDisplayMode('real', 'default');
-		$pdf->AddPage('P', 'A5');
+		$pdf->AddPage('P', 'A4');
+		$pdf->writeHTML($html, true, false, true, false, '');
+
+		$pdf->SetAlpha(0.7);
+		$pdf->Image( base_url().'assets/images/not_paid.png', 10, 90, 70, 50, '', '', 'C', false, 72, 'C', false, false, 0);
+		
+		$pdf->lastPage();
+		ob_end_clean();
+		$pdf->Output($pdfFilePath, 'FD');
+		exit;
+	}
+
+	public function printPDF()
+	{	
+		$data ='';
+		$html=$this->load->view('admin/pdf_print',$data,true); 
+		//exit;
+		$time = time();
+		$pdfFilePath = $_SERVER['DOCUMENT_ROOT']."/aquacredit/assets/pdf/transactions/user_".date('m-d-Y_hia').".pdf";	
+
+        $this->load->library('Pdf');
+		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+		$pdf->SetTitle('AquaDeals Invoice');
+
+		$pdf->SetMargins(5, '', 5);
+		$pdf->SetHeaderMargin(30);
+		$pdf->SetTopMargin(20);
+		$pdf->setFooterMargin(20);
+		$pdf->SetAutoPageBreak(true,30);
+		$pdf->SetAuthor('Author');
+		$pdf->SetDisplayMode('real', 'default');
+		$pdf->AddPage('P', 'A4');
 		$pdf->writeHTML($html, true, false, true, false, '');
 
 		$pdf->SetAlpha(0.7);
@@ -1238,7 +1514,7 @@ class Users extends CI_Controller
 		
 		$action=$_POST['action']; $kyc_flag = 0;
 		//echo $_POST['fname'][0]; exit;
-		print_r($_POST);exit;
+		//print_r($_POST);exit;
 		if(!empty($_POST['fname'][0]) && !empty($_POST['ac_number'][0]) && !empty($_POST['bc_name'][0]) && !empty($_POST['ifsc'][$b]) && !empty($_POST['branch_name'][0])){ $bank_flag = 1; }else{ $bank_flag = 0; }
 		if($_POST['optradio']=='sing_far' || $_POST['optradio']=='par_far'){ 
 			if(!empty(trim($_POST['aadhar_no'])) && !empty(trim($_POST['pan_no']))){ $kyc_flag = 1;}
